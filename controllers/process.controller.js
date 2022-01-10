@@ -48,7 +48,9 @@ exports.RegistrationProcess = async (req, res) => {
     const states = await getStates();
     const artisans = await getListOfArtisan();
     const acct_value = await AccountDetail(stage.full_name, payload?.user?.id);
-    const payment = await confirmPayment(stage.local_government?.flw_ref);
+    const payment = await confirmPayment(
+      JSON.parse(stage.local_government)?.flw_ref
+    );
 
     if (
       (payload.text.toLowerCase() == "hi" ||
@@ -130,13 +132,14 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (
         payload.type === "text" &&
         stage?.step === 5 &&
-        stage.local_government.includes(
-          stage.local_government[Number(payload.text) - 1]
+        JSON.parse(stage.local_government).includes(
+          JSON.parse(stage.local_government)[Number(payload.text) - 1]
         )
       ) {
         await update(
           {
-            lga: stage.local_government[Number(payload.text) - 1].name,
+            lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]
+              .name,
             step: 6,
           },
           {
@@ -226,12 +229,12 @@ exports.RegistrationProcess = async (req, res) => {
           response = await sendResponse(resp, payload.user.id);
         } else {
           const summary2 = `kindly make a payment of ${account.formatMoney(
-            Number(stage.local_government?.amount),
+            Number(JSON.parse(stage.local_government).amount),
             "₦"
           )} into * ${
-            stage.local_government?.account_number +
+            JSON.parse(stage.local_government).account_number +
             " " +
-            stage.local_government?.bank_name
+            JSON.parse(stage.local_government).bank_name
           }  *.After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
