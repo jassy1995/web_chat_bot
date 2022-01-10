@@ -47,9 +47,9 @@ exports.RegistrationProcess = async (req, res) => {
     const service = await getServices();
     const states = await getStates();
     const artisans = await getListOfArtisan();
-    const acct_value = await AccountDetail(stage.full_name, payload?.user?.id);
+    const acct_value = await AccountDetail(stage?.full_name, payload?.user?.id);
     const payment = await confirmPayment(
-      JSON.parse(stage.local_government)?.flw_ref
+      JSON.parse(stage?.local_government)?.flw_ref
     );
 
     if (
