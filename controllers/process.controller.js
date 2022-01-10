@@ -49,7 +49,7 @@ exports.RegistrationProcess = async (req, res) => {
     const artisans = await getListOfArtisan();
     const acct_value = await AccountDetail(stage?.full_name, payload?.user?.id);
     const payment = await confirmPayment(
-      JSON.parse(stage?.local_government)?.flw_ref
+      stage.local_government ? JSON.parse(stage.local_government)?.flw_ref : ""
     );
 
     if (
