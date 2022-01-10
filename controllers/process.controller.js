@@ -48,9 +48,6 @@ exports.RegistrationProcess = async (req, res) => {
     const states = await getStates();
     const artisans = await getListOfArtisan();
     const acct_value = await AccountDetail(stage?.full_name, payload?.user?.id);
-    const payment = await confirmPayment(
-      stage.local_government ? JSON.parse(stage.local_government)?.flw_ref : ""
-    );
 
     if (
       (payload.text.toLowerCase() == "hi" ||
@@ -212,6 +209,9 @@ exports.RegistrationProcess = async (req, res) => {
         payload.type === "text" &&
         stage?.step === 8
       ) {
+        const payment = await confirmPayment(
+          JSON.parse(stage.local_government)?.flw_ref
+        );
         if (payment.data.status) {
           const toSave = {
             user_id: stage.user_id,
