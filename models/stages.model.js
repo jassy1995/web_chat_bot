@@ -48,9 +48,7 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
       local_government: {
         type: DataTypes.JSON,
       },
-      // all_artisan: {
-      //   type: DataTypes.JSON,
-      // },
+
       step: {
         type: DataTypes.INTEGER,
         allowNull: false,
