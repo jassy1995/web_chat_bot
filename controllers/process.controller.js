@@ -196,16 +196,19 @@ exports.RegistrationProcess = async (req, res) => {
         //     },
         //   }
         // );
-        const summary = `Name: ${stage.full_name}, Service: ${
+        console.log(stage.lga);
+        const summary = `Name: *${stage.full_name}*, Service: *${
           stage.service
-        }, State: ${stage.state}, Local_government: ${stage.lga}, Address: ${
+        }*, State: *${stage.state}*, Local_government: *${
+          stage.lga
+        }*, Address: *${
           stage.address
-        }.To complete your registration, kindly make a payment of ${account.formatMoney(
+        }* .To complete your registration, kindly make a payment of *${account.formatMoney(
           Number(acct_value.data.amount),
           "₦"
-        )} into  ${
+        )}* into  *${
           acct_value.data.account_number + " " + acct_value.data.bank_name
-        } . After payment, click the button below to confirm your payment`;
+        }* . After payment, click the button below to confirm your payment`;
         const header = "Here is the summary of your registration";
         const button = [
           {
@@ -221,7 +224,7 @@ exports.RegistrationProcess = async (req, res) => {
         stage?.step === 8
       ) {
         const payment = await confirmPayment(stage.local_government?.flw_ref);
-        if (payment.data.status) {
+        if (!payment.data.status) {
           const toSave = {
             user_id: stage.user_id,
             menu: stage.menu,
@@ -240,14 +243,14 @@ exports.RegistrationProcess = async (req, res) => {
           const newData = await currentStage(payload.user.id);
           // console.log(newData.lga);
           // console.log(newData.local_government);
-          const summary2 = `kindly make a payment of ${account.formatMoney(
+          const summary2 = `kindly make a payment of *${account.formatMoney(
             Number(newData.local_government.amount),
             "₦"
-          )} into * ${
-            newData.local_government.account_number +
-            " " +
-            newData.local_government.bank_name
-          } .After payment, click the button below to confirm your payment`;
+          )}* into *${newData.local_government.account_number}*
+           
+            *${
+              newData.local_government.bank_name
+            }* .After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
             {
@@ -256,8 +259,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           ];
           let rr = productsButtons({ header, summary: summary2 }, button2);
-          // response = await sendResponse(rr, payload.user.id);
-          response = rr;
+          response = await sendResponse(rr, payload.user.id);
+          // response = rr;
         }
       } else {
         response =
