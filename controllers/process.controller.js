@@ -130,7 +130,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        response = await sendResponse(info.rest, payload.user.id);
+        response = await sendResponse(info.rests, payload.user.id);
         // response = info.rest;
       } else if (
         payload.type === "text" &&
