@@ -224,7 +224,7 @@ exports.RegistrationProcess = async (req, res) => {
         stage?.step === 8
       ) {
         const payment = await confirmPayment(stage.local_government?.flw_ref);
-        if (!payment.data.status) {
+        if (payment.data.status) {
           const toSave = {
             user_id: stage.user_id,
             menu: stage.menu,
