@@ -56,8 +56,8 @@ exports.RegistrationProcess = async (req, res) => {
     ) {
       await destroy({ where: { user_id: payload.user.id } });
       await create({ user_id: payload.user.id, step: 1 });
-      // response = await sendResponse(welcomeResponse, payload.user.id);
-      response = welcomeResponse;
+      response = await sendResponse(welcomeResponse, payload.user.id);
+      // response = welcomeResponse;
     } else if (
       payload.type === "text" &&
       stage?.step === 1 &&
@@ -76,9 +76,9 @@ exports.RegistrationProcess = async (req, res) => {
           },
         }
       );
-      // let fn = await fullNameResponse();
-      // response = await sendResponse(fn, payload.user.id);
-      response = await fullNameResponse();
+      let fn = await fullNameResponse();
+      response = await sendResponse(fn, payload.user.id);
+      // response = await fullNameResponse();
     } else if (stage?.menu === "Render Service (Artisan)") {
       if (payload.type === "text" && stage.step === 2) {
         await update(
@@ -89,9 +89,9 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        // let rfs = await serviceResponse();
-        // response = await sendResponse(rfs, payload.user.id);
-        response = await serviceResponse();
+        let rfs = await serviceResponse();
+        response = await sendResponse(rfs, payload.user.id);
+        // response = await serviceResponse();
       } else if (
         payload.type === "text" &&
         stage.step === 3 &&
@@ -105,9 +105,9 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        // let rRe = await stateResponse();
-        // response = await sendResponse(rRe, payload.user.id);
-        response = await stateResponse();
+        let rRe = await stateResponse();
+        response = await sendResponse(rRe, payload.user.id);
+        // response = await stateResponse();
       } else if (
         payload.type === "text" &&
         stage?.step === 4 &&
@@ -130,8 +130,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        // response = await sendResponse(info.rest, payload.user.id);
-        response = info.rest;
+        response = await sendResponse(info.rest, payload.user.id);
+        // response = info.rest;
       } else if (
         payload.type === "text" &&
         stage?.step === 5 &&
@@ -157,8 +157,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        // response = await sendResponse(otherResponse.address, payload.user.id);
-        response = otherResponse.address;
+        response = await sendResponse(otherResponse.address, payload.user.id);
+        // response = otherResponse.address;
       } else if (payload.type === "text" && stage.step === 6) {
         await update(
           { address: payload.text, step: 7 },
@@ -168,8 +168,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        // response = await sendResponse(otherResponse.id_card, payload.user.id);
-        response = otherResponse.id_card;
+        response = await sendResponse(otherResponse.id_card, payload.user.id);
+        // response = otherResponse.id_card;
         // info.res;
       } else if (payload.type === "image" && stage?.step === 7) {
         await update(
@@ -181,8 +181,8 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
 
-        // response = await sendResponse(otherResponse.picture, payload.user.id);
-        response = otherResponse.picture;
+        response = await sendResponse(otherResponse.picture, payload.user.id);
+        // response = otherResponse.picture;
       } else if (payload.type === "image" && stage?.step === 8) {
         await update(
           {
@@ -225,8 +225,8 @@ exports.RegistrationProcess = async (req, res) => {
           },
         ];
         let re = productsButtons({ header, summary }, button);
-        // response = await sendResponse(re, payload.user.id);
-        response = re;
+        response = await sendResponse(re, payload.user.id);
+        // response = re;
       } else if (
         payload.text.toString() === "1" &&
         payload.type === "text" &&
@@ -247,8 +247,8 @@ exports.RegistrationProcess = async (req, res) => {
           };
           await createArtisan(toSave);
           let resp = "Congratulation, your registration has been completed";
-          // response = await sendResponse(resp, payload.user.id);
-          response = resp;
+          response = await sendResponse(resp, payload.user.id);
+          // response = resp;
         } else {
           const newData = await currentStage(payload.user.id);
           // console.log(newData.lga);
@@ -267,14 +267,14 @@ exports.RegistrationProcess = async (req, res) => {
             },
           ];
           let rr = productsButtons({ header, summary: summary2 }, button2);
-          // response = await sendResponse(rr, payload.user.id);
-          response = rr;
+          response = await sendResponse(rr, payload.user.id);
+          // response = rr;
         }
       } else {
         let rq =
           "Invalid input,please check and retry or enter *restart* to start all over";
-        // response = await sendResponse(rq, payload.user.id);
-        response = rq;
+        response = await sendResponse(rq, payload.user.id);
+        // response = rq;
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
       if (payload?.type === "text" && stage?.step === 2) {
@@ -287,8 +287,8 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         let ress = await serviceResponse();
-        // response = await sendResponse(ress, payload.user.id);
-        response = ress;
+        response = await sendResponse(ress, payload.user.id);
+        // response = ress;
       } else if (
         payload.type === "text" &&
         stage.step === 3 &&
@@ -303,8 +303,8 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
 
-        // response = await sendResponse(otherResponse.address, payload.user.id);
-        response = otherResponse.address;
+        response = await sendResponse(otherResponse.address, payload.user.id);
+        // response = otherResponse.address;
       } else if (payload.type === "text" && stage.step === 4) {
         await update(
           { address: payload.text, step: 5 },
@@ -315,8 +315,8 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
 
-        // response = await sendResponse(otherResponse.location, payload.user.id);
-        response = otherResponse.location;
+        response = await sendResponse(otherResponse.location, payload.user.id);
+        // response = otherResponse.location;
       } else if (payload.type === "location" && stage.step === 5) {
         let location = {
           long: payload.location.longitude,
@@ -330,11 +330,11 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        // response = await sendResponse(
-        //   otherResponse.task_description,
-        //   payload.user.id
-        // );
-        response = otherResponse.task_description;
+        response = await sendResponse(
+          otherResponse.task_description,
+          payload.user.id
+        );
+        // response = otherResponse.task_description;
       } else if (payload.type === "text" && stage.step === 6) {
         await update(
           { task_description: payload.text, step: 7 },
@@ -346,8 +346,8 @@ exports.RegistrationProcess = async (req, res) => {
         );
         // states.includes(states[Number(payload.text) - 1]
         let js = await artisanResponse();
-        // response = await sendResponse(js, payload.user.id);
-        response = js;
+        response = await sendResponse(js, payload.user.id);
+        // response = js;
       } else if (
         payload.type === "text" &&
         stage.step === 7 &&
@@ -376,22 +376,22 @@ exports.RegistrationProcess = async (req, res) => {
         };
 
         await saveCustomerRequest(requestToSave);
-        // response = await sendResponse(
-        //   "Congrats,your request has been received",
-        //   payload.user.id
-        // );
-        response = "Congrats,your request has been received";
+        response = await sendResponse(
+          "Congrats,your request has been received",
+          payload.user.id
+        );
+        // response = "Congrats,your request has been received";
       } else {
         let sg =
           "Invalid input,please check and retry or enter *restart* to start all over";
-        // response = await sendResponse(sg, payload.user.id);
-        response = sg;
+        response = await sendResponse(sg, payload.user.id);
+        // response = sg;
       }
     } else {
       let fg =
         "Invalid input,please check and retry or enter *restart* to start all over";
-      // response = await sendResponse(fg, payload.user.id);
-      response = fg;
+      response = await sendResponse(fg, payload.user.id);
+      // response = fg;
     }
     return res.status(200).json(response);
   } catch (error) {
