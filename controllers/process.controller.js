@@ -342,14 +342,19 @@ exports.RegistrationProcess = async (req, res) => {
           artisan: ggg.artisan,
         };
         await saveCustomerRequest(requestToSave);
-        response = "Congrat,your request has been received";
+        response = await sendResponse(
+          "Congrat,your request has been received",
+          payload.user.id
+        );
       } else {
-        response =
+        let sg =
           "Invalid input,please check and retry or enter *restart* to start all over";
+        response = await sendResponse(sg, payload.user.id);
       }
     } else {
-      response =
+      let fg =
         "Invalid input,please check and retry or enter *restart* to start all over";
+      response = await sendResponse(fg, payload.user.id);
     }
     return res.status(200).json(response);
   } catch (error) {
