@@ -136,7 +136,7 @@ exports.RegistrationProcess = async (req, res) => {
       ) {
         await update(
           {
-            lga: stage.local_government[Number(payload.text) - 1].name,
+            lga: stage.local_government.data[Number(payload.text) - 1].name,
             step: 6,
           },
           {
@@ -185,9 +185,9 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        const summary = `*Name* ${stage.full_name} *Service* ${
+        const summary = `Name: *${stage.full_name}* Service: *${
           stage.service
-        } *State* ${stage.state} *Lga* ${stage.lga} *Address&* ${
+        }* State: *${stage.state}* Local_government: *${stage.lga}* Address: *${
           stage.address
         }.To complete your registration, kindly make a payment of ${account.formatMoney(
           Number(acct_value.data.amount),
