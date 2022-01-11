@@ -208,9 +208,7 @@ exports.RegistrationProcess = async (req, res) => {
         payload.type === "text" &&
         stage?.step === 8
       ) {
-        const payment = await confirmPayment(
-          JSON.parse(stage.local_government)?.flw_ref
-        );
+        const payment = await confirmPayment(stage.local_government?.flw_ref);
         if (payment.data.status) {
           const toSave = {
             user_id: stage.user_id,
@@ -228,12 +226,12 @@ exports.RegistrationProcess = async (req, res) => {
           response = await sendResponse(resp, payload.user.id);
         } else {
           const summary2 = `kindly make a payment of ${account.formatMoney(
-            Number(JSON.parse(stage.local_government).amount),
+            Number(stage.local_government.amount),
             "₦"
           )} into * ${
-            JSON.parse(stage.local_government).account_number +
+            stage.local_government.account_number +
             " " +
-            JSON.parse(stage.local_government).bank_name
+            stage.local_government.bank_name
           }  *.After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
