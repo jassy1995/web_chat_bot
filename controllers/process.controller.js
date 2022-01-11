@@ -341,9 +341,12 @@ exports.RegistrationProcess = async (req, res) => {
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
+        // saveCustomerRequest(requestToSave).then((ss) => {
+
+        //  }).catch(err=>{console.error(err)});
         await saveCustomerRequest(requestToSave);
         response = await sendResponse(
-          "Congrat,your request has been received",
+          "Congrats,your request has been received",
           payload.user.id
         );
       } else {
