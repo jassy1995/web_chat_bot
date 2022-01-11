@@ -18,7 +18,8 @@ const question_one = {
 
 const two = {
   full_name: "Kindly enter your full name",
-  service: "Kindly choose the service you offer",
+  service:
+    "Kindly click the button below to choose the service you are offering",
   address: "Enter your address",
   location: "Enter your location",
   task_description: "Describe your task(kindly make it brief)",
@@ -83,7 +84,7 @@ const lgaResponse = async (state_id) => {
   const { data: lga } = await getLga(state_id);
   return {
     lg: lga,
-    res: `${question} \n${formatDataArrayToStringLga(lga, "name")}`,
+    rest: `${question} \n${formatDataArrayToStringLga(lga, "name")}`,
   };
 };
 

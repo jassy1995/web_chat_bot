@@ -126,7 +126,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        response = await sendResponse(info.res, payload.user.id);
+        response = await sendResponse(info.rest, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage?.step === 5 &&
@@ -134,6 +134,13 @@ exports.RegistrationProcess = async (req, res) => {
           stage.local_government[Number(payload.text) - 1]
         )
       ) {
+        // const val = await getLga()
+        console.log(
+          stage.local_government.includes(
+            stage.local_government[Number(payload.text) - 1]
+          )
+        );
+        console.log(stage.local_government[Number(payload.text) - 1].name);
         await update(
           {
             lga: stage.local_government[Number(payload.text) - 1].name,
@@ -170,33 +177,35 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(otherResponse.picture, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 8) {
         await update(
-          { picture: payload.user.image, step: 8 },
+          {
+            picture: payload.user.image,
+            local_government: acct_value.data,
+            step: 8,
+          },
           {
             where: {
               user_id: payload.user.id,
             },
           }
         );
-        await update(
-          { local_government: acct_value.data },
-          {
-            where: {
-              user_id: payload.user.id,
-            },
-          }
-        );
-        const summary = `Name: *${stage.full_name}*, Service: *${
+        // await update(
+        //   { local_government: acct_value.data },
+        //   {
+        //     where: {
+        //       user_id: payload.user.id,
+        //     },
+        //   }
+        // );
+        const summary = `Name: ${stage.full_name}, Service: ${
           stage.service
-        }*, State: *${stage.state}*, Local_government: *${
-          stage.lga
-        }*, Address: *${
+        }, State: ${stage.state}, Local_government: ${stage.lga}, Address: ${
           stage.address
         }.To complete your registration, kindly make a payment of ${account.formatMoney(
           Number(acct_value.data.amount),
           "₦"
-        )} into * ${
+        )} into  ${
           acct_value.data.account_number + " " + acct_value.data.bank_name
-        }* . After payment, click the button below to confirm your payment`;
+        } . After payment, click the button below to confirm your payment`;
         const header = "Here is the summary of your registration";
         const button = [
           {
@@ -228,7 +237,9 @@ exports.RegistrationProcess = async (req, res) => {
           let resp = "Congratulation, your registration has been completed";
           response = await sendResponse(resp, payload.user.id);
         } else {
-          const newData = await currentStage();
+          const newData = await currentStage(payload.user.id);
+          // console.log(newData.lga);
+          // console.log(newData.local_government);
           const summary2 = `kindly make a payment of ${account.formatMoney(
             Number(newData.local_government.amount),
             "₦"
@@ -245,7 +256,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           ];
           let rr = productsButtons({ header, summary: summary2 }, button2);
-          response = await sendResponse(rr, payload.user.id);
+          // response = await sendResponse(rr, payload.user.id);
+          response = rr;
         }
       } else {
         response =
