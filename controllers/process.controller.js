@@ -135,20 +135,13 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (
         payload.type === "text" &&
         stage?.step === 5 &&
-        stage.local_government.includes(
-          stage.local_government[Number(payload.text) - 1]
-        )
+        payload.text > 0 &&
+        payload.text <= JSON.parse(stage.local_government).length
       ) {
-        // const val = await getLga()
-        // console.log(
-        //   stage.local_government.includes(
-        //     stage.local_government[Number(payload.text) - 1]
-        //   )
-        // );
-        // console.log(stage.local_government[Number(payload.text) - 1].name);
         await update(
           {
-            lga: stage.local_government[Number(payload.text) - 1].name,
+            lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]
+              .name,
             step: 6,
           },
           {
@@ -232,7 +225,9 @@ exports.RegistrationProcess = async (req, res) => {
         payload.type === "text" &&
         stage?.step === 8
       ) {
-        const payment = await confirmPayment(stage.local_government?.flw_ref);
+        const payment = await confirmPayment(
+          JSON.parse(stage.local_government)?.flw_ref
+        );
         if (payment.data.status) {
           const toSave = {
             user_id: stage.user_id,
@@ -254,10 +249,10 @@ exports.RegistrationProcess = async (req, res) => {
           // console.log(newData.lga);
           // console.log(newData.local_government);
           const summary2 = `kindly make a payment of *${account.formatMoney(
-            Number(newData.local_government.amount),
+            Number(JSON.parse(newData.local_government).amount),
             "₦"
-          )}* into *${newData.local_government.account_number}* *${
-            newData.local_government.bank_name
+          )}* into *${JSON.parse(newData.local_government).account_number}* *${
+            JSON.parse(newData.local_government).bank_name
           }*. After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
