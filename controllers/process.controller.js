@@ -292,7 +292,7 @@ exports.RegistrationProcess = async (req, res) => {
           lat: payload.location.latitude,
         };
         await update(
-          { local_government: location },
+          { local_government: location, step: 6 },
           {
             where: {
               user_id: payload.user.id,
