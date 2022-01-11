@@ -189,21 +189,6 @@ const mystates = [
   },
 ];
 
-const artisans = [
-  {
-    name: "James Oriwu",
-    phone: "08076452212",
-    account_number: "0076543123",
-    bank: "Wema Bank",
-  },
-  {
-    name: "Alade Hakeem",
-    phone: "08033236547",
-    account_number: "1278977722",
-    bank: "Wema Bank",
-  },
-];
-
 const { Service, State } = require("../models");
 
 const AccountDetail = async (full_name, id) => {

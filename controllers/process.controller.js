@@ -136,7 +136,7 @@ exports.RegistrationProcess = async (req, res) => {
       ) {
         await update(
           {
-            lga: stage.local_government.data[Number(payload.text) - 1].name,
+            lga: stage.local_government[Number(payload.text) - 1].name,
             step: 6,
           },
           {
