@@ -313,8 +313,8 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         // states.includes(states[Number(payload.text) - 1]
-        response = await artisanResponse();
-        // response = await sendResponse(otherResponse.artisan, payload.user.id);
+        let js = await artisanResponse();
+        response = await sendResponse(js, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 7 &&
