@@ -129,14 +129,13 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (
         payload.type === "text" &&
         stage?.step === 5 &&
-        JSON.parse(stage.local_government).includes(
-          JSON.parse(stage.local_government)[Number(payload.text) - 1]
+        stage.local_government.includes(
+          stage.local_government[Number(payload.text) - 1]
         )
       ) {
         await update(
           {
-            lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]
-              .name,
+            lga: stage.local_government[Number(payload.text) - 1].name,
             step: 6,
           },
           {
