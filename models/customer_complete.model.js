@@ -24,7 +24,7 @@ const CustomerComplete = (sequelize, DataTypes, Sequelize) =>
       allowNull: false,
     },
     location: {
-      type: DataTypes.STRING,
+      type: DataTypes.LONGTEXT,
       allowNull: false,
     },
     task_description: {

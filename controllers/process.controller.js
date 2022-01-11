@@ -50,16 +50,16 @@ exports.RegistrationProcess = async (req, res) => {
     const acct_value = await AccountDetail(stage?.full_name, payload?.user?.id);
 
     if (
-      (payload.text.toLowerCase() == "hi" ||
-        payload.text.toLowerCase() == "restart") &&
-      payload.type === "text"
+      payload.type === "text" &&
+      (payload?.text?.toLowerCase() == "hi" ||
+        payload.text.toLowerCase() == "restart")
     ) {
       await destroy({ where: { user_id: payload.user.id } });
       await create({ user_id: payload.user.id, step: 1 });
       response = await sendResponse(welcomeResponse, payload.user.id);
     } else if (
-      stage.step === 1 &&
       payload.type === "text" &&
+      stage.step === 1 &&
       otherResponse.initService.includes(
         otherResponse.initService[Number(payload.text) - 1]
       )
@@ -105,6 +105,7 @@ exports.RegistrationProcess = async (req, res) => {
         let rRe = await stateResponse();
         response = await sendResponse(rRe, payload.user.id);
       } else if (
+        payload.type === "text" &&
         stage?.step === 4 &&
         states.includes(states[Number(payload.text) - 1])
       ) {
@@ -285,10 +286,13 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.location, payload.user.id);
-      } else if (stage.step === 5) {
-        console.log(payload);
+      } else if (payload.type === "location" && stage.step === 5) {
+        let location = {
+          long: payload.location.longitude,
+          lat: payload.location.latitude,
+        };
         await update(
-          { location: payload.user.image, step: 6 },
+          { location: location },
           {
             where: {
               user_id: payload.user.id,
