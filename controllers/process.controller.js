@@ -185,9 +185,11 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        const summary = `Name: *${stage.full_name}* Service: *${
+        const summary = `Name: *${stage.full_name}*, Service: *${
           stage.service
-        }* State: *${stage.state}* Local_government: *${stage.lga}* Address: *${
+        }*, State: *${stage.state}*, Local_government: *${
+          stage.lga
+        }*, Address: *${
           stage.address
         }.To complete your registration, kindly make a payment of ${account.formatMoney(
           Number(acct_value.data.amount),
@@ -226,6 +228,7 @@ exports.RegistrationProcess = async (req, res) => {
           let resp = "Congratulation, your registration has been completed";
           response = await sendResponse(resp, payload.user.id);
         } else {
+          // const newData = await currentStage()
           const summary2 = `kindly make a payment of ${account.formatMoney(
             Number(stage.local_government.amount),
             "₦"
@@ -233,7 +236,7 @@ exports.RegistrationProcess = async (req, res) => {
             stage.local_government.account_number +
             " " +
             stage.local_government.bank_name
-          }  *.After payment, click the button below to confirm your payment`;
+          } .After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
             {

@@ -63,7 +63,7 @@ const welcomeResponse = productsButtons("how do we help you today?", [
 
 const fullNameResponse = () => {
   const question = question_one.full_name;
-  return `\nWelcome to the registration of websi. we would like to ask you some questions\n${question}`;
+  return `\nWelcome to the registration of wesabi. we would like to ask you some questions\n${question}`;
 };
 
 const serviceResponse = async () => {
