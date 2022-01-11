@@ -285,7 +285,8 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.location, payload.user.id);
-      } else if (payload.type === "location" && stage.step === 5) {
+      } else if (stage.step === 5) {
+        console.log(payload);
         await update(
           { location: payload.user.image, step: 6 },
           {
