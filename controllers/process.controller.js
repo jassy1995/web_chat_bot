@@ -228,14 +228,14 @@ exports.RegistrationProcess = async (req, res) => {
           let resp = "Congratulation, your registration has been completed";
           response = await sendResponse(resp, payload.user.id);
         } else {
-          // const newData = await currentStage()
+          const newData = await currentStage();
           const summary2 = `kindly make a payment of ${account.formatMoney(
-            Number(stage.local_government.data.amount),
+            Number(newData.local_government.amount),
             "₦"
           )} into * ${
-            stage.local_government.account_number +
+            newData.local_government.account_number +
             " " +
-            stage.local_government.bank_name
+            newData.local_government.bank_name
           } .After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
