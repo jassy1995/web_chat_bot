@@ -230,7 +230,7 @@ exports.RegistrationProcess = async (req, res) => {
         } else {
           // const newData = await currentStage()
           const summary2 = `kindly make a payment of ${account.formatMoney(
-            Number(stage.local_government.amount),
+            Number(stage.local_government.data.amount),
             "₦"
           )} into * ${
             stage.local_government.account_number +
