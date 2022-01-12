@@ -90,7 +90,7 @@ exports.RegistrationProcess = async (req, res) => {
     ) {
       await update(
         {
-          step: 12,
+          step: 10,
         },
         {
           where: {
@@ -116,7 +116,7 @@ exports.RegistrationProcess = async (req, res) => {
     } else if (
       payload?.type === "text" &&
       payload?.text?.toString() === "2" &&
-      stage?.step === 12
+      stage?.step === 10
     ) {
       await destroy({ where: { user_id: payload.user.id } });
       await create({ user_id: payload.user.id, step: 1 });
