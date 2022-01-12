@@ -45,7 +45,75 @@ exports.RegistrationProcess = async (req, res) => {
     if (
       payload.type === "text" &&
       (payload?.text?.toLowerCase() == "hi" ||
-        payload.text.toLowerCase() == "restart")
+        payload.text.toLowerCase() == "restart") &&
+      stage?.step === null
+    ) {
+      await destroy({ where: { user_id: payload.user.id } });
+      await create({ user_id: payload.user.id, step: 1 });
+      response = await sendResponse(welcomeResponse, payload.user.id);
+    } else if (
+      payload?.type === "text" &&
+      payload?.text?.toLowerCase() == "hi" &&
+      stage?.step === 10
+    ) {
+      await update(
+        {
+          step: 11,
+        },
+        {
+          where: {
+            user_id: payload.user.id,
+          },
+        }
+      );
+      const summary = `Here is the summary of the stage [Name]: *${stage.full_name}*, [Service]: *${stage.service}*, [State]: *${stage.state}*,[Local_government]: *${stage.lga}*, [Address]: *${stage.address}* . would you like to continue or restart the registration`;
+      const header = `Welcome,${stage.full_name} you are almost complete your registration`;
+      const button = [
+        {
+          type: "reply",
+          reply: { id: `${1}`, title: "Yes,Continue" },
+        },
+        {
+          type: "reply",
+          reply: { id: `${2}`, title: "No,Restart" },
+        },
+      ];
+      let re = productsButtons({ header, summary }, button);
+      response = await sendResponse(re, payload.user.id);
+    } else if (
+      payload?.type === "text" &&
+      payload?.text?.toString() === "1" &&
+      stage?.step === 11
+    ) {
+      await update(
+        {
+          step: 12,
+        },
+        {
+          where: {
+            user_id: payload.user.id,
+          },
+        }
+      );
+      const summary = `To complete your registration, kindly make a payment of *${account.formatMoney(
+        Number(acct_value.data.amount),
+        "₦"
+      )}* into  *${acct_value.data.account_number}* *${
+        acct_value.data.bank_name
+      }*. After payment, click the button below to confirm your payment`;
+      const header = "Here is the summary of your registration";
+      const button = [
+        {
+          type: "reply",
+          reply: { id: `${1}`, title: "Confirm payment" },
+        },
+      ];
+      let re = productsButtons({ header, summary }, button);
+      response = await sendResponse(re, payload.user.id);
+    } else if (
+      payload?.type === "text" &&
+      payload?.text?.toString() === "2" &&
+      stage?.step === 12
     ) {
       await destroy({ where: { user_id: payload.user.id } });
       await create({ user_id: payload.user.id, step: 1 });
