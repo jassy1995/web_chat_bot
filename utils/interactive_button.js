@@ -46,6 +46,24 @@ const changeNameButton = (info, button) => {
   return message;
 };
 
+const productsButtons2 = (info, button) => {
+  let message = {
+    payload: {
+      type: "interactive",
+      interactive: {
+        type: "button",
+        body: {
+          text: info.summary,
+        },
+        action: {
+          buttons: button,
+        },
+      },
+    },
+  };
+  return message;
+};
+
 const listButtons = (question, options) => {
   let lists = {
     payload: {

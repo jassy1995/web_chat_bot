@@ -66,7 +66,7 @@ exports.RegistrationProcess = async (req, res) => {
           },
         }
       );
-      const summary = `Here is the summary of the stage [Name]: *${stage.full_name}*, [Service]: *${stage.service}*, [State]: *${stage.state}*,[Local_government]: *${stage.lga}*, [Address]: *${stage.address}* . would you like to continue or restart the registration`;
+      const summary = `Here is the summary of your previous stage Name: *${stage.full_name}*, Service: *${stage.service}*, State: *${stage.state}*,LGA: *${stage.lga}*, Address: *${stage.address}* . would you like to continue or restart the registration`;
       const header = `Welcome,${stage.full_name} you are almost complete your registration`;
       const button = [
         {
@@ -101,14 +101,14 @@ exports.RegistrationProcess = async (req, res) => {
       )}* into  *${acct_value.data.account_number}* *${
         acct_value.data.bank_name
       }*. After payment, click the button below to confirm your payment`;
-      const header = "Here is the summary of your registration";
+
       const button = [
         {
           type: "reply",
           reply: { id: `${1}`, title: "Confirm payment" },
         },
       ];
-      let re = productsButtons({ header, summary }, button);
+      let re = productsButtons({ summary }, button);
       response = await sendResponse(re, payload.user.id);
     } else if (
       payload?.type === "text" &&
@@ -304,13 +304,11 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        const summary = `Name: *${stage.full_name}*, Service: *${
+        const summary = `Name: ${stage.full_name}, Service: ${
           stage.service
-        }*, State: *${stage.state}*,Local_government: *${
-          stage.lga
-        }*, Address: *${
+        }, State: ${stage.state}, LGA: ${stage.lga}, Address: ${
           stage.address
-        }* .To complete your registration, kindly make a payment of *${account.formatMoney(
+        } .To complete your registration, kindly make a payment of *${account.formatMoney(
           Number(acct_value.data.amount),
           "₦"
         )}* into  *${acct_value.data.account_number}* *${
