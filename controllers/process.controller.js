@@ -8,6 +8,7 @@ const {
   lgaResponse,
   otherResponse,
   artisanResponse,
+  changeNameResponse,
 } = require("../utils/chat");
 
 const {
@@ -67,12 +68,75 @@ exports.RegistrationProcess = async (req, res) => {
           },
         }
       );
-      let fn = await fullNameResponse();
-      response = await sendResponse(fn, payload.user.id);
-    } else if (stage?.menu === "Render Service (Artisan)") {
-      if (payload.type === "text" && stage.step === 2) {
+      // let fn = await fullNameResponse();
+      // response = await sendResponse(fn, payload.user.id);
+      let ps = await changeNameResponse();
+      response = await sendResponse(ps, payload.user.id);
+    }
+    // else if (payload.type === "text" && stage.step === 2 && payload.text.toString() === "1") {
+    //   await update(
+    //     { full_name: payload.user.name, step: 3 },
+    //     {
+    //       where: {
+    //         user_id: payload.user.id,
+    //       },
+    //     }
+    //   );
+    //    let rfs = await serviceResponse();
+    //    response = await sendResponse(rfs, payload.user.id);
+    // let ps = await changeNameResponse();
+    // response = await sendResponse(ps, payload.user.id);
+    // }
+    // else if (
+    //   payload.type === "text" &&
+    //   stage.step === 2 &&
+    //   payload.text.toString() === "2"
+    // ) {
+    //   await update(
+    //     { full_name: payload.user.name, step: 3 },
+    //     {
+    //       where: {
+    //         user_id: payload.user.id,
+    //       },
+    //     }
+    //   );
+    //   let ps = await changeNameResponse();
+    //   response = await sendResponse(ps, payload.user.id);
+    // }
+    else if (stage?.menu === "Render Service (Artisan)") {
+      if (
+        payload.type === "text" &&
+        stage.step === 2 &&
+        payload.text.toString() === "2"
+      ) {
         await update(
-          { full_name: payload.text, step: 3 },
+          { step: 3 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let fn = await fullNameResponse();
+        response = await sendResponse(fn, payload.user.id);
+      } else if (payload.type === "text" && stage.step === 3) {
+        await update(
+          { full_name: payload.text, step: 4 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let tt = await serviceResponse();
+        response = await sendResponse(tt, payload.user.id);
+      } else if (
+        payload.type === "text" &&
+        stage.step === 2 &&
+        payload.text.toString() === "1"
+      ) {
+        await update(
+          { full_name: payload.user.name, step: 4 },
           {
             where: {
               user_id: payload.user.id,
@@ -83,11 +147,11 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(rfs, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 3 &&
+        stage.step === 4 &&
         service.includes(service[Number(payload.text) - 1])
       ) {
         await update(
-          { service: service[Number(payload.text) - 1], step: 4 },
+          { service: service[Number(payload.text) - 1], step: 5 },
           {
             where: {
               user_id: payload.user.id,
@@ -98,11 +162,11 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(rRe, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage?.step === 4 &&
+        stage?.step === 5 &&
         states.includes(states[Number(payload.text) - 1])
       ) {
         await update(
-          { state: states[Number(payload.text) - 1].name, step: 5 },
+          { state: states[Number(payload.text) - 1].name, step: 6 },
           {
             where: {
               user_id: payload.user.id,
@@ -121,7 +185,7 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(info.rests, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage?.step === 5 &&
+        stage?.step === 6 &&
         payload.text > 0 &&
         payload.text <= JSON.parse(stage.local_government).length
       ) {
@@ -129,7 +193,7 @@ exports.RegistrationProcess = async (req, res) => {
           {
             lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]
               .name,
-            step: 6,
+            step: 7,
           },
           {
             where: {
@@ -138,9 +202,9 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         response = await sendResponse(otherResponse.address, payload.user.id);
-      } else if (payload.type === "text" && stage.step === 6) {
+      } else if (payload.type === "text" && stage.step === 7) {
         await update(
-          { address: payload.text, step: 7 },
+          { address: payload.text, step: 8 },
           {
             where: {
               user_id: payload.user.id,
@@ -148,9 +212,9 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         response = await sendResponse(otherResponse.id_card, payload.user.id);
-      } else if (payload.type === "image" && stage?.step === 7) {
+      } else if (payload.type === "image" && stage?.step === 8) {
         await update(
-          { id_card: payload.user.image, step: 8 },
+          { id_card: payload.user.image, step: 9 },
           {
             where: {
               user_id: payload.user.id,
@@ -159,12 +223,12 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.picture, payload.user.id);
-      } else if (payload.type === "image" && stage?.step === 8) {
+      } else if (payload.type === "image" && stage?.step === 9) {
         await update(
           {
             picture: payload.user.image,
             local_government: acct_value.data,
-            step: 8,
+            step: 10,
           },
           {
             where: {
@@ -196,7 +260,7 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (
         payload.text.toString() === "1" &&
         payload.type === "text" &&
-        stage?.step === 8
+        stage?.step === 10
       ) {
         const payment = await confirmPayment(
           JSON.parse(stage.local_government)?.flw_ref
@@ -242,9 +306,41 @@ exports.RegistrationProcess = async (req, res) => {
         // response = rq;
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
-      if (payload?.type === "text" && stage?.step === 2) {
+      if (
+        payload.type === "text" &&
+        stage.step === 2 &&
+        payload.text.toString() === "2"
+      ) {
         await update(
-          { full_name: payload.text, step: 3 },
+          { step: 3 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let fn = await fullNameResponse();
+        response = await sendResponse(fn, payload.user.id);
+      } else if (payload.type === "text" && stage.step === 3) {
+        await update(
+          { full_name: payload.text, step: 4 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let tt = await serviceResponse();
+        response = await sendResponse(tt, payload.user.id);
+      }
+
+      if (
+        payload?.type === "text" &&
+        stage?.step === 2 &&
+        payload.text.toString() === "1"
+      ) {
+        await update(
+          { full_name: payload.user.name, step: 4 },
           {
             where: {
               user_id: payload.user.id,
@@ -255,11 +351,11 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(ress, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 3 &&
+        stage.step === 4 &&
         service.includes(service[Number(payload.text) - 1])
       ) {
         await update(
-          { service: service[Number(payload.text) - 1], step: 4 },
+          { service: service[Number(payload.text) - 1], step: 5 },
           {
             where: {
               user_id: payload.user.id,
@@ -268,9 +364,9 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.address, payload.user.id);
-      } else if (payload.type === "text" && stage.step === 4) {
+      } else if (payload.type === "text" && stage.step === 5) {
         await update(
-          { address: payload.text, step: 5 },
+          { address: payload.text, step: 6 },
           {
             where: {
               user_id: payload.user.id,
@@ -279,13 +375,13 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.location, payload.user.id);
-      } else if (payload.type === "location" && stage.step === 5) {
+      } else if (payload.type === "location" && stage.step === 6) {
         let location = {
           long: payload.location.longitude,
           lat: payload.location.latitude,
         };
         await update(
-          { local_government: location, step: 6 },
+          { local_government: location, step: 7 },
           {
             where: {
               user_id: payload.user.id,
@@ -296,9 +392,9 @@ exports.RegistrationProcess = async (req, res) => {
           otherResponse.task_description,
           payload.user.id
         );
-      } else if (payload.type === "text" && stage.step === 6) {
+      } else if (payload.type === "text" && stage.step === 7) {
         await update(
-          { task_description: payload.text, step: 7 },
+          { task_description: payload.text, step: 8 },
           {
             where: {
               user_id: payload.user.id,
@@ -309,7 +405,7 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(js, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 7 &&
+        stage.step === 8 &&
         artisans.data.artisans.includes(
           artisans.data.artisans[Number(payload.text) - 1]
         )

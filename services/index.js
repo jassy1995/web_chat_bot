@@ -228,10 +228,6 @@ const getListOfArtisan = async () => {
   return await axios.post("https://kuda-mock.herokuapp.com/artisans");
 };
 
-// const test = async () => {
-//   return await axios.post("https://kuda-mock.herokuapp.com/artisans");
-// };
-
 const sendResponse = async (message, phone) => {
   try {
     const json = {

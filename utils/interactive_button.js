@@ -24,6 +24,28 @@ const productsButtons = (info, button) => {
   return message;
 };
 
+const changeNameButton = (info, button) => {
+  let message = {
+    payload: {
+      type: "interactive",
+      interactive: {
+        type: "button",
+        header: {
+          type: "text",
+          text: ` ${info}`,
+        },
+        body: {
+          text: "would you like to change your *full name*?",
+        },
+        action: {
+          buttons: button,
+        },
+      },
+    },
+  };
+  return message;
+};
+
 const listButtons = (question, options) => {
   let lists = {
     payload: {
@@ -51,4 +73,5 @@ const listButtons = (question, options) => {
 module.exports = {
   productsButtons,
   listButtons,
+  changeNameButton,
 };

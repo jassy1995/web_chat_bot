@@ -4,7 +4,11 @@ const {
   getLga,
   getListOfArtisan,
 } = require("../services");
-const { productsButtons, listButtons } = require("./interactive_button");
+const {
+  productsButtons,
+  listButtons,
+  changeNameButton,
+} = require("./interactive_button");
 
 const question_one = {
   full_name: "Kindly enter your *full name*",
@@ -15,17 +19,14 @@ const question_one = {
   address: "Enter your address",
   id_card: "Attach your ID card",
   picture: "Attach your picture",
-};
-
-const two = {
-  full_name: "Kindly enter your full name",
-  service:
-    "Kindly click the button below to choose the service you are offering",
-  address: "Enter your address",
-  location: "Enter your location",
+  location: "Share your location",
   task_description: "Describe your task(kindly make it brief)",
   artisan:
     "See attached list of verifiable artisans in your location and select one.... the artisan details goes thus",
+  initService: [
+    "Render Service (Artisan)",
+    "Request Service Provider(Customer)",
+  ],
 };
 
 // format data array to return array of objects
@@ -91,23 +92,32 @@ const lgaResponse = async (state_id) => {
 
 const artisanResponse = async () => {
   const artisans = await getListOfArtisan();
-  return `${two.artisan} \n${formatDataArrayToStringForArtisan(
+  return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
     artisans.data.artisans
   )}`;
 };
 
+const changeNameResponse = async (artisan_name) => {
+  return changeNameButton(`hi ${artisan_name}`, [
+    {
+      type: "reply",
+      reply: { id: `${1}`, title: "No" },
+    },
+    {
+      type: "reply",
+      reply: { id: `${2}`, title: "Yes" },
+    },
+  ]);
+};
+
 const otherResponse = {
-  address: "Enter your address",
-  id_card: "Attach your ID card",
-  picture: "Attach your picture",
-  location: "Share your location",
-  task_description: "Describe your task(kindly make it brief)",
-  artisan:
-    "See attached list of verifiable artisans in your location and select one.... the artisan details goes thus",
-  initService: [
-    "Render Service (Artisan)",
-    "Request Service Provider(Customer)",
-  ],
+  address: question_one.address,
+  id_card: question_one.id_card,
+  picture: question_one.picture,
+  location: question_one.location,
+  task_description: question_one.task_description,
+  artisan: question_one.artisan,
+  initService: question_one.initService,
 };
 
 module.exports = {
@@ -118,4 +128,5 @@ module.exports = {
   lgaResponse,
   otherResponse,
   artisanResponse,
+  changeNameResponse,
 };
