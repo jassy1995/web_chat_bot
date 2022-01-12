@@ -1,4 +1,7 @@
-const { productsButtons } = require("../utils/interactive_button");
+const {
+  productsButtons,
+  productsButtons2,
+} = require("../utils/interactive_button");
 const account = require("accounting");
 const {
   welcomeResponse,
@@ -108,7 +111,7 @@ exports.RegistrationProcess = async (req, res) => {
           reply: { id: `${1}`, title: "Confirm payment" },
         },
       ];
-      let re = productsButtons({ summary }, button);
+      let re = productsButtons2({ summary }, button);
       response = await sendResponse(re, payload.user.id);
     } else if (
       payload?.type === "text" &&

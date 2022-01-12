@@ -90,6 +90,7 @@ const listButtons = (question, options) => {
 
 module.exports = {
   productsButtons,
+  productsButtons2,
   listButtons,
   changeNameButton,
 };
