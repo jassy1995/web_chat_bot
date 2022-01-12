@@ -70,7 +70,7 @@ exports.RegistrationProcess = async (req, res) => {
       );
       // let fn = await fullNameResponse();
       // response = await sendResponse(fn, payload.user.id);
-      let ps = await changeNameResponse();
+      let ps = await changeNameResponse(payload.user.name);
       response = await sendResponse(ps, payload.user.id);
     }
     // else if (payload.type === "text" && stage.step === 2 && payload.text.toString() === "1") {
