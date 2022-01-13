@@ -139,42 +139,9 @@ exports.RegistrationProcess = async (req, res) => {
           },
         }
       );
-      // let fn = await fullNameResponse();
-      // response = await sendResponse(fn, payload.user.id);
       let ps = await changeNameResponse(payload.user.name);
       response = await sendResponse(ps, payload.user.id);
-    }
-    // else if (payload.type === "text" && stage.step === 2 && payload.text.toString() === "1") {
-    //   await update(
-    //     { full_name: payload.user.name, step: 3 },
-    //     {
-    //       where: {
-    //         user_id: payload.user.id,
-    //       },
-    //     }
-    //   );
-    //    let rfs = await serviceResponse();
-    //    response = await sendResponse(rfs, payload.user.id);
-    // let ps = await changeNameResponse();
-    // response = await sendResponse(ps, payload.user.id);
-    // }
-    // else if (
-    //   payload.type === "text" &&
-    //   stage.step === 2 &&
-    //   payload.text.toString() === "2"
-    // ) {
-    //   await update(
-    //     { full_name: payload.user.name, step: 3 },
-    //     {
-    //       where: {
-    //         user_id: payload.user.id,
-    //       },
-    //     }
-    //   );
-    //   let ps = await changeNameResponse();
-    //   response = await sendResponse(ps, payload.user.id);
-    // }
-    else if (stage?.menu === "Render Service (Artisan)") {
+    } else if (stage?.menu === "Render Service (Artisan)") {
       if (
         payload.type === "text" &&
         stage.step === 2 &&
@@ -366,13 +333,11 @@ exports.RegistrationProcess = async (req, res) => {
           ];
           let rr = productsButtons({ header, summary: summary2 }, button2);
           response = await sendResponse(rr, payload.user.id);
-          // response = rr;
         }
       } else {
         let rq =
           "Invalid input,please check and retry or enter *restart* to start all over";
         response = await sendResponse(rq, payload.user.id);
-        // response = rq;
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
       if (
