@@ -43,10 +43,7 @@ exports.RegistrationProcess = async (req, res) => {
     const service = await getServices();
     const states = await getStates();
     const artisans = await getListOfArtisan();
-    const acct_value = await AccountDetail(
-      payload.user.name,
-      payload?.user?.id
-    );
+    const acct_value = await AccountDetail(stage?.full_name, payload?.user?.id);
     // console.log(acct_value);
 
     if (
@@ -287,6 +284,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
+        // console.log(acct_value.data);
         const summary = `Name: ${stage.full_name}, Service: ${
           stage.service
         }, State: ${stage.state}, LGA: ${stage.lga}, Address: ${
@@ -358,6 +356,7 @@ exports.RegistrationProcess = async (req, res) => {
         stage.step === 2 &&
         payload.text.toString() === "2"
       ) {
+        console.log(stage.menu);
         await update(
           { step: 3 },
           {
@@ -369,6 +368,7 @@ exports.RegistrationProcess = async (req, res) => {
         let fn = await fullNameResponse();
         response = await sendResponse(fn, payload.user.id);
       } else if (payload.type === "text" && stage.step === 3) {
+        console.log(stage.step);
         await update(
           { full_name: payload.text, step: 4 },
           {
@@ -382,8 +382,8 @@ exports.RegistrationProcess = async (req, res) => {
       }
 
       if (
-        payload?.type === "text" &&
-        stage?.step === 2 &&
+        payload.type === "text" &&
+        stage.step === 2 &&
         payload.text.toString() === "1"
       ) {
         await update(
@@ -484,7 +484,7 @@ exports.RegistrationProcess = async (req, res) => {
         );
       } else {
         let sg =
-          "Invalid input,please check and retry or enter *restart* to start all over";
+          "Invalid input,please check and retry or enter *restart* to start all over first";
         response = await sendResponse(sg, payload.user.id);
       }
     } else {
