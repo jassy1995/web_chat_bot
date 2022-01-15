@@ -49,7 +49,7 @@ exports.RegistrationProcess = async (req, res) => {
       payload.type === "text" &&
       (payload?.text?.toLowerCase() == "hi" ||
         payload.text.toLowerCase() == "restart") &&
-      (stage?.step < 10 || stage.step === null)
+      (stage?.step < 10 || stage?.step === null)
     ) {
       await destroy({ where: { user_id: payload.user.id } });
       await create({ user_id: payload.user.id, step: 1 });
