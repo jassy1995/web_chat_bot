@@ -379,9 +379,7 @@ exports.RegistrationProcess = async (req, res) => {
         );
         let tt = await serviceResponse();
         response = await sendResponse(tt, payload.user.id);
-      }
-
-      if (
+      } else if (
         payload.type === "text" &&
         stage.step === 2 &&
         payload.text.toString() === "1"
@@ -484,7 +482,7 @@ exports.RegistrationProcess = async (req, res) => {
         );
       } else {
         let sg =
-          "Invalid input,please check and retry or enter *restart* to start all over first";
+          "Invalid input,please check and retry or enter *restart* to start all over";
         response = await sendResponse(sg, payload.user.id);
       }
     } else {
