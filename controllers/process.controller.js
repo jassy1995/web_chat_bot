@@ -43,7 +43,8 @@ exports.RegistrationProcess = async (req, res) => {
     const service = await getServices();
     const states = await getStates();
     const artisans = await getListOfArtisan();
-    const acct_value = await AccountDetail(stage?.full_name, payload?.user?.id);
+    // const acct_value = await AccountDetail(stage.full_name, payload?.user?.id);
+    // console.log(acct_value);
 
     if (
       payload.type === "text" &&
@@ -87,6 +88,11 @@ exports.RegistrationProcess = async (req, res) => {
       payload?.text?.toString() === "1" &&
       stage?.step === 11
     ) {
+      const acct_value = await AccountDetail(
+        stage.full_name,
+        payload?.user?.id
+      );
+      console.log(acct_value);
       await update(
         {
           step: 10,
@@ -261,6 +267,11 @@ exports.RegistrationProcess = async (req, res) => {
 
         response = await sendResponse(otherResponse.picture, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 9) {
+        const acct_value = await AccountDetail(
+          stage.full_name,
+          payload?.user?.id
+        );
+        console.log(acct_value);
         await update(
           {
             picture: payload.user.image,
