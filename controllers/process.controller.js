@@ -43,6 +43,7 @@ exports.RegistrationProcess = async (req, res) => {
     const service = await getServices();
     const states = await getStates();
     const artisans = await getListOfArtisan();
+    const acct_value = await AccountDetail(stage?.full_name, payload?.user?.id);
 
     if (
       payload.type === "text" &&
@@ -97,10 +98,10 @@ exports.RegistrationProcess = async (req, res) => {
         }
       );
       const summary = `To complete your registration, kindly make a payment of *${account.formatMoney(
-        Number(acct_value.data.amount),
+        Number(acct_value.data?.amount),
         "₦"
-      )}* into  *${acct_value.data.account_number}* *${
-        acct_value.data.bank_name
+      )}* into  *${acct_value.data?.account_number}* *${
+        acct_value.data?.bank_name
       }*. After payment, click the button below to confirm your payment`;
 
       const button = [
@@ -260,15 +261,10 @@ exports.RegistrationProcess = async (req, res) => {
 
         response = await sendResponse(otherResponse.picture, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 9) {
-        const acct_value = await AccountDetail(
-          stage?.full_name,
-          payload?.user?.id
-        );
-
         await update(
           {
             picture: payload.user.image,
-            local_government: acct_value.data,
+            local_government: acct_value?.data,
             step: 10,
           },
           {
