@@ -278,10 +278,10 @@ exports.RegistrationProcess = async (req, res) => {
         }, State: ${stage.state}, LGA: ${stage.lga}, Address: ${
           stage.address
         } .To complete your registration, kindly make a payment of *${account.formatMoney(
-          Number(acct_value.data.amount),
+          Number(acct_value.data?.amount),
           "₦"
-        )}* into  *${acct_value.data.account_number}* *${
-          acct_value.data.bank_name
+        )}* into  *${acct_value.data?.account_number}* *${
+          acct_value.data?.bank_name
         }*. After payment, click the button below to confirm your payment`;
         const header = "Here is the summary of your registration";
         const button = [
