@@ -43,7 +43,6 @@ exports.RegistrationProcess = async (req, res) => {
     const service = await getServices();
     const states = await getStates();
     const artisans = await getListOfArtisan();
-    const acct_value = await AccountDetail(stage?.full_name, payload?.user?.id);
 
     if (
       payload.type === "text" &&
@@ -261,6 +260,11 @@ exports.RegistrationProcess = async (req, res) => {
 
         response = await sendResponse(otherResponse.picture, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 9) {
+        const acct_value = await AccountDetail(
+          stage?.full_name,
+          payload?.user?.id
+        );
+
         await update(
           {
             picture: payload.user.image,
