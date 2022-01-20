@@ -12,8 +12,7 @@ const {
 
 const question_one = {
   full_name: "Kindly enter your *full name*",
-  service:
-    "Kindly click the button below to choose the service you are offering",
+  service: "Kindly click the button below to select the service you need",
   state: "What state do you reside ?",
   lga: "What is your LGA?",
   address: "Enter your address",

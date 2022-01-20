@@ -12,7 +12,7 @@ const productsButtons = (info, button) => {
           text: `${
             info.summary
               ? info.summary
-              : "To continue click your prefer option."
+              : "kindly click to select the your prefer option."
           }`,
         },
         action: {
