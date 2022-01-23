@@ -135,7 +135,7 @@ exports.RegistrationProcess = async (req, res) => {
         otherResponse.initService[Number(payload.text) - 1]
       )
     ) {
-      const existCustomer = await getExistCustomer(payload.user.id);
+      // const existCustomer = await getExistCustomer(payload.user.id);
       await update(
         {
           menu: otherResponse.initService[Number(payload.text) - 1],
@@ -146,6 +146,7 @@ exports.RegistrationProcess = async (req, res) => {
           },
         }
       );
+      const existCustomer = await getExistCustomer(payload.user.id);
       const refetchC = await currentStage(payload.user.id);
       if (
         existCustomer?.user_id === payload.user.id &&
@@ -154,7 +155,6 @@ exports.RegistrationProcess = async (req, res) => {
         // confirmNumberResponse
         await update(
           {
-            menu: otherResponse.initService[Number(payload.text) - 1],
             step: 3,
           },
           {
