@@ -112,7 +112,7 @@ const changeNameResponse = async (artisan_name) => {
 
 const confirmNumberResponse = async (artisan_name, artisan_phone) => {
   return confirmNumberButton(
-    `hi ${artisan_name}`,
+    `Hi ${artisan_name}`,
     [
       {
         type: "reply",
