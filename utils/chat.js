@@ -8,6 +8,7 @@ const {
   productsButtons,
   listButtons,
   changeNameButton,
+  confirmNumberButton,
 } = require("./interactive_button");
 
 const question_one = {
@@ -109,6 +110,19 @@ const changeNameResponse = async (artisan_name) => {
   ]);
 };
 
+const confirmNumberResponse = async (artisan_name, artisan_phone) => {
+  return confirmNumberButton(
+    `hi ${artisan_name}`,
+    [
+      {
+        type: "reply",
+        reply: { id: `${1}`, title: "confirm" },
+      },
+    ],
+    artisan_phone
+  );
+};
+
 const otherResponse = {
   address: question_one.address,
   id_card: question_one.id_card,
@@ -128,4 +142,5 @@ module.exports = {
   otherResponse,
   artisanResponse,
   changeNameResponse,
+  confirmNumberResponse,
 };

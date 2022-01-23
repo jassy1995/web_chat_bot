@@ -12,6 +12,7 @@ const {
   otherResponse,
   artisanResponse,
   changeNameResponse,
+  confirmNumberResponse,
 } = require("../utils/chat");
 
 const {
@@ -32,6 +33,7 @@ const {
   createArtisan,
   getExistArtisan,
   saveCustomerRequest,
+  getExistCustomer,
 } = require("../utils/query");
 
 exports.RegistrationProcess = async (req, res) => {
@@ -133,10 +135,10 @@ exports.RegistrationProcess = async (req, res) => {
         otherResponse.initService[Number(payload.text) - 1]
       )
     ) {
+      const existCustomer = await getExistCustomer(payload.user.id);
       await update(
         {
           menu: otherResponse.initService[Number(payload.text) - 1],
-          step: 2,
         },
         {
           where: {
@@ -144,8 +146,43 @@ exports.RegistrationProcess = async (req, res) => {
           },
         }
       );
-      let ps = await changeNameResponse(payload.user.name);
-      response = await sendResponse(ps, payload.user.id);
+      const refetchC = await currentStage(payload.user.id);
+      if (
+        existCustomer?.user_id === payload.user.id &&
+        refetchC?.menu === "Request Service Provider(Customer)"
+      ) {
+        // confirmNumberResponse
+        await update(
+          {
+            menu: otherResponse.initService[Number(payload.text) - 1],
+            step: 3,
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let pss = await confirmNumberResponse(
+          payload.user.name,
+          payload.user.id
+        );
+        response = await sendResponse(pss, payload.user.id);
+      } else {
+        await update(
+          {
+            menu: otherResponse.initService[Number(payload.text) - 1],
+            step: 2,
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let tt = await serviceResponse();
+        response = await sendResponse(tt, payload.user.id);
+      }
     } else if (stage?.menu === "Render Service (Artisan)") {
       if (
         payload.type === "text" &&
@@ -180,6 +217,7 @@ exports.RegistrationProcess = async (req, res) => {
       ) {
         await update(
           { full_name: payload.user.name, step: 4 },
+
           {
             where: {
               user_id: payload.user.id,
@@ -351,12 +389,22 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(rq, payload.user.id);
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
-      if (
+      if (payload.text.toString() === "1" && stage.step === 3) {
+        await update(
+          { step: 4 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let ttt = await serviceResponse();
+        response = await sendResponse(ttt, payload.user.id);
+      } else if (
         payload.type === "text" &&
         stage.step === 2 &&
         payload.text.toString() === "2"
       ) {
-        console.log(stage.menu);
         await update(
           { step: 3 },
           {
