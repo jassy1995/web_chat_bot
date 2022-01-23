@@ -389,7 +389,7 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(rq, payload.user.id);
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
-      if (payload.text.toString() === "1" && stage.step === 3) {
+      if (payload?.text?.toString() === "1" && stage?.step === 3) {
         await update(
           { step: 4 },
           {
