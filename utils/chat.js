@@ -98,7 +98,7 @@ const artisanResponse = async () => {
 };
 
 const changeNameResponse = async (artisan_name) => {
-  return changeNameButton(`hi ${artisan_name}`, [
+  return changeNameButton(`Hi ${artisan_name}`, [
     {
       type: "reply",
       reply: { id: `${1}`, title: "No" },
