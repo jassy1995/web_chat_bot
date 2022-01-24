@@ -148,33 +148,6 @@ const mailingCustomer = async () => {
   }
 };
 
-const smsCustomer = async (phone) => {
-  var data = JSON.stringify({
-    api_key: "TL7EaJz8XWbr6dnRQihBtdopQ1vdcv3l5ezaw0AGk9RTTt3fdn7SuNbF3UlwWm",
-    channel: "generic",
-    from: "Wesabi",
-    sms: "Welcome to wesabi, accessing reliable and verified service professionals just got better",
-    type: "plain",
-    to: phone,
-  });
-  var config = {
-    method: "post",
-    url: "https://termii.com/api/sms/send",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: data,
-  };
-
-  axios(config)
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
-
 const otherResponse = {
   address: question_one.address,
   id_card: question_one.id_card,
@@ -196,5 +169,4 @@ module.exports = {
   changeNameResponse,
   confirmNumberResponse,
   mailingCustomer,
-  smsCustomer,
 };

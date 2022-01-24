@@ -8,14 +8,14 @@ const config = {
   headers: { "x-api-key": API_KEY },
 };
 
-const smsCustomer = async () => {
+const smsCustomer = async (phone) => {
   var data = JSON.stringify({
     api_key: "TL7EaJz8XWbr6dnRQihBtdopQ1vdcv3l5ezaw0AGk9RTTt3fdn7SuNbF3UlwWm",
     channel: "whatsapp",
     from: "Wesabi",
     sms: "welcome to wesabi platform",
     type: "plain",
-    to: "08143274300",
+    to: phone,
   });
 
   var config = {
@@ -29,7 +29,7 @@ const smsCustomer = async () => {
 
   axios(config)
     .then(function (response) {
-      console.log(JSON.stringify(response.data));
+      return response.data;
     })
     .catch(function (error) {
       console.log(error);

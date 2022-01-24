@@ -25,6 +25,7 @@ const {
   confirmPayment,
   getListOfArtisan,
   sendResponse,
+  smsCustomer,
 } = require("../services");
 
 const {
