@@ -154,9 +154,9 @@ exports.RegistrationProcess = async (req, res) => {
       );
       const existCustomer = await getExistCustomer(payload.user.id);
       const refetchC = await currentStage(payload.user.id);
-      console.log(existCustomer?.user_id === payload.user.id);
-      console.log(refetchC?.menu === "Request Service Provider(Customer)");
-      console.log(refetchC);
+      // console.log(existCustomer?.user_id === payload.user.id);
+      // console.log(refetchC?.menu === "Request Service Provider(Customer)");
+      // console.log(refetchC);
 
       if (
         existCustomer?.user_id === payload.user.id &&
@@ -190,9 +190,10 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
+        console.log(payload.user.id);
         let tt = await changeNameResponse(payload.user.name);
         response = await sendResponse(tt, payload.user.id);
-        await smsCustomer(payload.user.id);
+        // await smsCustomer(payload.user.id);
       }
     } else if (stage?.menu === "Render Service (Artisan)") {
       if (
