@@ -156,10 +156,12 @@ exports.RegistrationProcess = async (req, res) => {
         "current user object " + refetchC?.menu ===
           "Request Service Provider(Customer)"
       );
-      console.log(existCustomer?.user_id === payload.user.id);
+      console.log(
+        existCustomer?.user_id?.slice(1) === payload.user.id?.slice(3)
+      );
       console.log(refetchC?.menu === "Request Service Provider(Customer)");
       if (
-        existCustomer?.user_id === payload.user.id &&
+        existCustomer?.user_id?.slice(1) === payload.user.id?.slice(3) &&
         refetchC?.menu === "Request Service Provider(Customer)" &&
         payload.text.toString() === "2"
       ) {
