@@ -13,8 +13,7 @@ const {
   artisanResponse,
   changeNameResponse,
   confirmNumberResponse,
-  mailingCustomer,
-  smsCustomer,
+  // mailingCustomer,
 } = require("../utils/chat");
 
 const {

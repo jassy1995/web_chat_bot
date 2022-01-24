@@ -123,30 +123,30 @@ const confirmNumberResponse = async (artisan_name, artisan_phone) => {
   );
 };
 
-const mailingCustomer = async () => {
-  const mailchimp = require("mailchimp_transactional")(
-    "34e6214f5c8ce6a89fbf18be4c4ba860-us20"
-  );
-  const message = {
-    from_email: "babatundejoseph85@gmail.com",
-    subject: "Registration",
-    text: "Welcome to Creditclan,your have successfully registered!",
-    to: [
-      {
-        email: "enochtaiwotimothy@gmail.com",
-        type: "to",
-      },
-    ],
-  };
-  try {
-    const response = await mailchimp.messages.send({
-      message,
-    });
-    console.log(response);
-  } catch (error) {
-    console.log(error);
-  }
-};
+// const mailingCustomer = async () => {
+//   const mailchimp = require("mailchimp_transactional")(
+//     "34e6214f5c8ce6a89fbf18be4c4ba860-us20"
+//   );
+//   const message = {
+//     from_email: "babatundejoseph85@gmail.com",
+//     subject: "Registration",
+//     text: "Welcome to Creditclan,your have successfully registered!",
+//     to: [
+//       {
+//         email: "enochtaiwotimothy@gmail.com",
+//         type: "to",
+//       },
+//     ],
+//   };
+//   try {
+//     const response = await mailchimp.messages.send({
+//       message,
+//     });
+//     console.log(response);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const otherResponse = {
   address: question_one.address,
@@ -168,5 +168,5 @@ module.exports = {
   artisanResponse,
   changeNameResponse,
   confirmNumberResponse,
-  mailingCustomer,
+  // mailingCustomer,
 };
