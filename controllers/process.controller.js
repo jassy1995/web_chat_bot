@@ -13,6 +13,7 @@ const {
   artisanResponse,
   changeNameResponse,
   confirmNumberResponse,
+  mailingCustomer,
 } = require("../utils/chat");
 
 const {
@@ -39,6 +40,7 @@ const {
 exports.RegistrationProcess = async (req, res) => {
   const { payload } = req.body;
   let response;
+  let num = "0";
 
   try {
     const stage = await currentStage(payload.user.id);
@@ -146,22 +148,26 @@ exports.RegistrationProcess = async (req, res) => {
           },
         }
       );
-      const existCustomer = await getExistCustomer(payload.user.id);
-      const refetchC = await currentStage(payload.user.id);
-      console.log(
-        "exist user object " + existCustomer?.user_id?.trim() ==
-          payload.user.id.trim()
+      const existCustomer = await getExistCustomer(
+        num.concat(payload.user.id?.slice(3))
       );
-      console.log(
-        "current user object " + refetchC?.menu ===
-          "Request Service Provider(Customer)"
+      const refetchC = await currentStage(
+        num.concat(payload.user.id?.slice(3))
       );
+      // console.log(
+      //   "exist user object " + existCustomer?.user_id?.trim() ==
+      //     payload.user.id.trim()
+      // );
+      // console.log(
+      //   "current user object " + refetchC?.menu ===
+      //     "Request Service Provider(Customer)"
+      // );
       console.log(
-        existCustomer?.user_id?.slice(1) === payload.user.id?.slice(3)
+        existCustomer.user_id + " " + num.concat(payload.user.id?.slice(3))
       );
-      console.log(refetchC?.menu === "Request Service Provider(Customer)");
+      // console.log(refetchC?.menu === "Request Service Provider(Customer)");
       if (
-        existCustomer?.user_id?.slice(1) === payload.user.id?.slice(3) &&
+        existCustomer?.user_id === num.concat(payload.user.id?.slice(3)) &&
         refetchC?.menu === "Request Service Provider(Customer)" &&
         payload.text.toString() === "2"
       ) {
@@ -537,6 +543,7 @@ exports.RegistrationProcess = async (req, res) => {
         };
 
         await saveCustomerRequest(requestToSave);
+        // await mailingCustomer();
         response = await sendResponse(
           "Congrats,your request has been received",
           payload.user.id
