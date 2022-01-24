@@ -182,7 +182,6 @@ exports.RegistrationProcess = async (req, res) => {
       } else {
         await update(
           {
-            menu: otherResponse.initService[Number(payload.text) - 1],
             step: 2,
           },
           {
