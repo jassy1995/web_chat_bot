@@ -14,6 +14,7 @@ const {
   changeNameResponse,
   confirmNumberResponse,
   mailingCustomer,
+  smsCustomer,
 } = require("../utils/chat");
 
 const {
@@ -171,7 +172,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        console.log("stage " + stage.menu);
+
         let pss = await confirmNumberResponse(
           payload.user.name,
           payload.user.id
@@ -191,6 +192,7 @@ exports.RegistrationProcess = async (req, res) => {
         );
         let tt = await changeNameResponse(payload.user.name);
         response = await sendResponse(tt, payload.user.id);
+        await smsCustomer(payload.user.id);
       }
     } else if (stage?.menu === "Render Service (Artisan)") {
       if (
@@ -536,7 +538,7 @@ exports.RegistrationProcess = async (req, res) => {
         };
 
         await saveCustomerRequest(requestToSave);
-        await mailingCustomer();
+        // await mailingCustomer();
         response = await sendResponse(
           "Congrats,your request has been received",
           payload.user.id
