@@ -40,17 +40,13 @@ const {
 exports.RegistrationProcess = async (req, res) => {
   const { payload } = req.body;
   let response;
-  let num = "0";
 
   try {
-    const stage = await currentStage(num.concat(payload.user.id?.slice(3)));
+    const stage = await currentStage(payload.user.id);
     const service = await getServices();
     const states = await getStates();
     const artisans = await getListOfArtisan();
-    const acct_value = await AccountDetail(
-      stage?.full_name,
-      num.concat(payload.user.id?.slice(3))
-    );
+    const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     // console.log(acct_value);
 
     if (
@@ -59,13 +55,10 @@ exports.RegistrationProcess = async (req, res) => {
         payload.text.toLowerCase() == "restart")
     ) {
       await destroy({
-        where: { user_id: num.concat(payload.user.id?.slice(3)) },
+        where: { user_id: payload.user.id },
       });
-      await create({ user_id: num.concat(payload.user.id?.slice(3)), step: 1 });
-      response = await sendResponse(
-        welcomeResponse,
-        num.concat(payload.user.id?.slice(3))
-      );
+      await create({ user_id: payload.user.id, step: 1 });
+      response = await sendResponse(welcomeResponse, payload.user.id);
     } else if (
       payload?.type === "text" &&
       payload?.text?.toLowerCase() == "hi" &&
@@ -77,7 +70,7 @@ exports.RegistrationProcess = async (req, res) => {
         },
         {
           where: {
-            user_id: num.concat(payload.user.id?.slice(3)),
+            user_id: payload.user.id,
           },
         }
       );
@@ -94,7 +87,7 @@ exports.RegistrationProcess = async (req, res) => {
         },
       ];
       let re = productsButtons({ header, summary }, button);
-      response = await sendResponse(re, num.concat(payload.user.id?.slice(3)));
+      response = await sendResponse(re, payload.user.id);
     } else if (
       payload?.type === "text" &&
       payload?.text?.toString() === "1" &&
@@ -111,7 +104,7 @@ exports.RegistrationProcess = async (req, res) => {
         },
         {
           where: {
-            user_id: num.concat(payload.user.id?.slice(3)),
+            user_id: payload.user.id,
           },
         }
       );
@@ -129,20 +122,17 @@ exports.RegistrationProcess = async (req, res) => {
         },
       ];
       let re = productsButtons2({ summary }, button);
-      response = await sendResponse(re, num.concat(payload.user.id?.slice(3)));
+      response = await sendResponse(re, payload.user.id);
     } else if (
       payload?.type === "text" &&
       payload?.text?.toString() === "2" &&
       stage?.step === 11
     ) {
       await destroy({
-        where: { user_id: num.concat(payload.user.id?.slice(3)) },
+        where: { user_id: payload.user.id },
       });
-      await create({ user_id: num.concat(payload.user.id?.slice(3)), step: 1 });
-      response = await sendResponse(
-        welcomeResponse,
-        num.concat(payload.user.id?.slice(3))
-      );
+      await create({ user_id: payload.user.id, step: 1 });
+      response = await sendResponse(welcomeResponse, payload.user.id);
     } else if (
       payload.type === "text" &&
       stage?.step === 1 &&
@@ -157,25 +147,19 @@ exports.RegistrationProcess = async (req, res) => {
         },
         {
           where: {
-            user_id: num.concat(num.concat(payload.user.id?.slice(3))),
+            user_id: payload.user.id,
           },
         }
       );
-      const existCustomer = await getExistCustomer(
-        num.concat(payload.user.id?.slice(3))
-      );
-      const refetchC = await currentStage(
-        num.concat(payload.user.id?.slice(3)).toString()
-      );
-      console.log(
-        existCustomer?.user_id === num.concat(payload.user.id?.slice(3))
-      );
+      const existCustomer = await getExistCustomer(payload.user.id);
+      const refetchC = await currentStage(payload.user.id);
+      console.log(existCustomer?.user_id === payload.user.id);
       console.log(refetchC?.menu === "Request Service Provider(Customer)");
       console.log(refetchC);
 
       if (
-        existCustomer?.user_id === num.concat(payload.user.id?.slice(3)) &&
-        payload.text === "2"
+        existCustomer?.user_id === payload.user.id &&
+        refetchC.menu === "Request Service Provider(Customer)"
       ) {
         await update(
           {
@@ -183,18 +167,16 @@ exports.RegistrationProcess = async (req, res) => {
           },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
+        console.log("stage " + stage.menu);
         let pss = await confirmNumberResponse(
           payload.user.name,
-          num.concat(payload.user.id?.slice(3))
+          payload.user.id
         );
-        response = await sendResponse(
-          pss,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(pss, payload.user.id);
       } else {
         await update(
           {
@@ -203,15 +185,12 @@ exports.RegistrationProcess = async (req, res) => {
           },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let tt = await changeNameResponse(payload.user.name);
-        response = await sendResponse(
-          tt,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(tt, payload.user.id);
       }
     } else if (stage?.menu === "Render Service (Artisan)") {
       if (
@@ -223,29 +202,23 @@ exports.RegistrationProcess = async (req, res) => {
           { step: 3 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let fn = await fullNameResponse();
-        response = await sendResponse(
-          fn,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(fn, payload.user.id);
       } else if (payload.type === "text" && stage.step === 3) {
         await update(
           { full_name: payload.text, step: 4 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let tt = await serviceResponse();
-        response = await sendResponse(
-          tt,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(tt, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 2 &&
@@ -256,15 +229,12 @@ exports.RegistrationProcess = async (req, res) => {
 
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let rfs = await serviceResponse();
-        response = await sendResponse(
-          rfs,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(rfs, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 4 &&
@@ -274,15 +244,12 @@ exports.RegistrationProcess = async (req, res) => {
           { service: service[Number(payload.text) - 1], step: 5 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let rRe = await stateResponse();
-        response = await sendResponse(
-          rRe,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(rRe, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage?.step === 5 &&
@@ -292,7 +259,7 @@ exports.RegistrationProcess = async (req, res) => {
           { state: states[Number(payload.text) - 1].name, step: 6 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
@@ -301,14 +268,11 @@ exports.RegistrationProcess = async (req, res) => {
           { local_government: info.lg },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
-        response = await sendResponse(
-          info.rests,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(info.rests, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage?.step === 6 &&
@@ -323,41 +287,35 @@ exports.RegistrationProcess = async (req, res) => {
           },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
-        response = await sendResponse(
-          otherResponse.address,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(otherResponse.address, payload.user.id);
       } else if (payload.type === "text" && stage.step === 7) {
         await update(
           { address: payload.text, step: 8 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         response = await sendResponse(
           otherResponse.id_card,
-          num.concat(payload.user.id?.slice(3))
+          num.payload.user.id
         );
       } else if (payload.type === "image" && stage?.step === 8) {
         await update(
           { id_card: payload.user.image, step: 9 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
 
-        response = await sendResponse(
-          otherResponse.picture,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(otherResponse.picture, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 9) {
         // const acct_value = await AccountDetail(
         //   stage.full_name,
@@ -372,7 +330,7 @@ exports.RegistrationProcess = async (req, res) => {
           },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
@@ -395,10 +353,7 @@ exports.RegistrationProcess = async (req, res) => {
           },
         ];
         let re = productsButtons({ header, summary }, button);
-        response = await sendResponse(
-          re,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(re, payload.user.id);
       } else if (
         payload.text.toString() === "1" &&
         payload.type === "text" &&
@@ -421,14 +376,9 @@ exports.RegistrationProcess = async (req, res) => {
           };
           await createArtisan(toSave);
           let resp = "Congratulation, your registration has been completed";
-          response = await sendResponse(
-            resp,
-            num.concat(payload.user.id?.slice(3))
-          );
+          response = await sendResponse(resp, payload.user.id);
         } else {
-          const newData = await currentStage(
-            num.concat(payload.user.id?.slice(3))
-          );
+          const newData = await currentStage(t(payload.user.id));
           const summary2 = `kindly make a payment of *${account.formatMoney(
             Number(JSON.parse(newData.local_government).amount),
             "₦"
@@ -443,18 +393,12 @@ exports.RegistrationProcess = async (req, res) => {
             },
           ];
           let rr = productsButtons({ header, summary: summary2 }, button2);
-          response = await sendResponse(
-            rr,
-            num.concat(payload.user.id?.slice(3))
-          );
+          response = await sendResponse(rr, payload.user.id);
         }
       } else {
         let rq =
           "Invalid input,please check and retry or enter *restart* to start all over";
-        response = await sendResponse(
-          rq,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(rq, payload.user.id);
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
       if (payload?.text?.toString() === "1" && stage?.step === 3) {
@@ -462,15 +406,12 @@ exports.RegistrationProcess = async (req, res) => {
           { step: 4 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let ttt = await serviceResponse();
-        response = await sendResponse(
-          ttt,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(ttt, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 2 &&
@@ -480,30 +421,24 @@ exports.RegistrationProcess = async (req, res) => {
           { step: 3 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let fn = await fullNameResponse();
-        response = await sendResponse(
-          fn,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(fn, payload.user.id);
       } else if (payload.type === "text" && stage.step === 3) {
         console.log(stage.step);
         await update(
           { full_name: payload.text, step: 4 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let tt = await serviceResponse();
-        response = await sendResponse(
-          tt,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(tt, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 2 &&
@@ -513,15 +448,12 @@ exports.RegistrationProcess = async (req, res) => {
           { full_name: payload.user.name, step: 4 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let ress = await serviceResponse();
-        response = await sendResponse(
-          ress,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(ress, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 4 &&
@@ -531,29 +463,23 @@ exports.RegistrationProcess = async (req, res) => {
           { service: service[Number(payload.text) - 1], step: 5 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
 
-        response = await sendResponse(
-          otherResponse.address,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(otherResponse.address, payload.user.id);
       } else if (payload.type === "text" && stage.step === 5) {
         await update(
           { address: payload.text, step: 6 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
 
-        response = await sendResponse(
-          otherResponse.location,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(otherResponse.location, payload.user.id);
       } else if (payload.type === "location" && stage.step === 6) {
         let location = {
           long: payload.location.longitude,
@@ -563,28 +489,25 @@ exports.RegistrationProcess = async (req, res) => {
           { local_government: location, step: 7 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         response = await sendResponse(
           otherResponse.task_description,
-          num.concat(payload.user.id?.slice(3))
+          payload.user.id
         );
       } else if (payload.type === "text" && stage.step === 7) {
         await update(
           { task_description: payload.text, step: 8 },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
         let js = await artisanResponse();
-        response = await sendResponse(
-          js,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(js, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 8 &&
@@ -596,11 +519,11 @@ exports.RegistrationProcess = async (req, res) => {
           { artisan: artisans.data.artisans[Number(payload.text) - 1].name },
           {
             where: {
-              user_id: num.concat(payload.user.id?.slice(3)),
+              user_id: payload.user.id,
             },
           }
         );
-        const ggg = await currentStage(num.concat(payload.user.id?.slice(3)));
+        const ggg = await currentStage(payload.user.id);
         const requestToSave = {
           user_id: stage.user_id,
           menu: stage.menu,
@@ -613,23 +536,20 @@ exports.RegistrationProcess = async (req, res) => {
         };
 
         await saveCustomerRequest(requestToSave);
-        // await mailingCustomer();
+        await mailingCustomer();
         response = await sendResponse(
           "Congrats,your request has been received",
-          num.concat(payload.user.id?.slice(3))
+          payload.user.id
         );
       } else {
         let sg =
           "Invalid input,please check and retry or enter *restart* to start all over";
-        response = await sendResponse(
-          sg,
-          num.concat(payload.user.id?.slice(3))
-        );
+        response = await sendResponse(sg, payload.user.id);
       }
     } else {
       let fg =
         "Invalid input,please check and retry or enter *restart* to start all over";
-      response = await sendResponse(fg, num.concat(payload.user.id?.slice(3)));
+      response = await sendResponse(fg, payload.user.id);
     }
     return res.status(200).json(response);
   } catch (error) {

@@ -7,6 +7,35 @@ const { API_KEY } = process.env;
 const config = {
   headers: { "x-api-key": API_KEY },
 };
+
+const smsCustomer = async () => {
+  var data = JSON.stringify({
+    api_key: "TL7EaJz8XWbr6dnRQihBtdopQ1vdcv3l5ezaw0AGk9RTTt3fdn7SuNbF3UlwWm",
+    channel: "whatsapp",
+    from: "Wesabi",
+    sms: "welcome to wesabi platform",
+    type: "plain",
+    to: "08143274300",
+  });
+
+  var config = {
+    method: "post",
+    url: "https://termii.com/api/sms/send",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+
 // annoying wrapper to avoid annoying data key
 // const getServices = async () => (await instance.get("/services", config)).data;
 // const searchUser = async (data) =>
@@ -258,4 +287,5 @@ module.exports = {
   getStates,
   getLga,
   sendResponse,
+  smsCustomer,
 };
