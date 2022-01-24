@@ -160,7 +160,8 @@ exports.RegistrationProcess = async (req, res) => {
       console.log(refetchC?.menu === "Request Service Provider(Customer)");
       if (
         existCustomer?.user_id === payload.user.id &&
-        refetchC?.menu === "Request Service Provider(Customer)"
+        refetchC?.menu === "Request Service Provider(Customer)" &&
+        payload.text.toString() === "2"
       ) {
         // confirmNumberResponse
         await update(
