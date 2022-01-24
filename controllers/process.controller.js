@@ -184,7 +184,7 @@ exports.RegistrationProcess = async (req, res) => {
         );
         let pss = await confirmNumberResponse(
           payload.user.name,
-          payload.user.id
+          num.concat(payload.user.id?.slice(3))
         );
         response = await sendResponse(pss, payload.user.id);
       } else {
