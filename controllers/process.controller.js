@@ -181,7 +181,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        let tt = await changeNameResponse();
+        let tt = await changeNameResponse(payload.user.name);
         response = await sendResponse(tt, payload.user.id);
       }
     } else if (stage?.menu === "Render Service (Artisan)") {
