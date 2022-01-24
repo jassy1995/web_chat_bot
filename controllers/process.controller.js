@@ -191,7 +191,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        console.log(payload.user.id);
+
         let succMess = await smsCustomer(payload.user.id);
         console.log(succMess);
         let tt = await changeNameResponse(payload.user.name);
