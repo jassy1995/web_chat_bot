@@ -148,7 +148,16 @@ exports.RegistrationProcess = async (req, res) => {
       );
       const existCustomer = await getExistCustomer(payload.user.id);
       const refetchC = await currentStage(payload.user.id);
-      console.log(existCustomer);
+      console.log(
+        "exist user object " + existCustomer?.user_id?.trim() ==
+          payload.user.id.trim()
+      );
+      console.log(
+        "current user object " + refetchC?.menu ===
+          "Request Service Provider(Customer)"
+      );
+      console.log(existCustomer?.user_id === payload.user.id);
+      console.log(refetchC?.menu === "Request Service Provider(Customer)");
       if (
         existCustomer?.user_id === payload.user.id &&
         refetchC?.menu === "Request Service Provider(Customer)"
