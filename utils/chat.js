@@ -168,8 +168,7 @@ const smsCustomer = async (phone) => {
 
   axios(config)
     .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      return res.json({ data: JSON.stringify(response.data) });
+      return response.data;
     })
     .catch(function (error) {
       console.log(error);
