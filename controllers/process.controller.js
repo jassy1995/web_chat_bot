@@ -165,12 +165,16 @@ exports.RegistrationProcess = async (req, res) => {
         num.concat(payload.user.id?.slice(3))
       );
       const refetchC = await currentStage(
-        num.concat(payload.user.id?.slice(3))
+        num.concat(payload.user.id?.slice(3)).toString()
       );
+      console.log(
+        existCustomer?.user_id === num.concat(payload.user.id?.slice(3))
+      );
+      console.log(refetchC?.menu === "Request Service Provider(Customer)");
+      console.log(refetchC);
 
       if (
         existCustomer?.user_id === num.concat(payload.user.id?.slice(3)) &&
-        refetchC?.menu === "Request Service Provider(Customer)" &&
         payload.text.toString() === "2"
       ) {
         await update(
