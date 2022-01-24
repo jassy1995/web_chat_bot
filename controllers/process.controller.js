@@ -175,7 +175,7 @@ exports.RegistrationProcess = async (req, res) => {
 
       if (
         existCustomer?.user_id === num.concat(payload.user.id?.slice(3)) &&
-        payload.text.toString() === "2"
+        payload.text === "2"
       ) {
         await update(
           {
