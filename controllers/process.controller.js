@@ -36,6 +36,7 @@ const {
   getExistArtisan,
   saveCustomerRequest,
   getExistCustomer,
+  getAllExistCustomer,
 } = require("../utils/query");
 
 exports.RegistrationProcess = async (req, res) => {
@@ -532,12 +533,11 @@ exports.RegistrationProcess = async (req, res) => {
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
-        console.log(requestToSave);
+
         await saveCustomerRequest(requestToSave);
         // await mailingCustomer()
-        const existCustomer = await getExistCustomer(payload.user.id);
-        existCustomer?.user_id !== payload.user.id &&
-          (await smsCustomer(payload.user.id));
+        const existCustomer = await getAllExistCustomer(payload.user.id);
+        existCustomer?.length === 1 && (await smsCustomer(payload.user.id));
 
         response = await sendResponse(
           "Congrats,your request has been received",

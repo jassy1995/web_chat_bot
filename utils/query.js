@@ -17,6 +17,14 @@ class MyQuery {
     }
   };
 
+  getAllExistCustomer = async (id) => {
+    try {
+      return await CustomerComplete.findAll({ where: { user_id: id } });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   getExistArtisan = async (id) => {
     try {
       return await ArtisanComplete.findOne({ where: { user_id: id } });
