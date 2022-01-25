@@ -484,7 +484,7 @@ exports.RegistrationProcess = async (req, res) => {
           lat: payload.location.latitude,
         };
         await update(
-          { local_government: location, step: 7 },
+          { location: location, step: 7 },
           {
             where: {
               user_id: payload.user.id,
@@ -528,7 +528,7 @@ exports.RegistrationProcess = async (req, res) => {
           full_name: stage.full_name,
           service: stage.service,
           address: stage.address,
-          location: JSON.parse(stage.local_government.location),
+          location: stage.location,
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
