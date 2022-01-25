@@ -528,7 +528,7 @@ exports.RegistrationProcess = async (req, res) => {
           full_name: stage.full_name,
           service: stage.service,
           address: stage.address,
-          location: stage.local_government.location,
+          location: JSON.parse(stage.local_government.location),
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
