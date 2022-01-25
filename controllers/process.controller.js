@@ -190,8 +190,6 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
 
-        let succMess = await smsCustomer(payload.user.id);
-        console.log(succMess);
         let tt = await changeNameResponse(payload.user.name);
         response = await sendResponse(tt, payload.user.id);
       }
@@ -304,10 +302,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        response = await sendResponse(
-          otherResponse.id_card,
-          payload.user.id
-        );
+        response = await sendResponse(otherResponse.id_card, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 8) {
         await update(
           { id_card: payload.user.image, step: 9 },
@@ -537,9 +532,13 @@ exports.RegistrationProcess = async (req, res) => {
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
-         console.log(requestToSave)
+        console.log(requestToSave);
         await saveCustomerRequest(requestToSave);
-        // await mailingCustomer();
+        // await mailingCustomer()
+        const existCustomer = await getExistCustomer(payload.user.id);
+        existCustomer?.user_id !== payload.user.id &&
+          (await smsCustomer(payload.user.id));
+
         response = await sendResponse(
           "Congrats,your request has been received",
           payload.user.id
