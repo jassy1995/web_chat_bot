@@ -306,7 +306,7 @@ exports.RegistrationProcess = async (req, res) => {
         );
         response = await sendResponse(
           otherResponse.id_card,
-          num.payload.user.id
+          payload.user.id
         );
       } else if (payload.type === "image" && stage?.step === 8) {
         await update(
@@ -537,7 +537,7 @@ exports.RegistrationProcess = async (req, res) => {
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
-
+         console.log(requestToSave)
         await saveCustomerRequest(requestToSave);
         // await mailingCustomer();
         response = await sendResponse(
