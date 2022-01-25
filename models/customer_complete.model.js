@@ -9,7 +9,6 @@ const CustomerComplete = (sequelize, DataTypes, Sequelize) =>
     user_id: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     full_name: {
       type: DataTypes.STRING,

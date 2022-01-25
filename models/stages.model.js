@@ -37,7 +37,7 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
         type: DataTypes.STRING,
       },
       location: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING.JSON,
       },
       task_description: {
         type: DataTypes.STRING,
