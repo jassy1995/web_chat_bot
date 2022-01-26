@@ -143,6 +143,10 @@ exports.RegistrationProcess = async (req, res) => {
       payload?.text?.toString() === "1" &&
       stage?.step === 11
     ) {
+      const prev_acct = await AccountDetail(
+        artisanOne?.full_name,
+        payload.user.id
+      );
       await update(
         {
           step: 10,
@@ -154,10 +158,10 @@ exports.RegistrationProcess = async (req, res) => {
         }
       );
       const summary = `To complete your registration, kindly make a payment of *${account.formatMoney(
-        Number(acct_value.data?.amount),
+        Number(prev_acct.data?.amount),
         "₦"
-      )}* into  *${acct_value.data?.account_number}* *${
-        acct_value.data?.bank_name
+      )}* into  *${prev_acct.data?.account_number}* *${
+        prev_acct.data?.bank_name
       }*. After payment, click the button below to confirm your payment`;
 
       const button = [
