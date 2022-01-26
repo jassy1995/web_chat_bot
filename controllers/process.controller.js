@@ -55,27 +55,19 @@ exports.RegistrationProcess = async (req, res) => {
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     // console.log(acct_value);
 
-    if (
-      payload.type === "text" &&
-      (payload?.text?.toLowerCase() == "hi" ||
-        payload.text.toLowerCase() == "restart")
-    ) {
-      await destroy({
-        where: { user_id: payload.user.id },
-      });
-      await create({ user_id: payload.user.id, step: 1 });
-      response = await sendResponse(welcomeResponse, payload.user.id);
-    } else if (
-      payload?.type === "text" &&
-      payload?.text?.toLowerCase() == "hi" &&
-      artisanOne.user_id === payload.user.id
-    ) {
-      if (artisanOne.payment_status === "paid") {
+    if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
+      if (
+        artisanOne?.user_id === payload.user.id &&
+        artisanOne.payment_status === "paid"
+      ) {
         response = await sendResponse(
           `*${payload.user.id} has already been registered with us,please use another number`,
           payload.user.id
         );
-      } else {
+      } else if (
+        artisanOne?.user_id === payload.user.id &&
+        artisanOne.payment_status === "pending"
+      ) {
         await update(
           {
             step: 11,
@@ -100,8 +92,53 @@ exports.RegistrationProcess = async (req, res) => {
         ];
         let re = productsButtons({ header, summary }, button);
         response = await sendResponse(re, payload.user.id);
+      } else {
+        await destroy({
+          where: { user_id: payload.user.id },
+        });
+        await create({ user_id: payload.user.id, step: 1 });
+        response = await sendResponse(welcomeResponse, payload.user.id);
       }
-    } else if (
+    }
+
+    // else if (
+    //   payload?.type === "text" &&
+    //   payload?.text?.toLowerCase() == "hi" &&
+    //   artisanOne.user_id === payload.user.id
+    // ) {
+    //   if (artisanOne.payment_status === "paid") {
+    //     response = await sendResponse(
+    //       `*${payload.user.id} has already been registered with us,please use another number`,
+    //       payload.user.id
+    //     );
+    //   } else {
+    //     await update(
+    //       {
+    //         step: 11,
+    //       },
+    //       {
+    //         where: {
+    //           user_id: payload.user.id,
+    //         },
+    //       }
+    //     );
+    //     const summary = `Here is the summary of your previous stage Name: *${stage.full_name}*, Service: *${stage.service}*, State: *${stage.state}*,LGA: *${stage.lga}*, Address: *${stage.address}* . would you like to continue or restart the registration`;
+    //     const header = `Welcome,${stage.full_name} you are almost complete your registration`;
+    //     const button = [
+    //       {
+    //         type: "reply",
+    //         reply: { id: `${1}`, title: "Yes,Continue" },
+    //       },
+    //       {
+    //         type: "reply",
+    //         reply: { id: `${2}`, title: "No,Restart" },
+    //       },
+    //     ];
+    //     let re = productsButtons({ header, summary }, button);
+    //     response = await sendResponse(re, payload.user.id);
+    //   }
+    // }
+    else if (
       payload?.type === "text" &&
       payload?.text?.toString() === "1" &&
       stage?.step === 11
@@ -136,6 +173,12 @@ exports.RegistrationProcess = async (req, res) => {
       payload?.text?.toString() === "2" &&
       stage?.step === 11
     ) {
+      await destroy({
+        where: { user_id: payload.user.id },
+      });
+      await create({ user_id: payload.user.id, step: 1 });
+      response = await sendResponse(welcomeResponse, payload.user.id);
+    } else if (payload.text?.toLowerCase() === "restart") {
       await destroy({
         where: { user_id: payload.user.id },
       });
