@@ -9,6 +9,7 @@ const {
   listButtons,
   changeNameButton,
   confirmNumberButton,
+  artisanInfo,
 } = require("./interactive_button");
 
 const question_one = {
@@ -123,6 +124,25 @@ const confirmNumberResponse = async (artisan_name, artisan_phone) => {
   );
 };
 
+const artisanInfoResponse = async (name, phone, acct, bank) => {
+  return artisanInfo(
+    name,
+    [
+      {
+        type: "reply",
+        reply: { id: `${1}`, title: "I want" },
+      },
+      {
+        type: "reply",
+        reply: { id: `${2}`, title: "I don't want" },
+      },
+    ],
+    phone,
+    acct,
+    bank
+  );
+};
+
 // const mailingCustomer = async () => {
 //   const mailchimp = require("mailchimp_transactional")(
 //     "34e6214f5c8ce6a89fbf18be4c4ba860-us20"
@@ -168,5 +188,6 @@ module.exports = {
   artisanResponse,
   changeNameResponse,
   confirmNumberResponse,
+  artisanInfoResponse,
   // mailingCustomer,
 };

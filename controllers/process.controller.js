@@ -13,6 +13,7 @@ const {
   artisanResponse,
   changeNameResponse,
   confirmNumberResponse,
+  artisanInfoResponse,
   // mailingCustomer,
 } = require("../utils/chat");
 
@@ -537,24 +538,46 @@ exports.RegistrationProcess = async (req, res) => {
         )
       ) {
         await update(
-          { artisan: artisans.data.artisans[Number(payload.text) - 1].name },
+          { artisanIndex: payload.text, step: 10 },
           {
             where: {
               user_id: payload.user.id,
             },
           }
         );
+        let art = await artisanInfoResponse(
+          artisans.data.artisans[Number(payload.text) - 1].name,
+          artisans.data.artisans[Number(payload.text) - 1].phone,
+          artisans.data.artisans[Number(payload.text) - 1].account_number,
+          artisans.data.artisans[Number(payload.text) - 1].bank
+        );
+        response = await sendResponse(art, payload.user.id);
+      } else if (
+        payload.type === "text" &&
+        stage.step === 10 &&
+        payload.text.toString() === "1"
+      ) {
         const ggg = await currentStage(payload.user.id);
+        await update(
+          {
+            artisan: artisans.data.artisans[Number(ggg.artisanIndex) - 1].name,
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+
         const requestToSave = {
           user_id: stage.user_id,
-          menu: stage.menu,
           full_name: stage.full_name,
           service: stage.service,
           address: stage.address,
           email: stage.email,
           location: JSON.parse(stage.local_government),
           task_description: stage.task_description,
-          artisan: ggg.artisan,
+          artisan: artisans.data.artisans[Number(ggg.artisanIndex) - 1].name,
         };
         await saveCustomerRequest(requestToSave);
         // await mailingCustomer()
@@ -565,7 +588,53 @@ exports.RegistrationProcess = async (req, res) => {
           "Congrats,your request has been received",
           payload.user.id
         );
-      } else {
+      } else if (
+        payload.type === "text" &&
+        stage.step === 10 &&
+        payload.text.toString() === "2"
+      ) {
+        await update(
+          { step: 9 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let js = await artisanResponse();
+        response = await sendResponse(js, payload.user.id);
+      }
+      // await update(
+      //   { artisan: artisans.data.artisans[Number(payload.text) - 1].name },
+      //   {
+      //     where: {
+      //       user_id: payload.user.id,
+      //     },
+      //   }
+      // );
+      // const ggg = await currentStage(payload.user.id);
+      // const requestToSave = {
+      //   user_id: stage.user_id,
+      //   menu: stage.menu,
+      //   full_name: stage.full_name,
+      //   service: stage.service,
+      //   address: stage.address,
+      //   email: stage.email,
+      //   location: JSON.parse(stage.local_government),
+      //   task_description: stage.task_description,
+      //   artisan: ggg.artisan,
+      // };
+      // await saveCustomerRequest(requestToSave);
+      // // await mailingCustomer()
+      // const existCustomer = await getAllExistCustomer(payload.user.id);
+      // if (existCustomer.length === 1) await smsCustomer(payload.user.id);
+
+      // response = await sendResponse(
+      //   "Congrats,your request has been received",
+      //   payload.user.id
+      // );
+      // }
+      else {
         let sg =
           "Invalid input,please check and retry or enter *restart* to start all over";
         response = await sendResponse(sg, payload.user.id);

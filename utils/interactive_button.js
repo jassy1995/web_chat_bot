@@ -68,6 +68,28 @@ const confirmNumberButton = (info, button, artisan_phone) => {
   return message;
 };
 
+const artisanInfo = (name, buttons, phone, acctNum, bank) => {
+  let message = {
+    payload: {
+      type: "interactive",
+      interactive: {
+        type: "button",
+        header: {
+          type: "text",
+          text: ` ${name}`,
+        },
+        body: {
+          text: `Phone : *${phone}* \n Acct_number : *${acctNum}* \n Bank : *${bank}*`,
+        },
+        action: {
+          buttons: buttons,
+        },
+      },
+    },
+  };
+  return message;
+};
+
 const productsButtons2 = (info, button) => {
   let message = {
     payload: {
@@ -116,4 +138,5 @@ module.exports = {
   listButtons,
   changeNameButton,
   confirmNumberButton,
+  artisanInfo,
 };

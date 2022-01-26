@@ -58,6 +58,9 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
     email: {
       type: DataTypes.STRING,
     },
+    artisanIndex: {
+      type: DataTypes.STRING,
+    },
   });
 
 module.exports = Stage;
