@@ -55,6 +55,9 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
     payment_status: {
       type: DataTypes.STRING,
     },
+    email: {
+      type: DataTypes.STRING,
+    },
   });
 
 module.exports = Stage;
