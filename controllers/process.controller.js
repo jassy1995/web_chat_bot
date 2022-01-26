@@ -280,12 +280,11 @@ exports.RegistrationProcess = async (req, res) => {
         payload.type === "text" &&
         stage?.step === 6 &&
         payload.text > 0 &&
-        payload.text <= JSON.parse(stage.local_government).length
+        payload.text <= stage.local_government.length
       ) {
         await update(
           {
-            lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]
-              .name,
+            lga: stage.local_government[Number(payload.text) - 1].name,
             step: 7,
           },
           {
@@ -334,8 +333,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        console.log(payload.user.image);
-        console.log(stage);
+        // console.log(payload.user.image);
+        console.log(" stage" + stage);
         const summary = `Name: ${stage.full_name}, Service: ${
           stage.service
         }, State: ${stage.state}, LGA: ${stage.lga}, Address: ${
@@ -367,7 +366,7 @@ exports.RegistrationProcess = async (req, res) => {
           picture: payload.user.image,
           payment_status: "pending",
         };
-        // console.log(toSave);
+        console.log("data to save" + toSave);
         await createArtisan(toSave);
         let re = productsButtons({ header, summary }, button);
         response = await sendResponse(re, payload.user.id);
@@ -376,9 +375,7 @@ exports.RegistrationProcess = async (req, res) => {
         payload.type === "text" &&
         stage?.step === 10
       ) {
-        const payment = await confirmPayment(
-          JSON.parse(stage.local_government)?.flw_ref
-        );
+        const payment = await confirmPayment(stage.local_government?.flw_ref);
         if (payment.data.status) {
           await updateArtisan(
             {
@@ -395,10 +392,10 @@ exports.RegistrationProcess = async (req, res) => {
         } else {
           const newData = await currentStage(payload.user.id);
           const summary2 = `kindly make a payment of *${account.formatMoney(
-            Number(JSON.parse(newData.local_government).amount),
+            Number(newData.local_government.amount),
             "₦"
-          )}* into *${JSON.parse(newData.local_government).account_number}* *${
-            JSON.parse(newData.local_government).bank_name
+          )}* into *${newData.local_government.account_number}* *${
+            newData.local_government.bank_name
           }*. After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
@@ -545,7 +542,7 @@ exports.RegistrationProcess = async (req, res) => {
           full_name: stage.full_name,
           service: stage.service,
           address: stage.address,
-          location: JSON.parse(stage.local_government),
+          location: stage.local_government,
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
