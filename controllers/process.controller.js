@@ -334,7 +334,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        // console.log(acct_value.data);
+        console.log(payload.user.image);
+        console.log(stage);
         const summary = `Name: ${stage.full_name}, Service: ${
           stage.service
         }, State: ${stage.state}, LGA: ${stage.lga}, Address: ${
@@ -345,13 +346,16 @@ exports.RegistrationProcess = async (req, res) => {
         )}* into  *${acct_value.data?.account_number}* *${
           acct_value.data?.bank_name
         }*. After payment, click the button below to confirm your payment`;
-        const header = ",Here is the summary of your registration";
+        const header = "Here is the summary of your registration";
         const button = [
           {
             type: "reply",
             reply: { id: `${1}`, title: "Confirm payment" },
           },
         ];
+        // const pictureVal = await currentStage(payload.user.id);
+        // console.log("second" + stage?.picture);
+        // console.log("third" + pictureVal?.picture);
         const toSave = {
           user_id: stage.user_id,
           menu: stage?.menu,
@@ -361,9 +365,10 @@ exports.RegistrationProcess = async (req, res) => {
           lga: stage?.lga,
           address: stage?.address,
           id_card: stage?.id_card,
-          picture: stage?.picture,
+          picture: payload.user.image,
           payment_status: "pending",
         };
+        console.log(toSave);
         await createArtisan(toSave);
         let re = productsButtons({ header, summary }, button);
         response = await sendResponse(re, payload.user.id);
