@@ -317,11 +317,6 @@ exports.RegistrationProcess = async (req, res) => {
 
         response = await sendResponse(otherResponse.picture, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 9) {
-        // const acct_value = await AccountDetail(
-        //   stage.full_name,
-        //   payload?.user?.id
-        // );
-        // console.log(acct_value);
         await update(
           {
             picture: payload.image,
@@ -353,9 +348,6 @@ exports.RegistrationProcess = async (req, res) => {
             reply: { id: `${1}`, title: "Confirm payment" },
           },
         ];
-        // const pictureVal = await currentStage(payload.user.id);
-        // console.log("second" + stage?.picture);
-        // console.log("third" + pictureVal?.picture);
         const toSave = {
           user_id: stage.user_id,
           full_name: stage?.full_name,
@@ -494,14 +486,28 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
 
+        response = await sendResponse(
+          "please enter your email",
+          payload.user.id
+        );
+      } else if (payload.type === "text" && stage.step === 6) {
+        await update(
+          { email: payload.text, step: 7 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+
         response = await sendResponse(otherResponse.location, payload.user.id);
-      } else if (payload.type === "location" && stage.step === 6) {
+      } else if (payload.type === "location" && stage.step === 7) {
         let location = {
           long: payload.location.longitude,
           lat: payload.location.latitude,
         };
         await update(
-          { local_government: location, step: 7 },
+          { local_government: location, step: 8 },
           {
             where: {
               user_id: payload.user.id,
@@ -512,9 +518,9 @@ exports.RegistrationProcess = async (req, res) => {
           otherResponse.task_description,
           payload.user.id
         );
-      } else if (payload.type === "text" && stage.step === 7) {
+      } else if (payload.type === "text" && stage.step === 8) {
         await update(
-          { task_description: payload.text, step: 8 },
+          { task_description: payload.text, step: 9 },
           {
             where: {
               user_id: payload.user.id,
@@ -525,7 +531,7 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(js, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 8 &&
+        stage.step === 9 &&
         artisans.data.artisans.includes(
           artisans.data.artisans[Number(payload.text) - 1]
         )
