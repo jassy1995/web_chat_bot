@@ -449,15 +449,15 @@ exports.RegistrationProcess = async (req, res) => {
                   Number(JSON.parse(newData.local_government)?.amount),
                   "₦"
                 )
-              : account.formatMoney(Number(nextV.amount), "₦")
+              : account.formatMoney(Number(nextV.data?.amount), "₦")
           }* into *${
             JSON.parse(newData.local_government)?.account_number
               ? JSON.parse(newData.local_government)?.account_number
-              : nextV.account_number
+              : nextV.data?.account_number
           }* *${
             JSON.parse(newData.local_government)?.bank_name
               ? JSON.parse(newData.local_government)?.bank_name
-              : nextV.bank_name
+              : nextV.data?.bank_name
           }*. After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
