@@ -79,7 +79,7 @@ const artisanInfo = (name, buttons, phone, acctNum, bank) => {
           text: ` ${name}`,
         },
         body: {
-          text: `Phone : *${phone}* \n Acct_number : *${acctNum}* \n Bank : *${bank}*`,
+          text: `Phone : *${phone}* \n Acct Number : *${acctNum}* \n Bank : *${bank}*`,
         },
         action: {
           buttons: buttons,
