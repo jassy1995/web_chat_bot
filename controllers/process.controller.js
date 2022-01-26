@@ -280,11 +280,12 @@ exports.RegistrationProcess = async (req, res) => {
         payload.type === "text" &&
         stage?.step === 6 &&
         payload.text > 0 &&
-        payload.text <= stage.local_government.length
+        payload.text <= JSON.parse(stage.local_government)
       ) {
         await update(
           {
-            lga: stage.local_government[Number(payload.text) - 1].name,
+            lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]
+              .name,
             step: 7,
           },
           {
@@ -305,9 +306,8 @@ exports.RegistrationProcess = async (req, res) => {
         );
         response = await sendResponse(otherResponse.id_card, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 8) {
-        console.log(payload.user);
         await update(
-          { id_card: payload.user.image, step: 9 },
+          { id_card: payload.image, step: 9 },
           {
             where: {
               user_id: payload.user.id,
@@ -322,11 +322,9 @@ exports.RegistrationProcess = async (req, res) => {
         //   payload?.user?.id
         // );
         // console.log(acct_value);
-        console.log(payload.user);
-
         await update(
           {
-            picture: payload.user.image,
+            picture: payload.image,
             local_government: acct_value?.data,
             step: 10,
           },
@@ -366,7 +364,7 @@ exports.RegistrationProcess = async (req, res) => {
           lga: stage?.lga,
           address: stage?.address,
           id_card: stage?.id_card,
-          picture: payload.user.image,
+          picture: payload.image,
           payment_status: "pending",
         };
         console.log("data to save" + toSave);
@@ -378,7 +376,9 @@ exports.RegistrationProcess = async (req, res) => {
         payload.type === "text" &&
         stage?.step === 10
       ) {
-        const payment = await confirmPayment(stage.local_government?.flw_ref);
+        const payment = await confirmPayment(
+          JSON.parse(stage.local_government)?.flw_ref
+        );
         if (payment.data.status) {
           await updateArtisan(
             {
@@ -395,10 +395,10 @@ exports.RegistrationProcess = async (req, res) => {
         } else {
           const newData = await currentStage(payload.user.id);
           const summary2 = `kindly make a payment of *${account.formatMoney(
-            Number(newData.local_government.amount),
+            Number(JSON.parse(newData.local_government).amount),
             "₦"
-          )}* into *${newData.local_government.account_number}* *${
-            newData.local_government.bank_name
+          )}* into *${JSON.parse(newData.local_government).account_number}* *${
+            JSON.parse(newData.local_government).bank_name
           }*. After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
@@ -545,7 +545,7 @@ exports.RegistrationProcess = async (req, res) => {
           full_name: stage.full_name,
           service: stage.service,
           address: stage.address,
-          location: stage.local_government,
+          location: JSON.parse(stage.local_government),
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
