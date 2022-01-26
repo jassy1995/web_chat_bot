@@ -442,18 +442,18 @@ exports.RegistrationProcess = async (req, res) => {
           response = await sendResponse(resp, payload.user.id);
         } else {
           const newData = await currentStage(payload.user.id);
-          let hh =
-            account.formatMoney(
-              Number(JSON.parse(newData.local_government).amount),
-              "₦"
-            ) !== null
-              ? account.formatMoney(
-                  Number(JSON.parse(newData.local_government).amount),
-                  "₦"
-                )
-              : account.formatMoney(Number(nextV.data?.amount), "₦");
+          // let hh =
+          //   account.formatMoney(
+          //     Number(JSON.parse(newData.local_government).amount),
+          //     "₦"
+          //   ) !== null
+          //     ? account.formatMoney(
+          //         Number(JSON.parse(newData.local_government).amount),
+          //         "₦"
+          //       )
+          //     : account.formatMoney(Number(nextV.data?.amount), "₦");
           const summary2 = `kindly make a payment of *${
-            hh
+            account.formatMoney(Number(nextV.data?.amount), "₦")
             // ? account.formatMoney(
             //     Number(JSON.parse(newData.local_government)?.amount),
             //     "₦"
