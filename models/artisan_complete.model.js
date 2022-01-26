@@ -3,8 +3,8 @@ const ArtisanComplete = (sequelize, DataTypes, Sequelize) =>
     "artisan_complete",
     {
       id: {
-        type: DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
@@ -43,7 +43,6 @@ const ArtisanComplete = (sequelize, DataTypes, Sequelize) =>
       },
       payment_status: {
         type: DataTypes.STRING,
-        defaultValue: "pending",
       },
     },
     { timestamps: false }
