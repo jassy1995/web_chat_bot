@@ -53,6 +53,7 @@ exports.RegistrationProcess = async (req, res) => {
     const artisans = await getListOfArtisan();
     const artisanOne = await getArtisanOne(payload.user.id);
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
+    const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
     // console.log(acct_value);
 
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
@@ -434,15 +435,29 @@ exports.RegistrationProcess = async (req, res) => {
               },
             }
           );
+          // nextV
           let resp = "Congratulation, your payment  has been received";
           response = await sendResponse(resp, payload.user.id);
         } else {
           const newData = await currentStage(payload.user.id);
-          const summary2 = `kindly make a payment of *${account.formatMoney(
-            Number(JSON.parse(newData.local_government)?.amount),
-            "₦"
-          )}* into *${JSON.parse(newData.local_government)?.account_number}* *${
+          const summary2 = `kindly make a payment of *${
+            account.formatMoney(
+              Number(JSON.parse(newData.local_government)?.amount),
+              "₦"
+            )
+              ? account.formatMoney(
+                  Number(JSON.parse(newData.local_government)?.amount),
+                  "₦"
+                )
+              : account.formatMoney(Number(nextV.amount), "₦")
+          }* into *${
+            JSON.parse(newData.local_government)?.account_number
+              ? JSON.parse(newData.local_government)?.account_number
+              : nextV.account_number
+          }* *${
             JSON.parse(newData.local_government)?.bank_name
+              ? JSON.parse(newData.local_government)?.bank_name
+              : nextV.bank_name
           }*. After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
@@ -456,7 +471,7 @@ exports.RegistrationProcess = async (req, res) => {
         }
       } else {
         let rq =
-          "Invalid input,please check and retry or enter *restart* to start all overrrrr";
+          "Invalid input,please check and retry or enter *restart* to start all over";
         response = await sendResponse(rq, payload.user.id);
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
