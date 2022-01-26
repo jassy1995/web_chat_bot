@@ -446,25 +446,27 @@ exports.RegistrationProcess = async (req, res) => {
           //   artisanOne.full_name,
           //   payload.user.id
           // );
-          const summary2 = `kindly make a payment of *${
-            account.formatMoney(
-              Number(JSON.parse(newData?.local_government)?.amount),
-              "₦"
-            )
-            // ? account.formatMoney(
-            //     Number(JSON.parse(newData.local_government)?.amount),
-            //     "₦"
-            //   )
-            // : account.formatMoney(Number(nextV.data?.amount), "₦")
-          }* into *${
-            JSON.parse(newData?.local_government)?.account_number
-            // ? JSON.parse(newData.local_government).account_number
-            // : nextV.data.account_number
-          }* *${
-            JSON.parse(newData?.local_government)?.bank_name
-            // ? JSON.parse(newData.local_government).bank_name
-            // : nextV.data.bank_name
-          }*. After payment, click the button below to confirm your payment`;
+          // const summary2 = `kindly make a payment of *${
+          // account.formatMoney(
+          //   Number(JSON.parse(newData?.local_government)?.amount),
+          //   "₦"
+          // )
+          // ? account.formatMoney(
+          //     Number(JSON.parse(newData.local_government)?.amount),
+          //     "₦"
+          //   )
+          // : account.formatMoney(Number(nextV.data?.amount), "₦")
+          // }* into *${
+          // JSON.parse(newData?.local_government)?.account_number
+          // ? JSON.parse(newData.local_government).account_number
+          // : nextV.data.account_number
+          // }* *${
+          // JSON.parse(newData?.local_government)?.bank_name
+          // ? JSON.parse(newData.local_government).bank_name
+          // : nextV.data.bank_name
+          // }*
+          const summary2 =
+            "After payment, click the button below to confirm your payment";
           const header = "Hay,your payment has not been received.";
           const button2 = [
             {
