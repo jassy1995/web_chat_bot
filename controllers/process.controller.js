@@ -78,8 +78,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        const summary = `Here is the summary of your previous stage Name: *${stage.full_name}*, Service: *${stage.service}*, State: *${stage.state}*,LGA: *${stage.lga}*, Address: *${stage.address}* . would you like to continue or restart the registration`;
-        const header = `Welcome,${stage.full_name} you are almost complete your registration`;
+        const summary = `Here is the summary of your previous stage Name: *${artisanOne.full_name}*, Service: *${artisanOne.service}*, State: *${artisanOne.state}*,LGA: *${artisanOne.lga}*, Address: *${artisanOne.address}* . would you like to continue or restart the registration`;
+        const header = `Welcome,${artisanOne.full_name} you are almost complete your registration`;
         const button = [
           {
             type: "reply",
