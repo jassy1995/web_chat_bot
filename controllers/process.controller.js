@@ -54,9 +54,6 @@ exports.RegistrationProcess = async (req, res) => {
     const artisanOne = await getArtisanOne(payload.user.id);
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
-    // console.log(acct_value);
-    console.log(nextV.data);
-    console.log(nextV.data.account_number);
 
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
       if (
@@ -152,7 +149,7 @@ exports.RegistrationProcess = async (req, res) => {
       );
       await update(
         {
-          step: 10,
+          step: 12,
         },
         {
           where: {
@@ -177,6 +174,26 @@ exports.RegistrationProcess = async (req, res) => {
       response = await sendResponse(re, payload.user.id);
     } else if (
       payload?.type === "text" &&
+      payload?.text?.toString() === "1" &&
+      stage?.step === 12
+    ) {
+      const summary2 = `kindly make a payment of *${account.formatMoney(
+        Number(nextV?.data?.amount),
+        "₦"
+      )}* into *${nextV?.data?.account_number}* *${
+        nextV?.data?.bank_name
+      }* .After payment, click the button below to confirm your payment`;
+      const header = "Hay,your payment has not been received.";
+      const button2 = [
+        {
+          type: "reply",
+          reply: { id: `${1}`, title: "Confirm payment" },
+        },
+      ];
+      let rr = productsButtons({ header, summary: summary2 }, button2);
+      response = await sendResponse(rr, payload.user.id);
+    } else if (
+      payload?.type === "text" &&
       payload?.text?.toString() === "2" &&
       stage?.step === 11
     ) {
@@ -198,7 +215,6 @@ exports.RegistrationProcess = async (req, res) => {
         otherResponse.initService[Number(payload.text) - 1]
       )
     ) {
-      // const existCustomer = await getExistCustomer(num.concat(payload.user.id?.slice(3)));
       await update(
         {
           menu: otherResponse.initService[Number(payload.text) - 1],
@@ -211,10 +227,6 @@ exports.RegistrationProcess = async (req, res) => {
       );
       const existCustomer = await getExistCustomer(payload.user.id);
       const refetchC = await currentStage(payload.user.id);
-      // console.log(existCustomer?.user_id === payload.user.id);
-      // console.log(refetchC?.menu === "Request Service Provider(Customer)");
-      // console.log(refetchC);
-
       if (
         existCustomer?.user_id === payload.user.id &&
         refetchC.menu === "Request Service Provider(Customer)"
@@ -414,7 +426,7 @@ exports.RegistrationProcess = async (req, res) => {
           picture: payload.image,
           payment_status: "pending",
         };
-        console.log("data to save" + toSave);
+
         await createArtisan(toSave);
         let re = productsButtons({ header, summary }, button);
         response = await sendResponse(re, payload.user.id);
@@ -442,31 +454,14 @@ exports.RegistrationProcess = async (req, res) => {
           response = await sendResponse(resp, payload.user.id);
         } else {
           const newData = await currentStage(payload.user.id);
-          // const prev_c = await AccountDetail(
-          //   artisanOne.full_name,
-          //   payload.user.id
-          // );
-          // const summary2 = `kindly make a payment of *${
-          // account.formatMoney(
-          //   Number(JSON.parse(newData?.local_government)?.amount),
-          //   "₦"
-          // )
-          // ? account.formatMoney(
-          //     Number(JSON.parse(newData.local_government)?.amount),
-          //     "₦"
-          //   )
-          // : account.formatMoney(Number(nextV.data?.amount), "₦")
-          // }* into *${
-          // JSON.parse(newData?.local_government)?.account_number
-          // ? JSON.parse(newData.local_government).account_number
-          // : nextV.data.account_number
-          // }* *${
-          // JSON.parse(newData?.local_government)?.bank_name
-          // ? JSON.parse(newData.local_government).bank_name
-          // : nextV.data.bank_name
-          // }*
-          const summary2 =
-            "After payment, click the button below to confirm your payment";
+          const summary2 = `kindly make a payment of *${account.formatMoney(
+            Number(JSON.parse(newData?.local_government)?.amount),
+            "₦"
+          )}* into *${
+            JSON.parse(newData?.local_government)?.account_number
+          }* *${
+            JSON.parse(newData?.local_government)?.bank_name
+          }* .After payment, click the button below to confirm your payment`;
           const header = "Hay,your payment has not been received.";
           const button2 = [
             {
