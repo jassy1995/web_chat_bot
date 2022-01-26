@@ -305,6 +305,7 @@ exports.RegistrationProcess = async (req, res) => {
         );
         response = await sendResponse(otherResponse.id_card, payload.user.id);
       } else if (payload.type === "image" && stage?.step === 8) {
+        console.log(payload.user);
         await update(
           { id_card: payload.user.image, step: 9 },
           {
@@ -321,6 +322,8 @@ exports.RegistrationProcess = async (req, res) => {
         //   payload?.user?.id
         // );
         // console.log(acct_value);
+        console.log(payload.user);
+
         await update(
           {
             picture: payload.user.image,
