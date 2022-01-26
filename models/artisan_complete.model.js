@@ -39,6 +39,10 @@ const ArtisanComplete = (sequelize, DataTypes, Sequelize) =>
       type: DataTypes.STRING,
       allowNull: false,
     },
+    payment_status: {
+      type: DataTypes.STRING,
+      defaultValue: "pending",
+    },
   });
 
 module.exports = ArtisanComplete;

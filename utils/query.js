@@ -42,6 +42,7 @@ class MyQuery {
   };
 
   createArtisan = async (data) => {
+    console.log(data);
     try {
       await ArtisanComplete.create(data);
     } catch (error) {
