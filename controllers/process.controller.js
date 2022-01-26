@@ -37,6 +37,7 @@ const {
   saveCustomerRequest,
   getExistCustomer,
   getAllExistCustomer,
+  updateArtisan,
 } = require("../utils/query");
 
 exports.RegistrationProcess = async (req, res) => {
@@ -219,8 +220,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        let tt = await serviceResponse();
-        response = await sendResponse(tt, payload.user.id);
+        let tts = await serviceResponse();
+        response = await sendResponse(tts, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 2 &&
@@ -338,19 +339,32 @@ exports.RegistrationProcess = async (req, res) => {
           stage.service
         }, State: ${stage.state}, LGA: ${stage.lga}, Address: ${
           stage.address
-        } .To complete your registration, kindly make a payment of *${account.formatMoney(
+        } .Congrats!, your detail has been submitted,to complete your registration, kindly make a payment of *${account.formatMoney(
           Number(acct_value.data?.amount),
           "₦"
         )}* into  *${acct_value.data?.account_number}* *${
           acct_value.data?.bank_name
         }*. After payment, click the button below to confirm your payment`;
-        const header = "Here is the summary of your registration";
+        const header = ",Here is the summary of your registration";
         const button = [
           {
             type: "reply",
             reply: { id: `${1}`, title: "Confirm payment" },
           },
         ];
+        const toSave = {
+          user_id: stage.user_id,
+          menu: stage?.menu,
+          full_name: stage?.full_name,
+          service: stage?.service,
+          state: stage?.state,
+          lga: stage?.lga,
+          address: stage?.address,
+          id_card: stage?.id_card,
+          picture: stage?.picture,
+          payment_status: "pending",
+        };
+        await createArtisan(toSave);
         let re = productsButtons({ header, summary }, button);
         response = await sendResponse(re, payload.user.id);
       } else if (
@@ -362,22 +376,20 @@ exports.RegistrationProcess = async (req, res) => {
           JSON.parse(stage.local_government)?.flw_ref
         );
         if (payment.data.status) {
-          const toSave = {
-            user_id: stage.user_id,
-            menu: stage.menu,
-            full_name: stage.full_name,
-            service: stage.service,
-            state: stage.state,
-            lga: stage.lga,
-            address: stage.address,
-            id_card: stage.id_card,
-            picture: stage.picture,
-          };
-          await createArtisan(toSave);
-          let resp = "Congratulation, your registration has been completed";
+          await updateArtisan(
+            {
+              payment_status: "paid",
+            },
+            {
+              where: {
+                user_id: payload.user.id,
+              },
+            }
+          );
+          let resp = "Congratulation, your payment  has been received";
           response = await sendResponse(resp, payload.user.id);
         } else {
-          const newData = await currentStage(t(payload.user.id));
+          const newData = await currentStage(payload.user.id);
           const summary2 = `kindly make a payment of *${account.formatMoney(
             Number(JSON.parse(newData.local_government).amount),
             "₦"
@@ -396,13 +408,13 @@ exports.RegistrationProcess = async (req, res) => {
         }
       } else {
         let rq =
-          "Invalid input,please check and retry or enter *restart* to start all over";
+          "Invalid input,please check and retry or enter *restart* to start all overrrrr";
         response = await sendResponse(rq, payload.user.id);
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
       if (payload?.text?.toString() === "1" && stage?.step === 3) {
         await update(
-          { step: 4 },
+          { full_name: payload.user.name, step: 4 },
           {
             where: {
               user_id: payload.user.id,
@@ -427,7 +439,7 @@ exports.RegistrationProcess = async (req, res) => {
         let fn = await fullNameResponse();
         response = await sendResponse(fn, payload.user.id);
       } else if (payload.type === "text" && stage.step === 3) {
-        console.log(stage.step);
+        // console.log(stage.step);
         await update(
           { full_name: payload.text, step: 4 },
           {
@@ -436,8 +448,8 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        let tt = await serviceResponse();
-        response = await sendResponse(tt, payload.user.id);
+        let ttf = await serviceResponse();
+        response = await sendResponse(ttf, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 2 &&
@@ -533,11 +545,10 @@ exports.RegistrationProcess = async (req, res) => {
           task_description: stage.task_description,
           artisan: ggg.artisan,
         };
-
         await saveCustomerRequest(requestToSave);
         // await mailingCustomer()
         const existCustomer = await getAllExistCustomer(payload.user.id);
-        existCustomer?.length === 1 && (await smsCustomer(payload.user.id));
+        if (existCustomer.length === 1) await smsCustomer(payload.user.id);
 
         response = await sendResponse(
           "Congrats,your request has been received",
