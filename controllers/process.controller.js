@@ -358,7 +358,6 @@ exports.RegistrationProcess = async (req, res) => {
         // console.log("third" + pictureVal?.picture);
         const toSave = {
           user_id: stage.user_id,
-          menu: stage?.menu,
           full_name: stage?.full_name,
           service: stage?.service,
           state: stage?.state,
