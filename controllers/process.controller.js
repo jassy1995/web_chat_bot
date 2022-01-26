@@ -39,6 +39,7 @@ const {
   getExistCustomer,
   getAllExistCustomer,
   updateArtisan,
+  getArtisanOne,
 } = require("../utils/query");
 
 exports.RegistrationProcess = async (req, res) => {
@@ -50,6 +51,7 @@ exports.RegistrationProcess = async (req, res) => {
     const service = await getServices();
     const states = await getStates();
     const artisans = await getListOfArtisan();
+    const artisanOne = await getArtisanOne(payload.user.id);
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     // console.log(acct_value);
 
@@ -66,42 +68,44 @@ exports.RegistrationProcess = async (req, res) => {
     } else if (
       payload?.type === "text" &&
       payload?.text?.toLowerCase() == "hi" &&
-      stage?.step === 10
+      artisanOne.user_id === payload.user.id
     ) {
-      await update(
-        {
-          step: 11,
-        },
-        {
-          where: {
-            user_id: payload.user.id,
+      if (artisanOne.payment_status === "paid") {
+        response = await sendResponse(
+          `*${payload.user.id} has already been registered with us,please use another number`,
+          payload.user.id
+        );
+      } else {
+        await update(
+          {
+            step: 11,
           },
-        }
-      );
-      const summary = `Here is the summary of your previous stage Name: *${stage.full_name}*, Service: *${stage.service}*, State: *${stage.state}*,LGA: *${stage.lga}*, Address: *${stage.address}* . would you like to continue or restart the registration`;
-      const header = `Welcome,${stage.full_name} you are almost complete your registration`;
-      const button = [
-        {
-          type: "reply",
-          reply: { id: `${1}`, title: "Yes,Continue" },
-        },
-        {
-          type: "reply",
-          reply: { id: `${2}`, title: "No,Restart" },
-        },
-      ];
-      let re = productsButtons({ header, summary }, button);
-      response = await sendResponse(re, payload.user.id);
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        const summary = `Here is the summary of your previous stage Name: *${stage.full_name}*, Service: *${stage.service}*, State: *${stage.state}*,LGA: *${stage.lga}*, Address: *${stage.address}* . would you like to continue or restart the registration`;
+        const header = `Welcome,${stage.full_name} you are almost complete your registration`;
+        const button = [
+          {
+            type: "reply",
+            reply: { id: `${1}`, title: "Yes,Continue" },
+          },
+          {
+            type: "reply",
+            reply: { id: `${2}`, title: "No,Restart" },
+          },
+        ];
+        let re = productsButtons({ header, summary }, button);
+        response = await sendResponse(re, payload.user.id);
+      }
     } else if (
       payload?.type === "text" &&
       payload?.text?.toString() === "1" &&
       stage?.step === 11
     ) {
-      // const acct_value = await AccountDetail(
-      //   stage.full_name,
-      //   payload?.user?.id
-      // );
-      // console.log(acct_value);
       await update(
         {
           step: 10,

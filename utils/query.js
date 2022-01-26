@@ -9,6 +9,14 @@ class MyQuery {
     }
   };
 
+  getArtisanOne = async (id) => {
+    try {
+      return await ArtisanComplete.findOne({ where: { user_id: id } });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   getExistCustomer = async (id) => {
     try {
       return await CustomerComplete.findOne({ where: { user_id: id } });
@@ -61,6 +69,14 @@ class MyQuery {
   update = async (data, id) => {
     try {
       await Stage.update(data, id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  updateArtisan = async (data, id) => {
+    try {
+      await ArtisanComplete.update(data, id);
     } catch (error) {
       console.log(error);
     }
