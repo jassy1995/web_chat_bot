@@ -426,7 +426,7 @@ exports.RegistrationProcess = async (req, res) => {
         const payment = await confirmPayment(
           JSON.parse(stage.local_government)?.flw_ref
         );
-        if (payment.data.status) {
+        if (payment?.data?.status) {
           await updateArtisan(
             {
               payment_status: "paid",
@@ -442,7 +442,10 @@ exports.RegistrationProcess = async (req, res) => {
           response = await sendResponse(resp, payload.user.id);
         } else {
           const newData = await currentStage(payload.user.id);
-
+          // const prev_c = await AccountDetail(
+          //   artisanOne.full_name,
+          //   payload.user.id
+          // );
           const summary2 = `kindly make a payment of *${
             account.formatMoney(
               Number(JSON.parse(newData.local_government)?.amount),
