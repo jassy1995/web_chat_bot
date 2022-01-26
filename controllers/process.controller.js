@@ -55,7 +55,8 @@ exports.RegistrationProcess = async (req, res) => {
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
     // console.log(acct_value);
-    console.log(nextV);
+    console.log(nextV.data);
+    console.log(nextV.data.account_number);
 
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
       if (
