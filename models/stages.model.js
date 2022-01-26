@@ -54,6 +54,10 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
         allowNull: false,
         defaultValue: 0,
       },
+      payment_status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     { timestamps: false }
   );

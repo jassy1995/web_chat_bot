@@ -365,8 +365,9 @@ exports.RegistrationProcess = async (req, res) => {
           address: stage?.address,
           id_card: stage?.id_card,
           picture: payload.user.image,
+          payment_status: "pending",
         };
-        console.log(toSave);
+        // console.log(toSave);
         await createArtisan(toSave);
         let re = productsButtons({ header, summary }, button);
         response = await sendResponse(re, payload.user.id);
