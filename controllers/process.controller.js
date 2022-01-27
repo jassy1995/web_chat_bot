@@ -193,23 +193,24 @@ exports.RegistrationProcess = async (req, res) => {
         // nextV
         let resp = "Congratulation, your payment  has been received";
         response = await sendResponse(resp, payload.user.id);
-      } else {
-        const summary2 = `kindly make a payment of *${account.formatMoney(
-          Number(nextV?.data?.amount),
-          "₦"
-        )}* into *${nextV?.data?.account_number}* *${
-          nextV?.data?.bank_name
-        }* .After payment, click the button below to confirm your payment`;
-        const header = "Hay,your payment has not been received.";
-        const button2 = [
-          {
-            type: "reply",
-            reply: { id: `${1}`, title: "Confirm payment" },
-          },
-        ];
-        let rr = productsButtons({ header, summary: summary2 }, button2);
-        response = await sendResponse(rr, payload.user.id);
       }
+      // else {
+      //   const summary2 = `kindly make a payment of *${account.formatMoney(
+      //     Number(nextV?.data?.amount),
+      //     "₦"
+      //   )}* into *${nextV?.data?.account_number}* *${
+      //     nextV?.data?.bank_name
+      //   }* .After payment, click the button below to confirm your payment`;
+      //   const header = "Hay,your payment has not been received.";
+      //   const button2 = [
+      //     {
+      //       type: "reply",
+      //       reply: { id: `${1}`, title: "Confirm payment" },
+      //     },
+      //   ];
+      //   let rr = productsButtons({ header, summary: summary2 }, button2);
+      //   response = await sendResponse(rr, payload.user.id);
+      // }
     } else if (
       payload?.type === "text" &&
       payload?.text?.toString() === "2" &&
