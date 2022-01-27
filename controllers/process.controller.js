@@ -40,6 +40,7 @@ const {
   getAllExistCustomer,
   updateArtisan,
   getArtisanOne,
+  destroyArtisan,
 } = require("../utils/query");
 
 exports.RegistrationProcess = async (req, res) => {
@@ -177,26 +178,46 @@ exports.RegistrationProcess = async (req, res) => {
       payload?.text?.toString() === "1" &&
       stage?.step === 12
     ) {
-      const summary2 = `kindly make a payment of *${account.formatMoney(
-        Number(nextV?.data?.amount),
-        "₦"
-      )}* into *${nextV?.data?.account_number}* *${
-        nextV?.data?.bank_name
-      }* .After payment, click the button below to confirm your payment`;
-      const header = "Hay,your payment has not been received.";
-      const button2 = [
-        {
-          type: "reply",
-          reply: { id: `${1}`, title: "Confirm payment" },
-        },
-      ];
-      let rr = productsButtons({ header, summary: summary2 }, button2);
-      response = await sendResponse(rr, payload.user.id);
+      const confirmPay = await confirmPayment(nextV.data?.flw_ref);
+      if (confirmPay?.data?.status) {
+        await updateArtisan(
+          {
+            payment_status: "paid",
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        // nextV
+        let resp = "Congratulation, your payment  has been received";
+        response = await sendResponse(resp, payload.user.id);
+      } else {
+        const summary2 = `kindly make a payment of *${account.formatMoney(
+          Number(nextV?.data?.amount),
+          "₦"
+        )}* into *${nextV?.data?.account_number}* *${
+          nextV?.data?.bank_name
+        }* .After payment, click the button below to confirm your payment`;
+        const header = "Hay,your payment has not been received.";
+        const button2 = [
+          {
+            type: "reply",
+            reply: { id: `${1}`, title: "Confirm payment" },
+          },
+        ];
+        let rr = productsButtons({ header, summary: summary2 }, button2);
+        response = await sendResponse(rr, payload.user.id);
+      }
     } else if (
       payload?.type === "text" &&
       payload?.text?.toString() === "2" &&
       stage?.step === 11
     ) {
+      await destroyArtisan({
+        where: { user_id: payload.user.id },
+      });
       await destroy({
         where: { user_id: payload.user.id },
       });
@@ -396,8 +417,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        // console.log(payload.user.image);
-        console.log(" stage" + stage);
+
         const summary = `Name: ${stage.full_name}, Service: ${
           stage.service
         }, State: ${stage.state}, LGA: ${stage.lga}, Address: ${

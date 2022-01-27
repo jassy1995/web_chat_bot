@@ -82,6 +82,14 @@ class MyQuery {
     }
   };
 
+  destroyArtisan = async (data) => {
+    try {
+      await ArtisanComplete.destroy(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   destroy = async (data) => {
     try {
       await Stage.destroy(data);
