@@ -59,133 +59,143 @@ exports.RegistrationProcess = async (req, res) => {
 
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
       if (
-        artisanOne?.user_id === payload.user.id &&
+        artisanOne?.user_id === payload.user.id || //&&
         artisanOne.payment_status === "paid"
       ) {
         response = await sendResponse(
-          `*${payload.user.id} has already been registered with us,please use another number`,
+          `*${payload.user.id} has already been registered with us, please use another number`,
           payload.user.id
         );
-      } else if (
-        artisanOne?.user_id === payload.user.id &&
-        artisanOne.payment_status === "pending"
-      ) {
-        await update(
-          {
-            step: 11,
-          },
-          {
-            where: {
-              user_id: payload.user.id,
-            },
-          }
-        );
-        const summary = `Here is the summary of your previous stage Name: *${artisanOne.full_name}*, Service: *${artisanOne.service}*, State: *${artisanOne.state}*,LGA: *${artisanOne.lga}*, Address: *${artisanOne.address}* . would you like to continue or restart the registration`;
-        const header = `Welcome,${artisanOne.full_name} you are almost complete your registration`;
-        const button = [
-          {
-            type: "reply",
-            reply: { id: `${1}`, title: "Yes,Continue" },
-          },
-          {
-            type: "reply",
-            reply: { id: `${2}`, title: "No,Restart" },
-          },
-        ];
-        let re = productsButtons({ header, summary }, button);
-        response = await sendResponse(re, payload.user.id);
-      } else {
+      }
+
+      // else if (
+      //   artisanOne?.user_id === payload.user.id &&
+      //   artisanOne.payment_status === "pending"
+      // ) {
+      //   await update(
+      //     {
+      //       step: 11,
+      //     },
+      //     {
+      //       where: {
+      //         user_id: payload.user.id,
+      //       },
+      //     }
+      //   );
+      //   const summary = `Here is the summary of your previous stage Name: *${artisanOne.full_name}*, Service: *${artisanOne.service}*, State: *${artisanOne.state}*,LGA: *${artisanOne.lga}*, Address: *${artisanOne.address}* . would you like to continue or restart the registration`;
+      //   const header = `Welcome,${artisanOne.full_name} you are almost complete your registration`;
+      //   const button = [
+      //     {
+      //       type: "reply",
+      //       reply: { id: `${1}`, title: "Yes,Continue" },
+      //     },
+      //     {
+      //       type: "reply",
+      //       reply: { id: `${2}`, title: "No,Restart" },
+      //     },
+      //   ];
+      //   let re = productsButtons({ header, summary }, button);
+      //   response = await sendResponse(re, payload.user.id);
+      // }
+      else {
         await destroy({
           where: { user_id: payload.user.id },
         });
         await create({ user_id: payload.user.id, step: 1 });
         response = await sendResponse(welcomeResponse, payload.user.id);
       }
-    } else if (
-      payload?.type === "text" &&
-      payload?.text?.toString() === "1" &&
-      stage?.step === 11
-    ) {
-      const prev_acct = await AccountDetail(
-        artisanOne?.full_name,
-        payload.user.id
-      );
-      await update(
-        {
-          step: 12,
-        },
-        {
-          where: {
-            user_id: payload.user.id,
-          },
-        }
-      );
-      const summary = `To complete your registration, kindly make a payment of *${account.formatMoney(
-        Number(prev_acct.data?.amount),
-        "₦"
-      )}* into  *${prev_acct.data?.account_number}* *${
-        prev_acct.data?.bank_name
-      }*. After payment, click the button below to confirm your payment`;
+    }
 
-      const button = [
-        {
-          type: "reply",
-          reply: { id: `${1}`, title: "Confirm payment" },
-        },
-      ];
-      let re = productsButtons2({ summary }, button);
-      response = await sendResponse(re, payload.user.id);
-    } else if (
-      payload?.type === "text" &&
-      payload?.text?.toString() === "1" &&
-      stage?.step === 12
-    ) {
-      const confirmPay = await confirmPayment(nextV.data?.flw_ref);
-      if (confirmPay?.data?.status) {
-        await updateArtisan(
-          {
-            payment_status: "paid",
-          },
-          {
-            where: {
-              user_id: payload.user.id,
-            },
-          }
-        );
-        // nextV
-        let resp = "Congratulation, your payment  has been received";
-        response = await sendResponse(resp, payload.user.id);
-      } else {
-        const summary2 = `kindly make a payment of *${account.formatMoney(
-          Number(nextV?.data?.amount),
-          "₦"
-        )}* into *${nextV?.data?.account_number}* *${
-          nextV?.data?.bank_name
-        }* .After payment, click the button below to confirm your payment`;
-        const header = "Hay,your payment has not been received.";
-        const button2 = [
-          {
-            type: "reply",
-            reply: { id: `${1}`, title: "Confirm payment" },
-          },
-        ];
-        let rr = productsButtons({ header, summary: summary2 }, button2);
-        response = await sendResponse(rr, payload.user.id);
-      }
-    } else if (
-      payload?.type === "text" &&
-      payload?.text?.toString() === "2" &&
-      stage?.step === 11
-    ) {
-      await destroyArtisan({
-        where: { user_id: payload.user.id },
-      });
-      await destroy({
-        where: { user_id: payload.user.id },
-      });
-      await create({ user_id: payload.user.id, step: 1 });
-      response = await sendResponse(welcomeResponse, payload.user.id);
-    } else if (payload.text?.toLowerCase() === "restart") {
+    // else if (
+    //   payload?.type === "text" &&
+    //   payload?.text?.toString() === "1" &&
+    //   stage?.step === 11
+    // ) {
+    //   const prev_acct = await AccountDetail(
+    //     artisanOne?.full_name,
+    //     payload.user.id
+    //   );
+    //   await update(
+    //     {
+    //       step: 12,
+    //     },
+    //     {
+    //       where: {
+    //         user_id: payload.user.id,
+    //       },
+    //     }
+    //   );
+    //   const summary = `To complete your registration, kindly make a payment of *${account.formatMoney(
+    //     Number(prev_acct.data?.amount),
+    //     "₦"
+    //   )}* into  *${prev_acct.data?.account_number}* *${
+    //     prev_acct.data?.bank_name
+    //   }*. After payment, click the button below to confirm your payment`;
+
+    //   const button = [
+    //     {
+    //       type: "reply",
+    //       reply: { id: `${1}`, title: "Confirm payment" },
+    //     },
+    //   ];
+    //   let re = productsButtons2({ summary }, button);
+    //   response = await sendResponse(re, payload.user.id);
+    // }
+    // else if (
+    //   payload?.type === "text" &&
+    //   payload?.text?.toString() === "1" &&
+    //   stage?.step === 12
+    // ) {
+    //   const confirmPay = await confirmPayment(nextV.data?.flw_ref);
+    //   if (confirmPay?.data?.status) {
+    //     await updateArtisan(
+    //       {
+    //         payment_status: "paid",
+    //       },
+    //       {
+    //         where: {
+    //           user_id: payload.user.id,
+    //         },
+    //       }
+    //     );
+
+    //     let resp = "Congratulation, your payment  has been received";
+    //     response = await sendResponse(resp, payload.user.id);
+    //   }
+
+    //   else {
+    //     const summary2 = `kindly make a payment of *${account.formatMoney(
+    //       Number(nextV?.data?.amount),
+    //       "₦"
+    //     )}* into *${nextV?.data?.account_number}* *${
+    //       nextV?.data?.bank_name
+    //     }* .After payment, click the button below to confirm your payment`;
+    //     const header = "Hay,your payment has not been received.";
+    //     const button2 = [
+    //       {
+    //         type: "reply",
+    //         reply: { id: `${1}`, title: "Confirm payment" },
+    //       },
+    //     ];
+    //     let rr = productsButtons({ header, summary: summary2 }, button2);
+    //     response = await sendResponse(rr, payload.user.id);
+    //   }
+    // }
+    // else if (
+    //   payload?.type === "text" &&
+    //   payload?.text?.toString() === "2" &&
+    //   stage?.step === 11
+    // ) {
+    //   await destroyArtisan({
+    //     where: { user_id: payload.user.id },
+    //   });
+    //   await destroy({
+    //     where: { user_id: payload.user.id },
+    //   });
+    //   await create({ user_id: payload.user.id, step: 1 });
+    //   response = await sendResponse(welcomeResponse, payload.user.id);
+    // }
+    else if (payload.text?.toLowerCase() === "restart") {
       await destroy({
         where: { user_id: payload.user.id },
       });
