@@ -55,12 +55,11 @@ exports.RegistrationProcess = async (req, res) => {
     const artisanOne = await getArtisanOne(payload.user.id);
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
-    console.log(nextV);
 
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
       if (
         artisanOne?.user_id === payload.user.id || //&&
-        artisanOne.payment_status === "paid"
+        artisanOne?.payment_status === "paid"
       ) {
         response = await sendResponse(
           `*${payload.user.id}* has already been registered with us, please use another number`,
