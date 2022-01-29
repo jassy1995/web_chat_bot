@@ -63,7 +63,7 @@ exports.RegistrationProcess = async (req, res) => {
         artisanOne.payment_status === "paid"
       ) {
         response = await sendResponse(
-          `*${payload.user.id} has already been registered with us, please use another number`,
+          `*${payload.user.id}* has already been registered with us, please use another number`,
           payload.user.id
         );
       }
