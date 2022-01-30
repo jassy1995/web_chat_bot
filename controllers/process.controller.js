@@ -553,7 +553,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        if (checkExistCustomer.user_id === payload.user.id) {
+        if (checkExistCustomer?.user_id === payload.user.id) {
           await update(
             { step: 6 },
             {
@@ -719,9 +719,16 @@ exports.RegistrationProcess = async (req, res) => {
           artisan: artisans.data.artisans[Number(ggg.artisanIndex) - 1].name,
         };
         await saveCustomerRequest(requestToSave);
+        let msmg =
+          "wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible";
+        await smsCustomer(msmg, payload.user.id);
         // await mailingCustomer()
         const existCustomer = await getAllExistCustomer(payload.user.id);
-        if (existCustomer.length === 1) await smsCustomer(payload.user.id);
+        if (existCustomer.length === 1)
+          await smsCustomer(
+            "Welcome to wesabi, accessing reliable and verified service professionals just got better",
+            payload.user.id
+          );
 
         response = await sendResponse(
           "Congrats,your request has been received",

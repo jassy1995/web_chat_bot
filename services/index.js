@@ -8,12 +8,12 @@ const config = {
   headers: { "x-api-key": API_KEY },
 };
 
-const smsCustomer = async (phone) => {
+const smsCustomer = async (msg, phone) => {
   let data = {
     api_key: "TL7EaJz8XWbr6dnRQihBtdopQ1vdcv3l5ezaw0AGk9RTTt3fdn7SuNbF3UlwWm",
     channel: "generic",
     from: "Wesabi",
-    sms: "Welcome to wesabi, accessing reliable and verified service professionals just got better",
+    sms: msg,
     type: "plain",
     to: phone,
   };
