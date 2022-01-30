@@ -399,12 +399,13 @@ exports.RegistrationProcess = async (req, res) => {
           lga: stage?.lga,
           address: stage?.address,
           id_card: stage?.id_card,
-          picture: stage.image,
+          picture: payload.image,
           payment_status: "pending",
         };
+        console.log(toSave);
         await createArtisan(toSave);
         response = await sendResponse(
-          `Congrats, your registration has been completed, below is the summary of your info \n \n 1. *${stage?.full_name}* \n 2: *${stage?.service}* \n 3: *${stage?.state}* \n 4: *${stage?.lga}* \n 5: *${stage?.address}*`,
+          `Congrats, your registration has been completed, below is the summary of your info \n \n Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* `,
           payload.user.id
         );
 
