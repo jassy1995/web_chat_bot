@@ -14,6 +14,7 @@ const {
   changeNameResponse,
   confirmNumberResponse,
   artisanInfoResponse,
+  changeAddressResponse,
   // mailingCustomer,
 } = require("../utils/chat");
 
@@ -56,7 +57,7 @@ exports.RegistrationProcess = async (req, res) => {
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
     const checkExistCustomer = await getExistCustomer(payload.user.id);
-
+    // existCustomer;
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
       if (
         artisanOne?.user_id === payload.user.id || //&&
@@ -422,7 +423,7 @@ exports.RegistrationProcess = async (req, res) => {
         await createArtisan(toSave);
         // let re = productsButtons({ header, summary }, button);
         // response = await sendResponse(re, payload.user.id);
-        let hhs = `Congratulation!, your registration has been completed,\n here is the summary of your information\n Name: *${stage?.full_name} \n Service: ${stage?.service} \n State: ${stage?.state} \n  local_government: ${stage?.lga} \n Address: ${stage?.address}`;
+        let hhs = `Congratulation!, your registration has been completed,\n here is the summary of your information\n Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n  local_government: *${stage?.lga}* \n Address: *${stage?.address}*`;
         response = await sendResponse(hhs, payload.user.id);
       }
       // else if (
@@ -514,7 +515,6 @@ exports.RegistrationProcess = async (req, res) => {
         let fn = await fullNameResponse();
         response = await sendResponse(fn, payload.user.id);
       } else if (payload.type === "text" && stage.step === 3) {
-        // console.log(stage.step);
         await update(
           { full_name: payload.text, step: 4 },
           {
@@ -546,18 +546,79 @@ exports.RegistrationProcess = async (req, res) => {
         service.includes(service[Number(payload.text) - 1])
       ) {
         await update(
-          { service: service[Number(payload.text) - 1], step: 5 },
+          { service: service[Number(payload.text) - 1] },
           {
             where: {
               user_id: payload.user.id,
             },
           }
         );
-
+        if (checkExistCustomer.user_id === payload.user.id) {
+          await update(
+            { step: 6 },
+            {
+              where: {
+                user_id: payload.user.id,
+              },
+            }
+          );
+          let jh = await changeAddressResponse(
+            stage.full_name,
+            checkExistCustomer.address
+          );
+          response = await sendResponse(jh, payload.user.id);
+        } else {
+          await update(
+            {
+              step: 5,
+            },
+            {
+              where: {
+                user_id: payload.user.id,
+              },
+            }
+          );
+          response = await sendResponse(otherResponse.address, payload.user.id);
+        }
+      } else if (
+        payload.type === "text" &&
+        stage.step === 6 &&
+        payload.text.toString() === "1"
+      ) {
+        await update(
+          {
+            address: checkExistCustomer?.address,
+            email: checkExistCustomer.email,
+            local_government: JSON.parse(checkExistCustomer.local_government),
+            step: 10,
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        response = await sendResponse(
+          otherResponse.task_description,
+          payload.user.id
+        );
+      } else if (
+        payload.type === "text" &&
+        stage.step === 6 &&
+        payload.text.toString() === "2"
+      ) {
+        await update(
+          { address: payload.text, step: 5 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
         response = await sendResponse(otherResponse.address, payload.user.id);
       } else if (payload.type === "text" && stage.step === 5) {
         await update(
-          { address: payload.text, step: 6 },
+          { address: payload.text, step: 8 },
           {
             where: {
               user_id: payload.user.id,
@@ -569,9 +630,9 @@ exports.RegistrationProcess = async (req, res) => {
           "please enter your email",
           payload.user.id
         );
-      } else if (payload.type === "text" && stage.step === 6) {
+      } else if (payload.type === "text" && stage.step === 8) {
         await update(
-          { email: payload.text, step: 7 },
+          { email: payload.text, step: 9 },
           {
             where: {
               user_id: payload.user.id,
@@ -580,13 +641,13 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.location, payload.user.id);
-      } else if (payload.type === "location" && stage.step === 7) {
+      } else if (payload.type === "location" && stage.step === 9) {
         let location = {
           long: payload.location.longitude,
           lat: payload.location.latitude,
         };
         await update(
-          { local_government: location, step: 8 },
+          { local_government: location, step: 10 },
           {
             where: {
               user_id: payload.user.id,
@@ -597,9 +658,9 @@ exports.RegistrationProcess = async (req, res) => {
           otherResponse.task_description,
           payload.user.id
         );
-      } else if (payload.type === "text" && stage.step === 8) {
+      } else if (payload.type === "text" && stage.step === 10) {
         await update(
-          { task_description: payload.text, step: 9 },
+          { task_description: payload.text, step: 11 },
           {
             where: {
               user_id: payload.user.id,
@@ -610,13 +671,13 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(js, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 9 &&
+        stage.step === 11 &&
         artisans.data.artisans.includes(
           artisans.data.artisans[Number(payload.text) - 1]
         )
       ) {
         await update(
-          { artisanIndex: payload.text, step: 10 },
+          { artisanIndex: payload.text, step: 12 },
           {
             where: {
               user_id: payload.user.id,
@@ -632,7 +693,7 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(art, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 10 &&
+        stage.step === 12 &&
         payload.text.toString() === "1"
       ) {
         const ggg = await currentStage(payload.user.id);
@@ -668,11 +729,11 @@ exports.RegistrationProcess = async (req, res) => {
         );
       } else if (
         payload.type === "text" &&
-        stage.step === 10 &&
+        stage.step === 12 &&
         payload.text.toString() === "2"
       ) {
         await update(
-          { step: 9 },
+          { step: 11 },
           {
             where: {
               user_id: payload.user.id,

@@ -24,6 +24,27 @@ const productsButtons = (info, button) => {
   return message;
 };
 
+const changeAddressButton = (info, button, address) => {
+  let message = {
+    payload: {
+      type: "interactive",
+      interactive: {
+        type: "button",
+        header: {
+          type: "text",
+          text: ` ${info}`,
+        },
+        body: {
+          text: `Is your address is still the same as *${address}*?`,
+        },
+        action: {
+          buttons: button,
+        },
+      },
+    },
+  };
+  return message;
+};
 const changeNameButton = (info, button) => {
   let message = {
     payload: {
@@ -139,4 +160,5 @@ module.exports = {
   changeNameButton,
   confirmNumberButton,
   artisanInfo,
+  changeAddressButton,
 };

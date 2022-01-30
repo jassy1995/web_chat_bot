@@ -10,6 +10,7 @@ const {
   changeNameButton,
   confirmNumberButton,
   artisanInfo,
+  changeAddressButton,
 } = require("./interactive_button");
 
 const question_one = {
@@ -111,6 +112,23 @@ const changeNameResponse = async (artisan_name) => {
   ]);
 };
 
+const changeAddressResponse = async (artisan_name, address) => {
+  return changeAddressButton(
+    `Hi *${artisan_name}*`,
+    [
+      {
+        type: "reply",
+        reply: { id: `${1}`, title: "Yes" },
+      },
+      {
+        type: "reply",
+        reply: { id: `${2}`, title: "No" },
+      },
+    ],
+    address
+  );
+};
+
 const confirmNumberResponse = async (artisan_name, artisan_phone) => {
   return confirmNumberButton(
     `Hi ${artisan_name}`,
@@ -189,5 +207,6 @@ module.exports = {
   changeNameResponse,
   confirmNumberResponse,
   artisanInfoResponse,
+  changeAddressResponse,
   // mailingCustomer,
 };
