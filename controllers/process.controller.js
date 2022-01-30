@@ -404,7 +404,7 @@ exports.RegistrationProcess = async (req, res) => {
         };
         await createArtisan(toSave);
         response = await sendResponse(
-          `Congrats, your registration has been completed, below is the summary of your info \n \n 1. *${stage?.full_name}* \n 2: *${stage?.service}* \n 3: *${stage?.state}* \n 4: *${stage?.lga}* \n 5: *${stage?.address}* \n 6: *${stage.email}`,
+          `Congrats, your registration has been completed, below is the summary of your info \n \n 1. *${stage?.full_name}* \n 2: *${stage?.service}* \n 3: *${stage?.state}* \n 4: *${stage?.lga}* \n 5: *${stage?.address}*`,
           payload.user.id
         );
 
@@ -426,73 +426,171 @@ exports.RegistrationProcess = async (req, res) => {
         //   },
         // ];
 
-        // const summary = `Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* `;
-        // const header = "Here is the summary of your registration detail";
-        // const button = [
-        //   {
-        //     type: "reply",
-        //     reply: { id: `${1}`, title: "Submit" },
-        //   },
-        //   {
-        //     type: "reply",
-        //     reply: { id: `${2}`, title: "Edit" },
-        //   },
-        // ];
-        // let re = productsButtons({ header, summary }, button);
-        // response = await sendResponse(re, payload.user.id);
+        //==============edit part==================
+        //   const summary = `Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* `;
+        //   const header = "Here is the summary of your registration detail";
+        //   const button = [
+        //     {
+        //       type: "reply",
+        //       reply: { id: `${1}`, title: "Submit" },
+        //     },
+        //     {
+        //       type: "reply",
+        //       reply: { id: `${2}`, title: "Edit" },
+        //     },
+        //   ];
+        //   let re = productsButtons({ header, summary }, button);
+        //   response = await sendResponse(re, payload.user.id);
+        // } else if (
+        //   payload.type === "text" &&
+        //   stage?.step === 10 &&
+        //   payload.text?.toString() === "1"
+        // ) {
+        //   const toSave = {
+        //     user_id: stage.user_id,
+        //     full_name: stage?.full_name,
+        //     service: stage?.service,
+        //     state: stage?.state,
+        //     lga: stage?.lga,
+        //     address: stage?.address,
+        //     id_card: stage?.id_card,
+        //     picture: stage?.image,
+        //     payment_status: "pending",
+        //   };
+        //   await createArtisan(toSave);
+        //   response = await sendResponse(
+        //     `Congrats, your registration has been completed `,
+        //     payload.user.id
+        //   );
+        // } else if (
+        //   payload.type === "text" &&
+        //   stage?.step === 10 &&
+        //   payload.text?.toString() === "2"
+        // ) {
+        //   await update(
+        //     {
+        //       step: 11,
+        //     },
+        //     {
+        //       where: {
+        //         user_id: payload.user.id,
+        //       },
+        //     }
+        //   );
+        //   response = await sendResponse(
+        //     `what would you like to edit ? \n \n 1. *${stage?.full_name}* \n 2: *${stage?.service}* \n 3: *${stage?.state}* \n 4: *${stage?.lga}* \n 5: *${stage?.address}* \n 6: *${stage?.id_card}* 7: *${stage?.picture}\n .Kindly enter the number that correspond to your option}`,
+        //     payload.user.id
+        //   );
+        // } else if (stage.step === 11) {
+        //   if (payload.text?.toString() === "1") {
+        //     let fn = await fullNameResponse();
+        //     response = await sendResponse(fn, payload.user.id);
+        //   } else if (payload.text?.toString() === "2") {
+        //     let rfs = await serviceResponse();
+        //     response = await sendResponse(rfs, payload.user.id);
+        //   } else if (payload.text?.toString() === "3") {
+        //     let rRe = await stateResponse();
+        //     response = await sendResponse(rRe, payload.user.id);
+        //   } else if (payload.text?.toString() === "4") {
+        //     response = await sendResponse(otherResponse.address, payload.user.id);
+        //   } else if (payload.text?.toString() === "5") {
+        //     response = await sendResponse(otherResponse.id_card, payload.user.id);
+        //   } else if (payload.text?.toString() === "6") {
+        //     response = await sendResponse(otherResponse.picture, payload.user.id);
+        //   }
+
+        //   await update(
+        //     {
+        //       editIndex: payload.text,
+        //       step: 12,
+        //     },
+        //     {
+        //       where: {
+        //         user_id: payload.user.id,
+        //       },
+        //     }
+        //   );
+        // } else if (stage.step === 12) {
+        //   if (stage?.editIndex === 1) {
+        //     await update(
+        //       {
+        //         full_name: payload.text,
+        //       },
+        //       {
+        //         where: {
+        //           user_id: payload.user.id,
+        //         },
+        //       }
+        //     );
+        //   } else if (stage.editIndex === 2) {
+        //     await update(
+        //       {
+        //         service: service[Number(payload.text) - 1],
+        //       },
+        //       {
+        //         where: {
+        //           user_id: payload.user.id,
+        //         },
+        //       }
+        //     );
+        //   } else if (stage.editIndex === 3) {
+        //     await update(
+        //       {
+        //         state: states[Number(payload.text) - 1].name,
+        //       },
+        //       {
+        //         where: {
+        //           user_id: payload.user.id,
+        //         },
+        //       }
+        //     );
+        //   } else if (stage.editIndex === 4) {
+        //     await update(
+        //       {
+        //         address: payload.text,
+        //       },
+        //       {
+        //         where: {
+        //           user_id: payload.user.id,
+        //         },
+        //       }
+        //     );
+        //   } else if (stage.editIndex === 5) {
+        //     await update(
+        //       {
+        //         address: payload.text,
+        //       },
+        //       {
+        //         where: {
+        //           user_id: payload.user.id,
+        //         },
+        //       }
+        //     );
+        //   } else if (stage.editIndex === 6) {
+        //     await update(
+        //       {
+        //         address: payload.text,
+        //       },
+        //       {
+        //         where: {
+        //           user_id: payload.user.id,
+        //         },
+        //       }
+        //     );
+        //   }
+
+        //   await update(
+        //     {
+        //       step: 9,
+        //     },
+        //     {
+        //       where: {
+        //         user_id: payload.user.id,
+        //       },
+        //     }
+        //   );
+        //============end edit part===================
       }
-      //   else if (payload.type === "text" && stage?.step === 10 && payload.text?.toString()==="1") {
-      //     const toSave = {
-      //     user_id: stage.user_id,
-      //     full_name: stage?.full_name,
-      //     service: stage?.service,
-      //     state: stage?.state,
-      //     lga: stage?.lga,
-      //     address: stage?.address,
-      //     id_card: stage?.id_card,
-      //     picture: stage.image,
-      //     payment_status: "pending",
-      //   };
-      //   await createArtisan(toSave);
-      //   response = await sendResponse(`Congrats, your registration has been completed `, payload.user.id);
-      // }
-
-      // else if (payload.type === "text" && stage?.step === 10 && payload.text?.toString() === "2") {
-
-      //   await update(
-      //     {
-      //       step: 11,
-      //     },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   response = await sendResponse(`what would you like to edit ? \n \n 1. *${stage?.full_name}* \n 2: *${stage?.service}* \n 3: *${stage?.state}* \n 4: *${stage?.lga}* \n 5: *${stage?.address}* \n 6: *${stage.email}`, payload.user.id);
-      // }
-
-      // else if (stage.step === 11) {
-      //   if (payload.text?.toString() === "1") {
-      //     let fnn = await fullNameResponse();
-      //     response = await sendResponse(fn, payload.user.id);
-      //   }
-      //   else if (payload.text?.toString() === "2") {
-      //    let rfs = await serviceResponse();
-      //   response = await sendResponse(rfs, payload.user.id);
-      //   }
-
-      //   await update(
-      //     {
-      //       service: payload.text,step:12
-      //     },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      // }
 
       // let re = productsButtons({ header, summary }, button);
       // response = await sendResponse(re, payload.user.id);
