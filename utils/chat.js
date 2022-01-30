@@ -114,7 +114,7 @@ const changeNameResponse = async (artisan_name) => {
 
 const changeAddressResponse = async (artisan_name, address) => {
   return changeAddressButton(
-    `Hi *${artisan_name}*`,
+    `Hi ${artisan_name}`,
     [
       {
         type: "reply",
