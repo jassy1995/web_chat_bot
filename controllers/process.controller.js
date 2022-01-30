@@ -589,7 +589,7 @@ exports.RegistrationProcess = async (req, res) => {
           {
             address: checkExistCustomer?.address,
             email: checkExistCustomer.email,
-            local_government: JSON.parse(checkExistCustomer.local_government),
+            local_government: JSON.parse(checkExistCustomer.location),
             step: 10,
           },
           {
