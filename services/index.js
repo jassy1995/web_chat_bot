@@ -80,7 +80,34 @@ const smsCustomer = async (msg, phone) => {
 //     console.log(e?.response?.body ?? e);
 //   }
 // };
-let service = ["Carpenter", "Plumber", "AC Repairs"];
+let service = [
+  "Carpenter",
+  "Plumber",
+  "AC Repairs",
+  "Furniture",
+  "washing machine repair",
+  "Generator service and repair",
+  "Electrical Service",
+  "Satellite/dstv service",
+  "Refrigerator repair",
+  "Aluminium fabrication",
+  "Metal fabrication(welding)",
+  "Masonyry",
+  "Gardening",
+  "Cleaning",
+  "Laundary services",
+  "Fumigation",
+  "Painting",
+  "Tiling",
+  "Waiter",
+  "Driver",
+  "Cook",
+  "Security",
+  "Administrative officer",
+  "Barber",
+  "Dispatch rider",
+  "others",
+];
 const mystates = [
   {
     id: "1",

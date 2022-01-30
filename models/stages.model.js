@@ -61,6 +61,9 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
     artisanIndex: {
       type: DataTypes.STRING,
     },
+    editIndex: {
+      type: DataTypes.INTEGER,
+    },
   });
 
 module.exports = Stage;

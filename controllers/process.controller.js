@@ -380,7 +380,7 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (payload.type === "image" && stage?.step === 9) {
         await update(
           {
-            picture: payload.image,
+            picture: payload?.image,
             local_government: acct_value?.data,
             step: 10,
           },
@@ -389,6 +389,23 @@ exports.RegistrationProcess = async (req, res) => {
               user_id: payload.user.id,
             },
           }
+        );
+
+        const toSave = {
+          user_id: stage.user_id,
+          full_name: stage?.full_name,
+          service: stage?.service,
+          state: stage?.state,
+          lga: stage?.lga,
+          address: stage?.address,
+          id_card: stage?.id_card,
+          picture: stage.image,
+          payment_status: "pending",
+        };
+        await createArtisan(toSave);
+        response = await sendResponse(
+          `Congrats, your registration has been completed, below is the summary of your info \n \n 1. *${stage?.full_name}* \n 2: *${stage?.service}* \n 3: *${stage?.state}* \n 4: *${stage?.lga}* \n 5: *${stage?.address}* \n 6: *${stage.email}`,
+          payload.user.id
         );
 
         // const summary = `Name: ${stage.full_name}, Service: ${
@@ -408,24 +425,80 @@ exports.RegistrationProcess = async (req, res) => {
         //     reply: { id: `${1}`, title: "Confirm payment" },
         //   },
         // ];
-        const toSave = {
-          user_id: stage.user_id,
-          full_name: stage?.full_name,
-          service: stage?.service,
-          state: stage?.state,
-          lga: stage?.lga,
-          address: stage?.address,
-          id_card: stage?.id_card,
-          picture: payload.image,
-          payment_status: "pending",
-        };
 
-        await createArtisan(toSave);
+        // const summary = `Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* `;
+        // const header = "Here is the summary of your registration detail";
+        // const button = [
+        //   {
+        //     type: "reply",
+        //     reply: { id: `${1}`, title: "Submit" },
+        //   },
+        //   {
+        //     type: "reply",
+        //     reply: { id: `${2}`, title: "Edit" },
+        //   },
+        // ];
         // let re = productsButtons({ header, summary }, button);
         // response = await sendResponse(re, payload.user.id);
-        let hhs = `Congratulation!, your registration has been completed,\n here is the summary of your information\n Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n  local_government: *${stage?.lga}* \n Address: *${stage?.address}*`;
-        response = await sendResponse(hhs, payload.user.id);
       }
+      //   else if (payload.type === "text" && stage?.step === 10 && payload.text?.toString()==="1") {
+      //     const toSave = {
+      //     user_id: stage.user_id,
+      //     full_name: stage?.full_name,
+      //     service: stage?.service,
+      //     state: stage?.state,
+      //     lga: stage?.lga,
+      //     address: stage?.address,
+      //     id_card: stage?.id_card,
+      //     picture: stage.image,
+      //     payment_status: "pending",
+      //   };
+      //   await createArtisan(toSave);
+      //   response = await sendResponse(`Congrats, your registration has been completed `, payload.user.id);
+      // }
+
+      // else if (payload.type === "text" && stage?.step === 10 && payload.text?.toString() === "2") {
+
+      //   await update(
+      //     {
+      //       step: 11,
+      //     },
+      //     {
+      //       where: {
+      //         user_id: payload.user.id,
+      //       },
+      //     }
+      //   );
+      //   response = await sendResponse(`what would you like to edit ? \n \n 1. *${stage?.full_name}* \n 2: *${stage?.service}* \n 3: *${stage?.state}* \n 4: *${stage?.lga}* \n 5: *${stage?.address}* \n 6: *${stage.email}`, payload.user.id);
+      // }
+
+      // else if (stage.step === 11) {
+      //   if (payload.text?.toString() === "1") {
+      //     let fnn = await fullNameResponse();
+      //     response = await sendResponse(fn, payload.user.id);
+      //   }
+      //   else if (payload.text?.toString() === "2") {
+      //    let rfs = await serviceResponse();
+      //   response = await sendResponse(rfs, payload.user.id);
+      //   }
+
+      //   await update(
+      //     {
+      //       service: payload.text,step:12
+      //     },
+      //     {
+      //       where: {
+      //         user_id: payload.user.id,
+      //       },
+      //     }
+      //   );
+      // }
+
+      // let re = productsButtons({ header, summary }, button);
+      // response = await sendResponse(re, payload.user.id);
+      // let hhs = `Congratulation!, your registration has been completed,\n here is the summary of your information\n Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n  local_government: *${stage?.lga}* \n Address: *${stage?.address}*`;
+      // response = await sendResponse(hhs, payload.user.id);
+
       // else if (
       //   payload.text.toString() === "1" &&
       //   payload.type === "text" &&

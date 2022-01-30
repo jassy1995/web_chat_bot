@@ -71,10 +71,18 @@ const fullNameResponse = () => {
   return `\nWelcome to the registration of wesabi. we would like to ask you some questions\n${question}`;
 };
 
+// const serviceResponse = async () => {
+//   const question = question_one.service;
+//   const services = await getServices();
+//   // return listButtons(question, formatServiceArray(services));
+//   return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(services)}
+// };
+
 const serviceResponse = async () => {
-  const question = question_one.service;
   const services = await getServices();
-  return listButtons(question, formatServiceArray(services));
+  return `kindly enter the number correspond to your option service \n ${formatDataArrayToStringForArtisan(
+    services
+  )}`;
 };
 
 const stateResponse = async () => {
@@ -129,6 +137,23 @@ const changeAddressResponse = async (artisan_name, address) => {
   );
 };
 
+// const submitEditResponse = async (artisan_name, address) => {
+//   return submitEditButton(
+//     `Hi ${artisan_name}`,
+//     [
+//       {
+//         type: "reply",
+//         reply: { id: `${1}`, title: "Yes" },
+//       },
+//       {
+//         type: "reply",
+//         reply: { id: `${2}`, title: "No" },
+//       },
+//     ],
+//     address
+//   );
+// };
+
 const confirmNumberResponse = async (artisan_name, artisan_phone) => {
   return confirmNumberButton(
     `Hi ${artisan_name}`,
@@ -148,11 +173,11 @@ const artisanInfoResponse = async (name, phone, acct, bank) => {
     [
       {
         type: "reply",
-        reply: { id: `${1}`, title: "I want" },
+        reply: { id: `${1}`, title: "Am interested" },
       },
       {
         type: "reply",
-        reply: { id: `${2}`, title: "I don't want" },
+        reply: { id: `${2}`, title: "Am not interested" },
       },
     ],
     phone,
@@ -208,5 +233,6 @@ module.exports = {
   confirmNumberResponse,
   artisanInfoResponse,
   changeAddressResponse,
+  // submitEditResponse,
   // mailingCustomer,
 };
