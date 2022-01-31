@@ -47,6 +47,7 @@ const {
 exports.RegistrationProcess = async (req, res) => {
   const { payload } = req.body;
   let response;
+  let num = "0";
 
   try {
     const stage = await currentStage(payload.user.id);
@@ -59,15 +60,15 @@ exports.RegistrationProcess = async (req, res) => {
     const checkExistCustomer = await getExistCustomer(payload.user.id);
     // existCustomer;
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
-      if (
-        artisanOne?.user_id === payload.user.id || //&&
-        artisanOne?.payment_status === "paid"
-      ) {
-        response = await sendResponse(
-          `*${payload.user.id}* has already been registered with us, please use another number`,
-          payload.user.id
-        );
-      }
+      // if (
+      //   artisanOne?.user_id === payload.user.id || //&&
+      //   artisanOne?.payment_status === "paid"
+      // ) {
+      //   response = await sendResponse(
+      //     `*${payload.user.id}* has already been registered with us, please use another number`,
+      //     payload.user.id
+      //   );
+      // }
 
       // else if (
       //   artisanOne?.user_id === payload.user.id &&
@@ -98,13 +99,13 @@ exports.RegistrationProcess = async (req, res) => {
       //   let re = productsButtons({ header, summary }, button);
       //   response = await sendResponse(re, payload.user.id);
       // }
-      else {
-        await destroy({
-          where: { user_id: payload.user.id },
-        });
-        await create({ user_id: payload.user.id, step: 1 });
-        response = await sendResponse(welcomeResponse, payload.user.id);
-      }
+      // else {
+      await destroy({
+        where: { user_id: payload.user.id },
+      });
+      await create({ user_id: payload.user.id, step: 1 });
+      response = await sendResponse(welcomeResponse, payload.user.id);
+      // }
     }
 
     // else if (
@@ -258,6 +259,26 @@ exports.RegistrationProcess = async (req, res) => {
       }
     } else if (stage?.menu === "Render Service (Artisan)") {
       if (
+        artisanOne?.user_id === payload.user.id &&
+        stage?.menu === "Render Service (Artisan)"
+      ) {
+        await update(
+          {
+            step: 0,
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        response = await sendResponse(
+          `*${num.concat(
+            payload.user.id.slice(3)
+          )}* has already been used, please use another phone`,
+          payload.user.id
+        );
+      } else if (
         payload.type === "text" &&
         stage.step === 2 &&
         payload.text.toString() === "2"
@@ -405,7 +426,7 @@ exports.RegistrationProcess = async (req, res) => {
         console.log(toSave);
         await createArtisan(toSave);
         response = await sendResponse(
-          `Congrats, your registration has been completed, below is the summary of your info \n \n Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* `,
+          `Congrats, your registration has been completed, below is the summary of your information  \n Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* `,
           payload.user.id
         );
 
