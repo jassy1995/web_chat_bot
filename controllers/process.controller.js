@@ -15,6 +15,7 @@ const {
   confirmNumberResponse,
   artisanInfoResponse,
   changeAddressResponse,
+  genderResponse,
   // mailingCustomer,
 } = require("../utils/chat");
 
@@ -388,7 +389,13 @@ exports.RegistrationProcess = async (req, res) => {
         );
         let vb = await genderResponse();
         response = await sendResponse(vb, payload.user.id);
-      } else if (payload.type === "text" && stage.step === 8) {
+      } else if (
+        payload.type === "text" &&
+        stage.step === 8 &&
+        otherResponse.genders.includes(
+          otherResponse.genders[Number(payload.text) - 1]
+        )
+      ) {
         await update(
           { gender: otherResponse.genders[Number(payload.text) - 1], step: 9 },
           {
