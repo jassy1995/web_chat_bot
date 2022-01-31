@@ -173,11 +173,11 @@ const artisanInfoResponse = async (name, phone, acct, bank) => {
     [
       {
         type: "reply",
-        reply: { id: `${1}`, title: "Am interested" },
+        reply: { id: `${1}`, title: "I'm interested" },
       },
       {
         type: "reply",
-        reply: { id: `${2}`, title: "Am not interested" },
+        reply: { id: `${2}`, title: "I'm not interested" },
       },
     ],
     phone,
