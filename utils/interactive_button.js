@@ -30,10 +30,6 @@ const genderButton = (button) => {
       type: "interactive",
       interactive: {
         type: "button",
-        header: {
-          type: "text",
-          text: ` ${info}`,
-        },
         body: {
           text: `kindly click one of the button below to select your prefer option`,
         },
