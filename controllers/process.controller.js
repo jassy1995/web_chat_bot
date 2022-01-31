@@ -386,10 +386,34 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        response = await sendResponse(otherResponse.id_card, payload.user.id);
-      } else if (payload.type === "image" && stage?.step === 8) {
+        let vb = await genderResponse();
+        response = await sendResponse(vb, payload.user.id);
+      } else if (payload.type === "text" && stage.step === 8) {
         await update(
-          { id_card: payload.image, step: 9 },
+          { gender: otherResponse.genders[Number(payload.text) - 1], step: 9 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        response = await sendResponse(
+          "enter your date of birth, Kindly use this format *dd/mm/yyy* ",
+          payload.user.id
+        );
+      } else if (payload.type === "text" && stage.step === 9) {
+        await update(
+          { dateOfBirth: payload.text, step: 10 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        response = await sendResponse(otherResponse.id_card, payload.user.id);
+      } else if (payload.type === "image" && stage?.step === 10) {
+        await update(
+          { id_card: payload.image, step: 11 },
           {
             where: {
               user_id: payload.user.id,
@@ -398,12 +422,12 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.picture, payload.user.id);
-      } else if (payload.type === "image" && stage?.step === 9) {
+      } else if (payload.type === "image" && stage?.step === 11) {
         await update(
           {
             picture: payload?.image,
             local_government: acct_value?.data,
-            step: 10,
+            step: 12,
           },
           {
             where: {
@@ -419,6 +443,8 @@ exports.RegistrationProcess = async (req, res) => {
           state: stage?.state,
           lga: stage?.lga,
           address: stage?.address,
+          gender: stage?.gender,
+          dateOfBirth: stage?.dateOfBirth,
           id_card: stage?.id_card,
           picture: payload.image,
           payment_status: "pending",

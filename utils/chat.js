@@ -11,6 +11,7 @@ const {
   confirmNumberButton,
   artisanInfo,
   changeAddressButton,
+  genderButton,
 } = require("./interactive_button");
 
 const question_one = {
@@ -29,6 +30,7 @@ const question_one = {
     "Render Service (Artisan)",
     "Request Service Provider(Customer)",
   ],
+  genders: ["male", "female"],
 };
 
 // format data array to return array of objects
@@ -137,6 +139,19 @@ const changeAddressResponse = async (artisan_name, address) => {
   );
 };
 
+const genderResponse = async () => {
+  return genderButton([
+    {
+      type: "reply",
+      reply: { id: `${1}`, title: "male" },
+    },
+    {
+      type: "reply",
+      reply: { id: `${2}`, title: "female" },
+    },
+  ]);
+};
+
 // const submitEditResponse = async (artisan_name, address) => {
 //   return submitEditButton(
 //     `Hi ${artisan_name}`,
@@ -219,6 +234,7 @@ const otherResponse = {
   task_description: question_one.task_description,
   artisan: question_one.artisan,
   initService: question_one.initService,
+  genders: question_one.genders,
 };
 
 module.exports = {
@@ -233,6 +249,7 @@ module.exports = {
   confirmNumberResponse,
   artisanInfoResponse,
   changeAddressResponse,
+  genderResponse,
   // submitEditResponse,
   // mailingCustomer,
 };
