@@ -64,6 +64,12 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
     editIndex: {
       type: DataTypes.INTEGER,
     },
+    gender: {
+      type: DataTypes.STRING,
+    },
+    dateOfBirth: {
+      type: DataTypes.STRING,
+    },
   });
 
 module.exports = Stage;

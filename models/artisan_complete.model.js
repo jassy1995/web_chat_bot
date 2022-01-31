@@ -31,6 +31,14 @@ const ArtisanComplete = (sequelize, DataTypes, Sequelize) =>
       type: DataTypes.STRING,
       allowNull: false,
     },
+    gender: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    dateOfBirth: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     id_card: {
       type: DataTypes.STRING,
       allowNull: false,
