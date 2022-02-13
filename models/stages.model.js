@@ -44,7 +44,7 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
       type: DataTypes.STRING,
     },
     local_government: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
     },
 
     step: {
