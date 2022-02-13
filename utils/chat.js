@@ -90,7 +90,7 @@ const serviceResponse = async () => {
 
 const stateResponse = async () => {
   const question = question_one.state;
-  const states = await getStates();
+  const { data: states } = await getStates();
   return `${question} \n${formatDataArrayToString(states)}`;
 };
 
