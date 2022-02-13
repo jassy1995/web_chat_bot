@@ -40,13 +40,14 @@ exports.savedServiceRecords = async (req, res) => {
     { service_name: "Dispatch rider" },
   ];
   try {
+    let response;
     services.forEach(async (service, index) => {
       const { service_name } = service;
       const dataTOSave = { service_name };
-      await Service.create(dataTOSave);
+      response = await Service.create(dataTOSave);
     });
 
-    return res.json("done");
+    return res.json(response);
   } catch (error) {
     return res.status(500).json({ message: "error occur", error });
   }

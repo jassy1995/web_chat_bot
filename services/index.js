@@ -281,9 +281,13 @@ const confirmPayment = async (reference_id) => {
   );
 };
 
-const getServices = async () => {
-  return service;
-};
+const getServices = async () =>
+  (
+    await axios.get(
+      "https://api.wesabi.com/v3/categories?key=039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561"
+    )
+  ).data;
+
 const getStates = async () => mystates;
 // const getLga = async () => await Lga.findAll();
 const getLga = async (stateId) =>

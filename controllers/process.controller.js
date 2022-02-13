@@ -52,7 +52,7 @@ exports.RegistrationProcess = async (req, res) => {
 
   try {
     const stage = await currentStage(payload.user.id);
-    const service = await getServices();
+    const { data: service } = await getServices();
     const states = await getStates();
     const artisans = await getListOfArtisan();
     const artisanOne = await getArtisanOne(payload.user.id);
@@ -327,7 +327,7 @@ exports.RegistrationProcess = async (req, res) => {
         service.includes(service[Number(payload.text) - 1])
       ) {
         await update(
-          { service: service[Number(payload.text) - 1], step: 5 },
+          { service: service[Number(payload.text) - 1].category, step: 5 },
           {
             where: {
               user_id: payload.user.id,
