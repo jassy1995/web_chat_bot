@@ -27,7 +27,7 @@ const CustomerComplete = (sequelize, DataTypes, Sequelize) =>
       allowNull: false,
     },
     location: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     task_description: {
