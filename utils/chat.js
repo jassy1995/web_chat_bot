@@ -81,10 +81,9 @@ const fullNameResponse = () => {
 // };
 
 const serviceResponse = async () => {
-  const { data: services } = await getServices();
+  const services = await getServices();
   return `kindly enter the number correspond to your option service \n ${formatDataArrayToStringLga(
-    services,
-    "category"
+    services
   )}`;
 };
 
