@@ -31,7 +31,7 @@ const genderButton = (button) => {
       interactive: {
         type: "button",
         body: {
-          text: `kindly click one of the button below to select your prefer option`,
+          text: "kindly click one of the button below to select your gender",
         },
         action: {
           buttons: button,
@@ -86,6 +86,7 @@ const changeNameButton = (info, button) => {
 };
 
 const confirmNumberButton = (info, button, artisan_phone) => {
+  let num = "0";
   let message = {
     payload: {
       type: "interactive",
@@ -96,7 +97,9 @@ const confirmNumberButton = (info, button, artisan_phone) => {
           text: ` ${info}`,
         },
         body: {
-          text: `please confirm your number *${artisan_phone}*`,
+          text: `please confirm your number *${num.concat(
+            artisan_phone.slice(3)
+          )}*`,
         },
         action: {
           buttons: button,
