@@ -35,7 +35,7 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
       type: DataTypes.STRING,
     },
     location: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
     },
     task_description: {
       type: DataTypes.STRING,
@@ -44,7 +44,7 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
       type: DataTypes.STRING,
     },
     local_government: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
     },
 
     step: {
