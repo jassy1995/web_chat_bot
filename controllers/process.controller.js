@@ -944,6 +944,7 @@ exports.RegistrationProcess = async (req, res) => {
           task_description: stage.task_description,
           artisan: artisans.data.artisans[Number(ggg.artisanIndex) - 1].name,
         };
+        console.log(requestToSave);
         await saveCustomerRequest(requestToSave);
         let msmg =
           "wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible";
