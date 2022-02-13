@@ -405,7 +405,7 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         response = await sendResponse(
-          "enter your date of birth, Kindly use this format *dd/mm/yyy* ",
+          "enter your date of birth, Kindly use this format *dd/mm/yyyy* ",
           payload.user.id
         );
       } else if (payload.type === "text" && stage.step === 9) {
@@ -432,7 +432,7 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (payload.type === "image" && stage?.step === 11) {
         await update(
           {
-            picture: payload?.image,
+            picture: payload.image,
             local_government: acct_value?.data,
             step: 12,
           },
@@ -459,7 +459,7 @@ exports.RegistrationProcess = async (req, res) => {
         console.log(toSave);
         await createArtisan(toSave);
         response = await sendResponse(
-          `Congrats, your registration has been completed, below is the summary of your information  \n Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* `,
+          `Congrats, your registration has been completed, below is the summary of your information  \n Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* \n Gender: *${stage.gender}* \n Date Of Birth: *${stage.dateOfBirth}* \n`,
           payload.user.id
         );
 
@@ -873,7 +873,7 @@ exports.RegistrationProcess = async (req, res) => {
           lat: payload.location.latitude,
         };
         await update(
-          { local_government: location, step: 10 },
+          { local_government: JSON.stringify(location), step: 10 },
           {
             where: {
               user_id: payload.user.id,
