@@ -94,12 +94,12 @@ const stateResponse = async () => {
   return `${question} \n${formatDataArrayToString(states)}`;
 };
 
-const lgaResponse = async (state_id) => {
+const lgaResponse = async (state) => {
   const question = question_one.lga;
-  const { data: lga } = await getLga(state_id);
+  const { data: lga } = await getLga(state);
   return {
     lg: lga,
-    rests: `${question} \n${formatDataArrayToStringLga(lga, "name")}`,
+    rests: `${question} \n${formatDataArrayToStringLga(lga, "lga")}`,
   };
 };
 

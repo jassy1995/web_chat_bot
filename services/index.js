@@ -108,156 +108,156 @@ const smsCustomer = async (msg, phone) => {
 //   "Dispatch rider",
 //   "others",
 // ];
-const mystates = [
-  {
-    id: "1",
-    name: "Abia ",
-  },
-  {
-    id: "2",
-    name: "Adamawa ",
-  },
-  {
-    id: "3",
-    name: "Akwa Ibom ",
-  },
-  {
-    id: "4",
-    name: "Anambra ",
-  },
-  {
-    id: "5",
-    name: "Bauchi ",
-  },
-  {
-    id: "6",
-    name: "Bayelsa ",
-  },
-  {
-    id: "7",
-    name: "Benue ",
-  },
-  {
-    id: "8",
-    name: "Borno ",
-  },
-  {
-    id: "9",
-    name: "Cross River ",
-  },
-  {
-    id: "10",
-    name: "Delta ",
-  },
-  {
-    id: "11",
-    name: "Ebonyi ",
-  },
-  {
-    id: "12",
-    name: "Edo ",
-  },
-  {
-    id: "13",
-    name: "Ekiti ",
-  },
-  {
-    id: "14",
-    name: "Enugu ",
-  },
-  {
-    id: "15",
-    name: "FCT",
-  },
-  {
-    id: "16",
-    name: "Gombe ",
-  },
-  {
-    id: "17",
-    name: "Imo ",
-  },
-  {
-    id: "18",
-    name: "Jigawa ",
-  },
-  {
-    id: "19",
-    name: "Kaduna ",
-  },
-  {
-    id: "20",
-    name: "Kano ",
-  },
-  {
-    id: "21",
-    name: "Katsina ",
-  },
-  {
-    id: "22",
-    name: "Kebbi ",
-  },
-  {
-    id: "23",
-    name: "Kogi ",
-  },
-  {
-    id: "24",
-    name: "Kwara ",
-  },
-  {
-    id: "25",
-    name: "Lagos ",
-  },
-  {
-    id: "26",
-    name: "Nasarawa ",
-  },
-  {
-    id: "27",
-    name: "Niger ",
-  },
-  {
-    id: "28",
-    name: "Ogun ",
-  },
-  {
-    id: "29",
-    name: "Ondo ",
-  },
-  {
-    id: "30",
-    name: "Osun ",
-  },
-  {
-    id: "31",
-    name: "Oyo ",
-  },
-  {
-    id: "32",
-    name: "Plateau ",
-  },
-  {
-    id: "33",
-    name: "Rivers ",
-  },
-  {
-    id: "34",
-    name: "Sokoto ",
-  },
-  {
-    id: "35",
-    name: "Taraba ",
-  },
-  {
-    id: "36",
-    name: "Yobe ",
-  },
-  {
-    id: "37",
-    name: "Zamfara ",
-  },
-];
+// const mystates = [
+//   {
+//     id: "1",
+//     name: "Abia ",
+//   },
+//   {
+//     id: "2",
+//     name: "Adamawa ",
+//   },
+//   {
+//     id: "3",
+//     name: "Akwa Ibom ",
+//   },
+//   {
+//     id: "4",
+//     name: "Anambra ",
+//   },
+//   {
+//     id: "5",
+//     name: "Bauchi ",
+//   },
+//   {
+//     id: "6",
+//     name: "Bayelsa ",
+//   },
+//   {
+//     id: "7",
+//     name: "Benue ",
+//   },
+//   {
+//     id: "8",
+//     name: "Borno ",
+//   },
+//   {
+//     id: "9",
+//     name: "Cross River ",
+//   },
+//   {
+//     id: "10",
+//     name: "Delta ",
+//   },
+//   {
+//     id: "11",
+//     name: "Ebonyi ",
+//   },
+//   {
+//     id: "12",
+//     name: "Edo ",
+//   },
+//   {
+//     id: "13",
+//     name: "Ekiti ",
+//   },
+//   {
+//     id: "14",
+//     name: "Enugu ",
+//   },
+//   {
+//     id: "15",
+//     name: "FCT",
+//   },
+//   {
+//     id: "16",
+//     name: "Gombe ",
+//   },
+//   {
+//     id: "17",
+//     name: "Imo ",
+//   },
+//   {
+//     id: "18",
+//     name: "Jigawa ",
+//   },
+//   {
+//     id: "19",
+//     name: "Kaduna ",
+//   },
+//   {
+//     id: "20",
+//     name: "Kano ",
+//   },
+//   {
+//     id: "21",
+//     name: "Katsina ",
+//   },
+//   {
+//     id: "22",
+//     name: "Kebbi ",
+//   },
+//   {
+//     id: "23",
+//     name: "Kogi ",
+//   },
+//   {
+//     id: "24",
+//     name: "Kwara ",
+//   },
+//   {
+//     id: "25",
+//     name: "Lagos ",
+//   },
+//   {
+//     id: "26",
+//     name: "Nasarawa ",
+//   },
+//   {
+//     id: "27",
+//     name: "Niger ",
+//   },
+//   {
+//     id: "28",
+//     name: "Ogun ",
+//   },
+//   {
+//     id: "29",
+//     name: "Ondo ",
+//   },
+//   {
+//     id: "30",
+//     name: "Osun ",
+//   },
+//   {
+//     id: "31",
+//     name: "Oyo ",
+//   },
+//   {
+//     id: "32",
+//     name: "Plateau ",
+//   },
+//   {
+//     id: "33",
+//     name: "Rivers ",
+//   },
+//   {
+//     id: "34",
+//     name: "Sokoto ",
+//   },
+//   {
+//     id: "35",
+//     name: "Taraba ",
+//   },
+//   {
+//     id: "36",
+//     name: "Yobe ",
+//   },
+//   {
+//     id: "37",
+//     name: "Zamfara ",
+//   },
+// ];
 
 const { Service, State } = require("../models");
 
@@ -297,13 +297,18 @@ const getStates = async () =>
   ).data;
 // mystates;
 // const getLga = async () => await Lga.findAll();
-const getLga = async (stateId) =>
+const getLga = async (state) =>
   (
     await axios.get(
-      `https://mobile.creditclan.com/webapi/v1/states/${stateId}/lgas`,
-      config
+      `https://api.wesabi.com/v3/lgas/state/${state}/?key=039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561`
     )
   ).data;
+// (
+//   await axios.get(
+//     `https://mobile.creditclan.com/webapi/v1/states/${stateId}/lgas`,
+//     config
+//   )
+// ).data;
 
 const getListOfArtisan = async () => {
   return await axios.post("https://kuda-mock.herokuapp.com/artisans");

@@ -349,7 +349,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        let info = await lgaResponse(states[Number(payload.text) - 1].id);
+        let info = await lgaResponse(states[Number(payload.text) - 1].name);
         await update(
           { local_government: JSON.stringify(info.lg) },
           {
