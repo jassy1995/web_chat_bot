@@ -28,6 +28,7 @@ const {
   getListOfArtisan,
   sendResponse,
   smsCustomer,
+  saveArtisanToLive,
 } = require("../services");
 
 const {
@@ -387,17 +388,28 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
+
+        response = await sendResponse("Enter your email", payload.user.id);
+      } else if (payload.type === "text" && stage.step === 8) {
+        await update(
+          { email: payload.text, step: 9 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
         let vb = await genderResponse();
         response = await sendResponse(vb, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 8 &&
+        stage.step === 9 &&
         otherResponse.genders.includes(
           otherResponse.genders[Number(payload.text) - 1]
         )
       ) {
         await update(
-          { gender: otherResponse.genders[Number(payload.text) - 1], step: 9 },
+          { gender: otherResponse.genders[Number(payload.text) - 1], step: 10 },
           {
             where: {
               user_id: payload.user.id,
@@ -408,9 +420,9 @@ exports.RegistrationProcess = async (req, res) => {
           "enter your date of birth, Kindly use this format *dd/mm/yyyy* ",
           payload.user.id
         );
-      } else if (payload.type === "text" && stage.step === 9) {
+      } else if (payload.type === "text" && stage.step === 10) {
         await update(
-          { dateOfBirth: payload.text, step: 10 },
+          { dateOfBirth: payload.text, step: 11 },
           {
             where: {
               user_id: payload.user.id,
@@ -418,9 +430,9 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         response = await sendResponse(otherResponse.id_card, payload.user.id);
-      } else if (payload.type === "image" && stage?.step === 10) {
+      } else if (payload.type === "image" && stage?.step === 11) {
         await update(
-          { id_card: payload.image, step: 11 },
+          { id_card: payload.image, step: 12 },
           {
             where: {
               user_id: payload.user.id,
@@ -429,12 +441,12 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.picture, payload.user.id);
-      } else if (payload.type === "image" && stage?.step === 11) {
+      } else if (payload.type === "image" && stage?.step === 12) {
         await update(
           {
             picture: payload.image,
             local_government: acct_value?.data,
-            step: 12,
+            step: 13,
           },
           {
             where: {
@@ -450,6 +462,7 @@ exports.RegistrationProcess = async (req, res) => {
           state: stage?.state,
           lga: stage?.lga,
           address: stage?.address,
+          email: stage?.email,
           gender: stage?.gender,
           dateOfBirth: stage?.dateOfBirth,
           id_card: stage?.id_card,
@@ -457,7 +470,21 @@ exports.RegistrationProcess = async (req, res) => {
           payment_status: "pending",
         };
         console.log(toSave);
+        const getServiceId = service.find(
+          ({ category }) => category === stage?.service
+        );
+        const getStateCode = states.find(({ name }) => name === stage?.state);
         await createArtisan(toSave);
+        await saveArtisanToLive(
+          getServiceId.id,
+          stage.full_name,
+          stage.email,
+          payload.user.id,
+          stage?.gender,
+          stage?.dateOfBirth,
+          getStateCode.id,
+          stage?.address
+        );
         response = await sendResponse(
           `Congrats, your registration has been completed, below is the summary of your information  \n Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* \n Gender: *${stage.gender}* \n Date Of Birth: *${stage.dateOfBirth}* \n`,
           payload.user.id

@@ -261,6 +261,90 @@ const smsCustomer = async (msg, phone) => {
 
 const { Service, State } = require("../models");
 
+// const saveCustomerToLive = (
+//   category_id,
+//   full_name,
+//   email,
+//   mobile,
+//   gender,
+//   birthday,
+//   state_id,
+//   address
+// ) => {
+//   let data = JSON.stringify({
+//     category: category_id,
+//     firstname: full_name.split(" ")[0],
+//     lastname: full_name.split(" ")[1],
+//     email,
+//     mobile,
+//     gender,
+//     birthday,
+//     state: state_id,
+//     address,
+//     channel: "chatbot",
+//     experience: "2",
+//   });
+//   let config = {
+//     method: "post",
+//     url: "https://api.wesabi.com/v3/artisans",
+//     headers: {
+//       Authorization:
+//         "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
+//       "Content-Type": "application/json",
+//     },
+//     data: data,
+//   };
+//   axios(config)
+//     .then(function (response) {
+//       console.log(JSON.stringify(response.data));
+//     })
+//     .catch(function (error) {
+//       console.log(error);
+//     });
+// };
+
+const saveArtisanToLive = (
+  category_id,
+  full_name,
+  email,
+  mobile,
+  gender,
+  birthday,
+  state_id,
+  address
+) => {
+  let data = JSON.stringify({
+    category: category_id,
+    firstname: full_name.split(" ")[0],
+    lastname: full_name.split(" ")[1],
+    email,
+    mobile,
+    gender,
+    birthday,
+    state: state_id,
+    address,
+    channel: "chatbot",
+    experience: "2",
+  });
+  let config = {
+    method: "post",
+    url: "https://api.wesabi.com/v3/artisans",
+    headers: {
+      Authorization:
+        "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+
 const AccountDetail = async (full_name, id) => {
   return (
     await axios.post("https://wema.creditclan.com/generate/account", {
@@ -345,4 +429,5 @@ module.exports = {
   getLga,
   sendResponse,
   smsCustomer,
+  saveArtisanToLive,
 };
