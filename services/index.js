@@ -261,47 +261,64 @@ const smsCustomer = async (msg, phone) => {
 
 const { Service, State } = require("../models");
 
-// const saveCustomerToLive = (
-//   category_id,
-//   full_name,
-//   email,
-//   mobile,
-//   gender,
-//   birthday,
-//   state_id,
-//   address
-// ) => {
-//   let data = JSON.stringify({
-//     category: category_id,
-//     firstname: full_name.split(" ")[0],
-//     lastname: full_name.split(" ")[1],
-//     email,
-//     mobile,
-//     gender,
-//     birthday,
-//     state: state_id,
-//     address,
-//     channel: "chatbot",
-//     experience: "2",
-//   });
-//   let config = {
-//     method: "post",
-//     url: "https://api.wesabi.com/v3/artisans",
-//     headers: {
-//       Authorization:
-//         "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
-//       "Content-Type": "application/json",
-//     },
-//     data: data,
-//   };
-//   axios(config)
-//     .then(function (response) {
-//       console.log(JSON.stringify(response.data));
-//     })
-//     .catch(function (error) {
-//       console.log(error);
-//     });
-// };
+// {
+//     "user":"0",
+//     "category": 40,
+//     "description": "Good",
+//     "state": "Lagos",
+//     "lga": "Amac",
+//     "location": "1, Address Street, Lagos",
+//     "email": "email@wesabi.com",
+//     "mobile": "07033000000",
+//     "lastname": "Wesabi",
+//     "firstname": "Sanni",
+//     "channel":"chatbot",
+//     "date":"2022-02-13 09:00:00"
+// }
+
+const saveCustomerToLive = (
+  category_id,
+  description,
+  state,
+  lga,
+  address,
+  email,
+  mobile,
+  full_name,
+  date
+) => {
+  let data = JSON.stringify({
+    user: "0",
+    category: category_id,
+    description,
+    state,
+    lga,
+    location: address,
+    email,
+    mobile: mobile.replace(/^0/, "234"),
+    firstname: full_name.split(" ")[0],
+    lastname: full_name.split(" ")[1],
+    channel: "chatbot",
+    date,
+  });
+  let config = {
+    method: "post",
+    url: "https://api.wesabi.com/v3/bookings",
+    headers: {
+      Authorization:
+        "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
 
 const saveArtisanToLive = (
   category_id,
@@ -310,7 +327,7 @@ const saveArtisanToLive = (
   mobile,
   gender,
   birthday,
-  state_id,
+  state_name,
   address
 ) => {
   let data = JSON.stringify({
@@ -318,10 +335,10 @@ const saveArtisanToLive = (
     firstname: full_name.split(" ")[0],
     lastname: full_name.split(" ")[1],
     email,
-    mobile,
+    mobile: mobile.replace(/^0/, "234"),
     gender,
     birthday,
-    state: state_id,
+    state: state_name,
     address,
     channel: "chatbot",
     experience: "2",
@@ -430,4 +447,5 @@ module.exports = {
   sendResponse,
   smsCustomer,
   saveArtisanToLive,
+  saveCustomerToLive,
 };

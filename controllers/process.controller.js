@@ -29,6 +29,7 @@ const {
   sendResponse,
   smsCustomer,
   saveArtisanToLive,
+  saveCustomerToLive,
 } = require("../services");
 
 const {
@@ -482,7 +483,7 @@ exports.RegistrationProcess = async (req, res) => {
           payload.user.id,
           stage?.gender,
           stage?.dateOfBirth,
-          getStateCode.id,
+          getStateCode.name,
           stage?.address
         );
         response = await sendResponse(
@@ -842,8 +843,10 @@ exports.RegistrationProcess = async (req, res) => {
           {
             address: checkExistCustomer?.address,
             email: checkExistCustomer.email,
-            local_government: checkExistCustomer.location,
-            step: 10,
+            location: checkExistCustomer.location,
+            state: checkExistCustomer.state,
+            lga: checkExistCustomer.lga,
+            step: 12,
           },
           {
             where: {
@@ -861,7 +864,7 @@ exports.RegistrationProcess = async (req, res) => {
         payload.text.toString() === "2"
       ) {
         await update(
-          { address: payload.text, step: 5 },
+          { step: 5 },
           {
             where: {
               user_id: payload.user.id,
@@ -879,13 +882,60 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
 
+        // response = await sendResponse(
+        //   "please enter your email",
+        //   payload.user.id
+        // );
+        let hhh = await stateResponse();
+        response = await sendResponse(hhh, payload.user.id);
+      } else if (
+        payload.type === "text" &&
+        stage?.step === 8 &&
+        states.includes(states[Number(payload.text) - 1])
+      ) {
+        await update(
+          { state: states[Number(payload.text) - 1].name, step: 9 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        let info = await lgaResponse(states[Number(payload.text) - 1].name);
+        await update(
+          { local_government: JSON.stringify(info.lg) },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        response = await sendResponse(info.rests, payload.user.id);
+      } else if (
+        payload.type === "text" &&
+        stage?.step === 9 &&
+        payload.text > 0 &&
+        payload.text <= JSON.parse(stage.local_government)
+      ) {
+        await update(
+          {
+            lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]
+              .name,
+            step: 10,
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
         response = await sendResponse(
-          "please enter your email",
+          "Enter your email address",
           payload.user.id
         );
-      } else if (payload.type === "text" && stage.step === 8) {
+      } else if (payload.type === "text" && stage.step === 10) {
         await update(
-          { email: payload.text, step: 9 },
+          { email: payload.text, step: 11 },
           {
             where: {
               user_id: payload.user.id,
@@ -894,13 +944,13 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(otherResponse.location, payload.user.id);
-      } else if (payload.type === "location" && stage.step === 9) {
+      } else if (payload.type === "location" && stage.step === 11) {
         let location = {
           long: payload.location.longitude,
           lat: payload.location.latitude,
         };
         await update(
-          { local_government: JSON.stringify(location), step: 10 },
+          { location: JSON.stringify(location), step: 12 },
           {
             where: {
               user_id: payload.user.id,
@@ -911,9 +961,9 @@ exports.RegistrationProcess = async (req, res) => {
           otherResponse.task_description,
           payload.user.id
         );
-      } else if (payload.type === "text" && stage.step === 10) {
+      } else if (payload.type === "text" && stage.step === 12) {
         await update(
-          { task_description: payload.text, step: 11 },
+          { task_description: payload.text, step: 13 },
           {
             where: {
               user_id: payload.user.id,
@@ -924,13 +974,13 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(js, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 11 &&
+        stage.step === 13 &&
         artisans.data.artisans.includes(
           artisans.data.artisans[Number(payload.text) - 1]
         )
       ) {
         await update(
-          { artisanIndex: payload.text, step: 12 },
+          { artisanIndex: payload.text, step: 14 },
           {
             where: {
               user_id: payload.user.id,
@@ -946,7 +996,7 @@ exports.RegistrationProcess = async (req, res) => {
         response = await sendResponse(art, payload.user.id);
       } else if (
         payload.type === "text" &&
-        stage.step === 12 &&
+        stage.step === 14 &&
         payload.text.toString() === "1"
       ) {
         const ggg = await currentStage(payload.user.id);
@@ -966,8 +1016,10 @@ exports.RegistrationProcess = async (req, res) => {
           full_name: stage.full_name,
           service: stage.service,
           address: stage.address,
+          state: stage.state,
+          lga: stage.lga,
           email: stage.email,
-          location: stage.local_government,
+          location: stage.location,
           task_description: stage.task_description,
           artisan: artisans.data.artisans[Number(ggg.artisanIndex) - 1].name,
         };
@@ -983,6 +1035,34 @@ exports.RegistrationProcess = async (req, res) => {
             "Welcome to wesabi, accessing reliable and verified service professionals just got better",
             payload.user.id
           );
+
+        // category_id, full_name, email, mobile, state_name, address, date;
+        // category_id,
+        //   description,
+        //   state,
+        //   lga,
+        //   address,
+        //   email,
+        //   mobile,
+        //   full_name,
+        //   date;
+
+        const getServiceId2 = service.find(
+          ({ category }) => category === stage?.service
+        );
+        // const getStateCode2 = states.find(({ name }) => name === stage?.state);
+        await createArtisan(toSave);
+        await saveCustomerToLive(
+          getServiceId2.id,
+          stage.task_description,
+          stage?.state,
+          stage.lga,
+          stage?.address,
+          stage.email,
+          payload.user.id,
+          stage.full_name,
+          stage.createdAt
+        );
 
         response = await sendResponse(
           "Congrats,your request has been received",
