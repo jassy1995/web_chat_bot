@@ -914,8 +914,8 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (
         payload.type === "text" &&
         stage?.step === 9 &&
-        payload.text > 0 &&
-        payload.text <= JSON.parse(stage.local_government)
+        Number(payload.text) > 0 &&
+        Number(payload.text) <= JSON.parse(stage.local_government).length
       ) {
         await update(
           {
