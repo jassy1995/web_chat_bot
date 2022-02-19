@@ -471,21 +471,21 @@ exports.RegistrationProcess = async (req, res) => {
           payment_status: "pending",
         };
         console.log(toSave);
-        const getServiceId = service.find(
-          ({ category }) => category === stage?.service
-        );
-        const getStateCode = states.find(({ name }) => name === stage?.state);
+        // const getServiceId = service.find(
+        //   ({ category }) => category === stage?.service
+        // );
+        // const getStateCode = states.find(({ name }) => name === stage?.state);
         await createArtisan(toSave);
-        await saveArtisanToLive(
-          getServiceId.id,
-          stage.full_name,
-          stage.email,
-          payload.user.id,
-          stage?.gender,
-          stage?.dateOfBirth,
-          getStateCode.name,
-          stage?.address
-        );
+        // await saveArtisanToLive(
+        //   stage.service,
+        //   stage.full_name,
+        //   stage.email,
+        //   payload.user.id,
+        //   stage?.gender,
+        //   stage?.dateOfBirth,
+        //   stage.stage,
+        //   stage?.address
+        // );
         response = await sendResponse(
           `Congrats, your registration has been completed, below is the summary of your information  \n Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* \n Gender: *${stage.gender}* \n Date Of Birth: *${stage.dateOfBirth}* \n`,
           payload.user.id
@@ -978,6 +978,15 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         let js = await artisanResponse();
+        // stage.service,
+        // stage.task_description,
+        // stage?.state,
+        // stage.lga,
+        // stage?.address,
+        // stage.email,
+        // payload.user.id,
+        // stage.full_name,
+        // stage.createdAt
         response = await sendResponse(js, payload.user.id);
       } else if (
         payload.type === "text" &&
@@ -1043,33 +1052,22 @@ exports.RegistrationProcess = async (req, res) => {
             payload.user.id
           );
 
-        // category_id, full_name, email, mobile, state_name, address, date;
-        // category_id,
-        //   description,
-        //   state,
-        //   lga,
-        //   address,
-        //   email,
-        //   mobile,
-        //   full_name,
-        //   date;
-
-        const getServiceId2 = service.find(
-          ({ category }) => category === stage?.service
-        );
+        // const getServiceId2 = service.find(
+        //   ({ category }) => category === stage?.service
+        // );
         // const getStateCode2 = states.find(({ name }) => name === stage?.state);
-        await createArtisan(toSave);
-        await saveCustomerToLive(
-          getServiceId2.id,
-          stage.task_description,
-          stage?.state,
-          stage.lga,
-          stage?.address,
-          stage.email,
-          payload.user.id,
-          stage.full_name,
-          stage.createdAt
-        );
+        // await createArtisan(toSave);
+        // await saveCustomerToLive(
+        //   stage.service,
+        //   stage.task_description,
+        //   stage?.state,
+        //   stage.lga,
+        //   stage?.address,
+        //   stage.email,
+        //   payload.user.id,
+        //   stage.full_name,
+        //   stage.createdAt
+        // );
 
         response = await sendResponse(
           "Congrats,your request has been received",

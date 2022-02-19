@@ -103,8 +103,29 @@ const lgaResponse = async (state) => {
   };
 };
 
-const artisanResponse = async () => {
+const artisanResponse = async (
+  service,
+  description,
+  state,
+  lga,
+  address,
+  email,
+  phone,
+  full_name,
+  createdAt
+) => {
   const artisans = await getListOfArtisan();
+  // const artisans = await saveCustomerToLive(
+  //   service,
+  //   description,
+  //   state,
+  //   lga,
+  //   address,
+  //   email,
+  //   phone,
+  //   full_name,
+  //   createdAt
+  // );
   return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
     artisans.data.artisans
   )}`;
