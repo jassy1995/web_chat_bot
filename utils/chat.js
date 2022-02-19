@@ -139,9 +139,13 @@ const artisanResponse = async (
   //   full_name,
   //   createdAt
   // );
-  return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
-    artisans.data.artisans
-  )}`;
+  if (Array.isArray(artisans.data.artisans)) {
+    return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
+      artisans.data.artisans
+    )}`;
+  } else {
+    return "no artisan available for now, we will get back to you";
+  }
 };
 
 const changeNameResponse = async (artisan_name) => {
