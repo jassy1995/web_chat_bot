@@ -277,7 +277,7 @@ const { Service, State } = require("../models");
 // }
 
 const saveCustomerToLive = (
-  category_id,
+  category,
   description,
   state,
   lga,
@@ -289,13 +289,13 @@ const saveCustomerToLive = (
 ) => {
   let data = JSON.stringify({
     user: "0",
-    category: category_id,
+    category: category,
     description,
     state,
     lga,
     location: address,
     email,
-    mobile: mobile.replace(/^(234)|^(\+234)/, "0"),
+    mobile: mobile?.replace(/^(234)|^(\+234)/, "0"),
     firstname: full_name.split(" ")[0],
     lastname: full_name.split(" ")[1],
     channel: "chatbot",
@@ -418,7 +418,7 @@ const getListOfArtisan = async (
   lga,
   address,
   email,
-  phone,
+  mobile,
   full_name,
   createdAt
 ) => {
@@ -431,7 +431,7 @@ const getListOfArtisan = async (
     lga,
     location: address,
     email,
-    mobile: phone.replace(/^(234)|^(\+234)/, "0"),
+    mobile: mobile?.replace(/^(234)|^(\+234)/, "0"),
     firstname: full_name.split(" ")[0],
     lastname: full_name.split(" ")[1],
     channel: "chatbot",
@@ -452,7 +452,7 @@ const getListOfArtisan = async (
       console.log(JSON.stringify(response.data.data.artisans));
       console.log(response.data.data.bookings);
       console.log(JSON.stringify(response.data.data.user));
-      return response;
+      return response.data;
     })
     .catch(function (error) {
       console.log(error);

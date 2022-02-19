@@ -56,7 +56,17 @@ exports.RegistrationProcess = async (req, res) => {
     const stage = await currentStage(payload.user.id);
     const { data: service } = await getServices();
     const { data: states } = await getStates();
-    const artisans = await getListOfArtisan();
+    const artisans = await getListOfArtisan(
+      stage?.service,
+      stage?.task_description,
+      stage?.state,
+      stage?.lga,
+      stage?.address,
+      stage?.email,
+      payload?.user.id,
+      stage?.full_name,
+      stage?.createdAt
+    );
     const artisanOne = await getArtisanOne(payload.user.id);
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
@@ -997,6 +1007,7 @@ exports.RegistrationProcess = async (req, res) => {
       ) {
         // artisans.data.artisans.includes(
         //   artisans.data.artisans[Number(payload.text) - 1]
+
         await update(
           { artisanIndex: payload.text, step: 14 },
           {

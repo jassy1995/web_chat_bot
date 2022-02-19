@@ -113,7 +113,7 @@ const artisanResponse = async (
   lga,
   address,
   email,
-  phone,
+  mobile,
   full_name,
   createdAt
 ) => {
@@ -124,7 +124,7 @@ const artisanResponse = async (
     lga,
     address,
     email,
-    phone,
+    mobile,
     full_name,
     createdAt
   );
