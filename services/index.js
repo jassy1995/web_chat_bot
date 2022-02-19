@@ -452,7 +452,7 @@ const getListOfArtisan = async (
       console.log(JSON.stringify(response.data.data.artisans));
       console.log(response.data.data.bookings);
       console.log(JSON.stringify(response.data.data.user));
-      return response.data;
+      return response;
     })
     .catch(function (error) {
       console.log(error);
