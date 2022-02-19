@@ -432,8 +432,8 @@ const getListOfArtisan = async (
     location: address,
     email,
     mobile: mobile?.replace(/^(234)|^(\+234)/, "0"),
-    firstname: full_name.split(" ")[0],
-    lastname: full_name.split(" ")[1],
+    firstname: full_name?.split(" ")[0],
+    lastname: full_name?.split(" ")[1],
     channel: "chatbot",
     date: createdAt,
   });
