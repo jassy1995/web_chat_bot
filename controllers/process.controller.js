@@ -991,10 +991,11 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (
         payload.type === "text" &&
         stage.step === 13 &&
-        artisans.data.artisans.includes(
-          artisans.data.artisans[Number(payload.text) - 1]
-        )
+        Number(payload.text) <= artisans.data.artisans.length &&
+        Number(payload.text) > 0
       ) {
+        // artisans.data.artisans.includes(
+        //   artisans.data.artisans[Number(payload.text) - 1]
         await update(
           { artisanIndex: payload.text, step: 14 },
           {
@@ -1075,11 +1076,11 @@ exports.RegistrationProcess = async (req, res) => {
         );
       } else if (
         payload.type === "text" &&
-        stage.step === 12 &&
+        stage.step === 14 &&
         payload.text.toString() === "2"
       ) {
         await update(
-          { step: 11 },
+          { step: 13 },
           {
             where: {
               user_id: payload.user.id,
