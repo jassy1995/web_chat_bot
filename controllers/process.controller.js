@@ -977,16 +977,17 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        let js = await artisanResponse();
-        // stage.service,
-        // stage.task_description,
-        // stage?.state,
-        // stage.lga,
-        // stage?.address,
-        // stage.email,
-        // payload.user.id,
-        // stage.full_name,
-        // stage.createdAt
+        let js = await artisanResponse(
+          stage.service,
+          stage.task_description,
+          stage?.state,
+          stage.lga,
+          stage?.address,
+          stage.email,
+          payload.user.id,
+          stage.full_name,
+          stage.createdAt
+        );
         response = await sendResponse(js, payload.user.id);
       } else if (
         payload.type === "text" &&
@@ -1057,7 +1058,7 @@ exports.RegistrationProcess = async (req, res) => {
         //   ({ category }) => category === stage?.service
         // );
         // const getStateCode2 = states.find(({ name }) => name === stage?.state);
-        // await createArtisan(toSave);
+
         // await saveCustomerToLive(
         //   stage.service,
         //   stage.task_description,

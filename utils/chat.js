@@ -106,8 +106,28 @@ const lgaResponse = async (state) => {
 
 //  service, description, state, lga, address, email, phone, full_name, createdAt;
 
-const artisanResponse = async () => {
-  const artisans = await getListOfArtisan();
+const artisanResponse = async (
+  service,
+  description,
+  state,
+  lga,
+  address,
+  email,
+  phone,
+  full_name,
+  createdAt
+) => {
+  const artisans = await getListOfArtisan(
+    service,
+    description,
+    state,
+    lga,
+    address,
+    email,
+    phone,
+    full_name,
+    createdAt
+  );
   // const artisans = await saveCustomerToLive(
   //   service,
   //   description,

@@ -411,8 +411,52 @@ const getLga = async (state) =>
 //   )
 // ).data;
 
-const getListOfArtisan = async () => {
-  return await axios.post("https://kuda-mock.herokuapp.com/artisans");
+const getListOfArtisan = async (
+  service,
+  description,
+  state,
+  lga,
+  address,
+  email,
+  phone,
+  full_name,
+  createdAt
+) => {
+  // return await axios.post("https://kuda-mock.herokuapp.com/artisans");
+  let data = JSON.stringify({
+    user: "0",
+    category: service,
+    description,
+    state,
+    lga,
+    location: address,
+    email,
+    mobile: phone.replace(/^(234)|^(\+234)/, "0"),
+    firstname: full_name.split(" ")[0],
+    lastname: full_name.split(" ")[1],
+    channel: "chatbot",
+    date: createdAt,
+  });
+  let config = {
+    method: "post",
+    url: "https://api.wesabi.com/v3/bookings",
+    headers: {
+      Authorization:
+        "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data.data.artisans));
+      console.log(response.data.data.bookings);
+      console.log(JSON.stringify(response.data.data.user));
+      return response;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 };
 
 const sendResponse = async (message, phone) => {
