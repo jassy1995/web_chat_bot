@@ -91,7 +91,8 @@ const serviceResponse = async () => {
 const stateResponse = async () => {
   const question = question_one.state;
   const { data: states } = await getStates();
-  return `${question} \n${formatDataArrayToString(states)}`;
+  let reverseState = states.reverse();
+  return `${question} \n${formatDataArrayToString(reverseState)}`;
 };
 
 const lgaResponse = async (state) => {
