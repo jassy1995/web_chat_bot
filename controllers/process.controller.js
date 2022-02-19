@@ -55,7 +55,8 @@ exports.RegistrationProcess = async (req, res) => {
   try {
     const stage = await currentStage(payload.user.id);
     const { data: service } = await getServices();
-    const { data: states } = await getStates();
+    let { data } = await getStates();
+    const states = data.reverse();
     const artisanOne = await getArtisanOne(payload.user.id);
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
