@@ -139,6 +139,7 @@ const artisanResponse = async (
   //   full_name,
   //   createdAt
   // );
+  console.log("checking " + artisans);
   if (
     Array.isArray(artisans.data.artisans) &&
     artisans.data.artisans.length > 0
