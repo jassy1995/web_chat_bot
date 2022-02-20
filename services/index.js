@@ -259,7 +259,7 @@ const smsCustomer = async (msg, phone) => {
 //   },
 // ];
 
-const { Service, State } = require("../models");
+const { Service, Stage } = require("../models");
 
 // {
 //     "user":"0",
@@ -276,34 +276,21 @@ const { Service, State } = require("../models");
 //     "date":"2022-02-13 09:00:00"
 // }
 
-const saveCustomerToLive = (
-  category,
-  description,
-  state,
-  lga,
-  address,
-  email,
-  mobile,
-  full_name,
-  date
-) => {
-  let data = JSON.stringify({
-    user: "0",
-    category: category,
-    description,
-    state,
-    lga,
-    location: address,
-    email,
-    mobile: mobile?.replace(/^(234)|^(\+234)/, "0"),
-    firstname: full_name.split(" ")[0],
-    lastname: full_name.split(" ")[1],
-    channel: "chatbot",
-    date,
-  });
+// Send a PUT request to https://api.wesabi.com/v3/bookings/{booking_id}
+
+// And pass the artisan id as payload:
+
+// {
+// artisan:109,
+// }
+
+const updateCustomerToLive = async (artisan_id, user_id) => {
+  let data = JSON.stringify({ artisan: artisan_id });
+  const findBooking = await Stage.findOne({ where: { user_id } });
+  const booking_id = findBooking?.editIndex;
   let config = {
-    method: "post",
-    url: "https://api.wesabi.com/v3/bookings",
+    method: "put",
+    url: `https://api.wesabi.com/v3/bookings/${booking_id}`,
     headers: {
       Authorization:
         "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
@@ -311,13 +298,8 @@ const saveCustomerToLive = (
     },
     data: data,
   };
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  let response = await axios(config);
+  console.log(JSON.stringify(response.data));
 };
 
 const saveArtisanToLive = (
@@ -332,10 +314,10 @@ const saveArtisanToLive = (
 ) => {
   let data = JSON.stringify({
     category: category,
-    firstname: full_name.split(" ")[0],
-    lastname: full_name.split(" ")[1],
+    firstname: full_name?.split(" ")[0],
+    lastname: full_name?.split(" ")[1],
     email,
-    mobile: mobile.replace(/^(234)|^(\+234)/, "0"),
+    mobile: mobile?.replace(/^(234)|^(\+234)/, "0"),
     gender,
     birthday,
     state: state_name,
@@ -449,6 +431,10 @@ const getListOfArtisan = async (
   };
   try {
     let response = await axios(config);
+    await Stage.update(
+      { editIndex: response?.data?.id },
+      { where: { user_id: mobile } }
+    );
     return response.data.data.artisans;
   } catch (error) {
     console.log(error);
@@ -487,5 +473,5 @@ module.exports = {
   sendResponse,
   smsCustomer,
   saveArtisanToLive,
-  saveCustomerToLive,
+  updateCustomerToLive,
 };

@@ -487,16 +487,16 @@ exports.RegistrationProcess = async (req, res) => {
         // );
         // const getStateCode = states.find(({ name }) => name === stage?.state);
         await createArtisan(toSave);
-        // await saveArtisanToLive(
-        //   stage?.service,
-        //   stage?.full_name,
-        //   stage?.email,
-        //   payload?.user.id,
-        //   stage?.gender,
-        //   stage?.dateOfBirth,
-        //   stage?.state,
-        //   stage?.address
-        // );
+        await saveArtisanToLive(
+          stage?.service,
+          stage?.full_name,
+          stage?.email,
+          payload?.user.id,
+          stage?.gender,
+          stage?.dateOfBirth,
+          stage?.state,
+          stage?.address
+        );
         response = await sendResponse(
           `Congrats, your registration has been completed, below is the summary of your information  \n Name: *${stage.full_name}* \n Service: *${stage.service}* \n State: *${stage.state}* \n LGA: *${stage.lga}* \n Address: *${stage.address}* \n Gender: *${stage.gender}* \n Date Of Birth: *${stage.dateOfBirth}* \n`,
           payload.user.id
@@ -1065,7 +1065,7 @@ exports.RegistrationProcess = async (req, res) => {
           task_description: stage.task_description,
           artisan: artisans[Number(stage.artisanIndex) - 1].firstname,
         };
-        console.log(requestToSave);
+
         await saveCustomerRequest(requestToSave);
         let msmg =
           "wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible";
@@ -1083,17 +1083,10 @@ exports.RegistrationProcess = async (req, res) => {
         // );
         // const getStateCode2 = states.find(({ name }) => name === stage?.state);
 
-        // await saveCustomerToLive(
-        //   stage.service,
-        //   stage.task_description,
-        //   stage?.state,
-        //   stage.lga,
-        //   stage?.address,
-        //   stage.email,
-        //   payload.user.id,
-        //   stage.full_name,
-        //   stage.createdAt
-        // );
+        await updateCustomerToLive(
+          artisans[Number(stage.artisanIndex) - 1].id,
+          payload.user.id
+        );
 
         response = await sendResponse(
           "Congrats,your request has been received",
