@@ -140,12 +140,9 @@ const artisanResponse = async (
   //   createdAt
   // );
   console.log("checking " + artisans);
-  if (
-    Array.isArray(artisans.data.artisans) &&
-    artisans.data.artisans.length > 0
-  ) {
+  if (Array.isArray(artisans) && artisans.length > 0) {
     return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
-      artisans.data.artisans
+      artisans
     )}`;
   } else {
     return "no artisan available for now, we will get back to you";
