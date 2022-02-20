@@ -139,14 +139,14 @@ const artisanResponse = async (
   //   full_name,
   //   createdAt
   // );
-  console.log("checking " + artisans);
-  if (Array.isArray(artisans) && artisans.length > 0) {
-    return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
-      artisans
-    )}`;
-  } else {
-    return "no artisan available for now, we will get back to you";
-  }
+  // console.log("checking " + artisans);
+  // if (Array.isArray(artisans) && artisans.length > 0) {
+  //   return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
+  //     artisans
+  //   )}`;
+  // } else {
+  return "no artisan available for now, we will get back to you";
+  // }
 };
 
 const changeNameResponse = async (artisan_name) => {
