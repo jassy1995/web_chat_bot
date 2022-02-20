@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { update } = require("../utils/query");
 const instance = axios.create({
   baseURL: "https://mobile.creditclan.com/api/artisan/",
 });
@@ -431,9 +432,15 @@ const getListOfArtisan = async (
   };
   try {
     let response = await axios(config);
-    await Stage.update(
-      { editIndex: response?.data?.id },
-      { where: { user_id: mobile } }
+    await update(
+      {
+        editIndex: response.data.data.id,
+      },
+      {
+        where: {
+          user_id: payload.user.id,
+        },
+      }
     );
     return response.data.data.artisans;
   } catch (error) {
