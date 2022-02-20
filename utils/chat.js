@@ -49,7 +49,9 @@ const formatDataArrayToString = (data) => {
 
 const formatDataArrayToStringForArtisan = (data) => {
   if (!data) throw new Error("endpoints not found");
-  return `${data.map((entity, index) => `\n *[${index + 1}]* ${entity.name}`)}`;
+  return `${data.map(
+    (entity, index) => `\n *[${index + 1}]* ${entity.firstname}`
+  )}`;
 };
 
 const formatDataArrayToStringLga = (data, returnKey) => {
@@ -139,7 +141,8 @@ const artisanResponse = async (
   //   full_name,
   //   createdAt
   // );
-  console.log("checking " + artisans);
+  console.log(typeof artisans);
+  console.log(artisans.length);
   if (Array.isArray(artisans) && artisans.length > 0) {
     return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
       artisans
