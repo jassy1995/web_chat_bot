@@ -449,7 +449,7 @@ const getListOfArtisan = async (
   };
   axios(config)
     .then(function (response) {
-      console.log(response);
+      console.log(response.data.artisans);
       // console.log(response.data.data.artisans[0]);
       // console.log(response.data.data.bookings);
       // console.log(JSON.stringify(response.data.data.user));
