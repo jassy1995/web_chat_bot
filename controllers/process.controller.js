@@ -989,8 +989,8 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         let js = await artisanResponse(
-          stage.service,
-          stage.task_description,
+          stage?.service,
+          stage?.task_description,
           stage?.state,
           stage.lga,
           stage?.address,
