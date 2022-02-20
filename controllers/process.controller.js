@@ -1020,16 +1020,17 @@ exports.RegistrationProcess = async (req, res) => {
         );
         let art = await artisanInfoResponse(
           artisans[Number(payload.text) - 1].firstname,
+          artisans[Number(payload.text) - 1].lastname,
           artisans[Number(payload.text) - 1].email,
           artisans[Number(payload.text) - 1].mobile
         );
         response = await sendResponse(art, payload.user.id);
       } else if (
-        payload.type === "text" &&
-        stage.step === 14 &&
-        payload.text.toString() === "1"
+        payload.type == "text" &&
+        stage.step == 14 &&
+        payload.text.toString() == "1"
       ) {
-        const ggg = await currentStage(payload.user.id);
+        // const ggg = await currentStage(payload.user.id);
         // const artisans = await getListOfArtisan(
         //   stage?.service,
         //   stage?.task_description,
@@ -1043,7 +1044,7 @@ exports.RegistrationProcess = async (req, res) => {
         // );
         await update(
           {
-            artisan: artisans[Number(ggg.artisanIndex) - 1].firstname,
+            artisan: artisans[Number(stage.artisanIndex) - 1].firstname,
           },
           {
             where: {
@@ -1062,7 +1063,7 @@ exports.RegistrationProcess = async (req, res) => {
           email: stage.email,
           location: stage.location,
           task_description: stage.task_description,
-          artisan: artisans[Number(ggg.artisanIndex) - 1].firstname,
+          artisan: artisans[Number(stage.artisanIndex) - 1].firstname,
         };
         console.log(requestToSave);
         await saveCustomerRequest(requestToSave);

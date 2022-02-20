@@ -225,9 +225,9 @@ const confirmNumberResponse = async (artisan_name, artisan_phone) => {
   );
 };
 
-const artisanInfoResponse = async (name, phone, acct, bank) => {
+const artisanInfoResponse = async (fname, lname, email, mobile) => {
   return artisanInfo(
-    name,
+    fname,
     [
       {
         type: "reply",
@@ -238,9 +238,9 @@ const artisanInfoResponse = async (name, phone, acct, bank) => {
         reply: { id: `${2}`, title: "I'm not interested" },
       },
     ],
-    phone,
-    acct,
-    bank
+    lname,
+    email,
+    mobile
   );
 };
 
