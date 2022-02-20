@@ -29,7 +29,7 @@ const {
   sendResponse,
   smsCustomer,
   saveArtisanToLive,
-  saveCustomerToLive,
+  updateCustomerToLive,
 } = require("../services");
 
 const {
