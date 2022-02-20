@@ -1125,3 +1125,13 @@ exports.RegistrationProcess = async (req, res) => {
     console.log(error);
   }
 };
+
+const { State } = require("../models");
+exports.Testing = async (req, res) => {
+  try {
+    const data = await State.create({ state_name: req.body.state });
+    return res.json(data);
+  } catch (error) {
+    return res.status(500).json({ message: "error occur", error });
+  }
+};
