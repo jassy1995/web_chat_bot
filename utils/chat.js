@@ -139,7 +139,7 @@ const artisanResponse = async (
   //   full_name,
   //   createdAt
   // );
-  // console.log("checking " + artisans);
+  console.log("checking " + artisans);
   if (Array.isArray(artisans) && artisans.length > 0) {
     return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
       artisans
