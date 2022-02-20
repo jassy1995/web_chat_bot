@@ -141,7 +141,7 @@ const artisanResponse = async (
   //   full_name,
   //   createdAt
   // );
-  console.log(typeof artisans);
+  console.log(artisans);
   console.log(artisans.length);
   if (Array.isArray(artisans) && artisans.length > 0) {
     return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(

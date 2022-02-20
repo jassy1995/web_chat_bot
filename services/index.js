@@ -447,17 +447,17 @@ const getListOfArtisan = async (
     },
     data: data,
   };
-  axios(config)
-    .then(function (response) {
-      console.log(response.data.data.artisans);
-      // console.log(response.data.data.artisans[0]);
-      // console.log(response.data.data.bookings);
-      // console.log(JSON.stringify(response.data.data.user));
-      return response.data.data.artisans;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  try {
+    let response = await axios(config);
+
+    console.log(response.data.data.artisans);
+    // console.log(response.data.data.artisans[0]);
+    // console.log(response.data.data.bookings);
+    // console.log(JSON.stringify(response.data.data.user));
+    return response.data.data.artisans;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const sendResponse = async (message, phone) => {
