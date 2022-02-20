@@ -61,6 +61,17 @@ exports.RegistrationProcess = async (req, res) => {
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
     const checkExistCustomer = await getExistCustomer(payload.user.id);
+    const artisans = await getListOfArtisan(
+      stage?.service,
+      stage?.task_description,
+      stage?.state,
+      stage?.lga,
+      stage?.address,
+      stage?.email,
+      payload?.user.id,
+      stage?.full_name,
+      stage?.createdAt
+    );
     // existCustomer;
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
       // if (
@@ -989,22 +1000,15 @@ exports.RegistrationProcess = async (req, res) => {
           stage.createdAt
         );
         response = await sendResponse(js, payload.user.id);
-      } else if (payload.type === "text" && stage.step === 13) {
+      } else if (
+        payload.type === "text" &&
+        stage.step === 13 &&
+        Number(payload.text) <= artisans.length
+      ) {
         //  Number(payload.text) <= artisans.data.artisans.length &&
         //    Number(payload.text) > 0;
         // artisans.data.artisans.includes(
         //   artisans.data.artisans[Number(payload.text) - 1]
-        const artisans = await getListOfArtisan(
-          stage?.service,
-          stage?.task_description,
-          stage?.state,
-          stage?.lga,
-          stage?.address,
-          stage?.email,
-          payload?.user.id,
-          stage?.full_name,
-          stage?.createdAt
-        );
 
         await update(
           { artisanIndex: payload.text, step: 14 },
@@ -1015,10 +1019,9 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         let art = await artisanInfoResponse(
-          artisans.data.artisans[Number(payload.text) - 1].name,
-          artisans.data.artisans[Number(payload.text) - 1].phone,
-          artisans.data.artisans[Number(payload.text) - 1].account_number,
-          artisans.data.artisans[Number(payload.text) - 1].bank
+          artisans[Number(payload.text) - 1].firstname,
+          artisans[Number(payload.text) - 1].email,
+          artisans[Number(payload.text) - 1].mobile
         );
         response = await sendResponse(art, payload.user.id);
       } else if (
@@ -1027,20 +1030,20 @@ exports.RegistrationProcess = async (req, res) => {
         payload.text.toString() === "1"
       ) {
         const ggg = await currentStage(payload.user.id);
-        const artisans = await getListOfArtisan(
-          stage?.service,
-          stage?.task_description,
-          stage?.state,
-          stage?.lga,
-          stage?.address,
-          stage?.email,
-          payload?.user.id,
-          stage?.full_name,
-          stage?.createdAt
-        );
+        // const artisans = await getListOfArtisan(
+        //   stage?.service,
+        //   stage?.task_description,
+        //   stage?.state,
+        //   stage?.lga,
+        //   stage?.address,
+        //   stage?.email,
+        //   payload?.user.id,
+        //   stage?.full_name,
+        //   stage?.createdAt
+        // );
         await update(
           {
-            artisan: artisans.data.artisans[Number(ggg.artisanIndex) - 1].name,
+            artisan: artisans[Number(ggg.artisanIndex) - 1].firstname,
           },
           {
             where: {
@@ -1059,7 +1062,7 @@ exports.RegistrationProcess = async (req, res) => {
           email: stage.email,
           location: stage.location,
           task_description: stage.task_description,
-          artisan: artisans.data.artisans[Number(ggg.artisanIndex) - 1].name,
+          artisan: artisans[Number(ggg.artisanIndex) - 1].firstname,
         };
         console.log(requestToSave);
         await saveCustomerRequest(requestToSave);
