@@ -139,7 +139,10 @@ const artisanResponse = async (
   //   full_name,
   //   createdAt
   // );
-  if (Array.isArray(artisans.data.artisans)) {
+  if (
+    Array.isArray(artisans.data.artisans) &&
+    artisans.data.artisans.length > 0
+  ) {
     return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
       artisans.data.artisans
     )}`;
