@@ -321,7 +321,7 @@ const saveCustomerToLive = (
 };
 
 const saveArtisanToLive = (
-  category_id,
+  category,
   full_name,
   email,
   mobile,
@@ -331,7 +331,7 @@ const saveArtisanToLive = (
   address
 ) => {
   let data = JSON.stringify({
-    category: category_id,
+    category: category,
     firstname: full_name.split(" ")[0],
     lastname: full_name.split(" ")[1],
     email,

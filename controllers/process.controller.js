@@ -477,13 +477,13 @@ exports.RegistrationProcess = async (req, res) => {
         // const getStateCode = states.find(({ name }) => name === stage?.state);
         await createArtisan(toSave);
         // await saveArtisanToLive(
-        //   stage.service,
-        //   stage.full_name,
-        //   stage.email,
-        //   payload.user.id,
+        //   stage?.service,
+        //   stage?.full_name,
+        //   stage?.email,
+        //   payload?.user.id,
         //   stage?.gender,
         //   stage?.dateOfBirth,
-        //   stage.stage,
+        //   stage?.state,
         //   stage?.address
         // );
         response = await sendResponse(
