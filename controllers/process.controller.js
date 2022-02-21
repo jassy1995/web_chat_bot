@@ -64,17 +64,17 @@ exports.RegistrationProcess = async (req, res) => {
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
     const checkExistCustomer = await getExistCustomer(payload.user.id);
-    const artisans = await getListOfArtisan(
-      stage?.service,
-      stage?.task_description,
-      stage?.state,
-      stage?.lga,
-      stage?.address,
-      stage?.email,
-      payload?.user.id,
-      stage?.full_name,
-      stage?.createdAt
-    );
+    // const artisans = await getListOfArtisan(
+    //   stage?.service,
+    //   stage?.task_description,
+    //   stage?.state,
+    //   stage?.lga,
+    //   stage?.address,
+    //   stage?.email,
+    //   payload?.user.id,
+    //   stage?.full_name,
+    //   stage?.createdAt
+    // );
     // existCustomer;
     if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
       // if (
@@ -1006,7 +1006,7 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (
         payload.type === "text" &&
         stage.step === 13 &&
-        Number(payload.text) <= artisans.length
+        Number(payload.text) <= JSON.parse(stage.artisanArray).length
       ) {
         //  Number(payload.text) <= artisans.data.artisans.length &&
         //    Number(payload.text) > 0;
@@ -1017,7 +1017,6 @@ exports.RegistrationProcess = async (req, res) => {
           {
             artisanIndex: payload.text,
             step: 14,
-            artisanArray: JSON.stringify(artisans),
           },
           {
             where: {
@@ -1026,10 +1025,10 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         let art = await artisanInfoResponse(
-          artisans[Number(payload.text) - 1].firstname,
-          artisans[Number(payload.text) - 1].lastname,
-          artisans[Number(payload.text) - 1].email,
-          artisans[Number(payload.text) - 1].mobile
+          JSON.parse(stage.artisanArray)[Number(payload.text) - 1].firstname,
+          JSON.parse(stage.artisanArray)[Number(payload.text) - 1].lastname,
+          JSON.parse(stage.artisanArray)[Number(payload.text) - 1].email,
+          JSON.parse(stage.artisanArray)[Number(payload.text) - 1].mobile
         );
         response = await sendResponse(art, payload.user.id);
       } else if (

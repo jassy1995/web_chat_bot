@@ -435,6 +435,7 @@ const getListOfArtisan = async (
     await update(
       {
         editIndex: response.data.data.id,
+        artisanArray: response.data.data.artisans,
       },
       {
         where: {
