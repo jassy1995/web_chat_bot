@@ -1014,7 +1014,11 @@ exports.RegistrationProcess = async (req, res) => {
         //   artisans.data.artisans[Number(payload.text) - 1]
 
         await update(
-          { artisanIndex: payload.text, step: 14 },
+          {
+            artisanIndex: payload.text,
+            step: 14,
+            artisanArray: JSON.stringify(artisans),
+          },
           {
             where: {
               user_id: payload.user.id,
@@ -1047,7 +1051,9 @@ exports.RegistrationProcess = async (req, res) => {
         // );
         await update(
           {
-            artisan: artisans[Number(stage.artisanIndex) - 1].firstname,
+            artisan: JSON.parse(stage.artisanArray)[
+              Number(stage.artisanIndex) - 1
+            ].firstname,
           },
           {
             where: {
@@ -1066,7 +1072,9 @@ exports.RegistrationProcess = async (req, res) => {
           email: stage.email,
           location: stage.location,
           task_description: stage.task_description,
-          artisan: artisans[Number(stage.artisanIndex) - 1].firstname,
+          artisan: JSON.parse(stage.artisanArray)[
+            Number(stage.artisanIndex) - 1
+          ].firstname,
         };
 
         await saveCustomerRequest(requestToSave);
@@ -1087,7 +1095,7 @@ exports.RegistrationProcess = async (req, res) => {
         // const getStateCode2 = states.find(({ name }) => name === stage?.state);
 
         await updateCustomerToLive(
-          artisans[Number(stage.artisanIndex) - 1].id,
+          JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
           payload.user.id
         );
 

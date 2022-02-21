@@ -70,6 +70,9 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
     dateOfBirth: {
       type: DataTypes.STRING,
     },
+    artisanArray: {
+      type: DataTypes.TEXT,
+    },
   });
 
 module.exports = Stage;
