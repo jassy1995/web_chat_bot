@@ -1044,7 +1044,7 @@ exports.RegistrationProcess = async (req, res) => {
         // );
         await update(
           {
-            artisan: artisans[Number(stage.artisanIndex) - 1].firstname,
+            artisan: artisans[Number(stage.artisanIndex)].firstname,
           },
           {
             where: {
