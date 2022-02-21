@@ -992,12 +992,12 @@ exports.RegistrationProcess = async (req, res) => {
           stage?.service,
           stage?.task_description,
           stage?.state,
-          stage.lga,
+          stage?.lga,
           stage?.address,
           stage.email,
           payload.user.id,
-          stage.full_name,
-          stage.createdAt
+          stage?.full_name,
+          stage?.createdAt
         );
         response = await sendResponse(js, payload.user.id);
       } else if (
