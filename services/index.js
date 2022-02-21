@@ -443,6 +443,7 @@ const getListOfArtisan = async (
       }
     );
     const checker = await Stage.findOne({ where: { user_id: mobile } });
+    console.log(JSON.parse(checker.artisanArray).length === 0);
     if (JSON.parse(checker.artisanArray).length === 0) {
       await update(
         {
