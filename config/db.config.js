@@ -25,7 +25,7 @@ const dbConfig = {
   dialectOptions: {
     // @see https://github.com/sequelize/sequelize/issues/8019
     decimalNumbers: true,
-    maxPreparedStatements: 100,
+    maxPreparedStatements: 50000,
   },
 };
 

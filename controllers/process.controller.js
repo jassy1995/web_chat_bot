@@ -1,3 +1,5 @@
+const { Stage, ArtisanComplete, CustomerComplete } = require("../models");
+
 const {
   productsButtons,
   productsButtons2,
@@ -54,6 +56,7 @@ exports.RegistrationProcess = async (req, res) => {
 
   try {
     const stage = await currentStage(payload.user.id);
+    // const stage = await Stage.findOne({ where: { user_id: payload.user.id } });
     const { data: service } = await getServices();
     let { data } = await getStates();
     const states = data.reverse();
@@ -1044,7 +1047,7 @@ exports.RegistrationProcess = async (req, res) => {
         // );
         await update(
           {
-            artisan: artisans[Number(stage.artisanIndex)].firstname,
+            artisan: artisans[Number(stage.artisanIndex) - 1].firstname,
           },
           {
             where: {
