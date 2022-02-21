@@ -438,7 +438,7 @@ const getListOfArtisan = async (
       },
       {
         where: {
-          user_id: payload.user.id,
+          user_id: mobile,
         },
       }
     );
