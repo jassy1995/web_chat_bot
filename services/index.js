@@ -435,7 +435,6 @@ const getListOfArtisan = async (
     await update(
       {
         editIndex: response.data.data.id,
-        artisanArray: JSON.stringify(response.data.data.artisans),
       },
       {
         where: {
@@ -443,6 +442,19 @@ const getListOfArtisan = async (
         },
       }
     );
+    const checker = await Stage.findOne({ where: { user_id: mobile } });
+    if (JSON.parse(checker.artisanArray).length <= 0) {
+      await update(
+        {
+          artisanArray: JSON.stringify(response.data.data.artisans),
+        },
+        {
+          where: {
+            user_id: mobile,
+          },
+        }
+      );
+    }
     return response.data.data.artisans;
   } catch (error) {
     console.log(error);
