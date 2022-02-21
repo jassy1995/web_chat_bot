@@ -285,10 +285,10 @@ const { Service, Stage } = require("../models");
 // artisan:109,
 // }
 
-const updateCustomerToLive = async (artisan_id, user_id) => {
+const updateCustomerToLive = async (artisan_id, booking_id) => {
   let data = JSON.stringify({ artisan: artisan_id });
-  const findBooking = await Stage.findOne({ where: { user_id } });
-  const booking_id = findBooking?.editIndex;
+  // const findBooking = await Stage.findOne({ where: { user_id } });
+  // const booking_id = findBooking?.editIndex;
   let config = {
     method: "put",
     url: `https://api.wesabi.com/v3/bookings/${booking_id}`,
@@ -432,19 +432,19 @@ const getListOfArtisan = async (
   };
   try {
     let response = await axios(config);
-    await update(
-      {
-        editIndex: response.data.data.id,
-        artisanArray: JSON.stringify(response.data.data.artisans),
-      },
-      {
-        where: {
-          user_id: mobile,
-        },
-      }
-    );
-    const checker = await Stage.findOne({ where: { user_id: mobile } });
-    console.log(JSON.parse(checker.artisanArray).length === 0);
+    // await update(
+    //   {
+    //     editIndex: response.data.data.id,
+    //     artisanArray: JSON.stringify(response.data.data.artisans),
+    //   },
+    //   {
+    //     where: {
+    //       user_id: mobile,
+    //     },
+    //   }
+    // );
+    // const checker = await Stage.findOne({ where: { user_id: mobile } });
+    // console.log(JSON.parse(checker.artisanArray).length === 0);
     // if (JSON.parse(checker.artisanArray).length === 0) {
     //   await update(
     //     {
@@ -457,7 +457,7 @@ const getListOfArtisan = async (
     //     }
     //   );
     // }
-    return response.data.data.artisans;
+    return { data: response.data.data.artisans, id: response.data.data.id };
   } catch (error) {
     console.log(error);
   }

@@ -991,7 +991,7 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        let js = await artisanResponse(
+        let { booking_id, artisanList, artisanArray } = await artisanResponse(
           stage?.service,
           stage?.task_description,
           stage?.state,
@@ -1002,7 +1002,15 @@ exports.RegistrationProcess = async (req, res) => {
           stage?.full_name,
           stage?.createdAt
         );
-        response = await sendResponse(js, payload.user.id);
+        await update(
+          { artisanArray: JSON.stringify(artisanArray), editIndex: booking_id },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        response = await sendResponse(artisanList, payload.user.id);
       } else if (
         payload.type === "text" &&
         stage.step === 13 &&
@@ -1096,7 +1104,7 @@ exports.RegistrationProcess = async (req, res) => {
 
         await updateCustomerToLive(
           JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
-          payload.user.id
+          stage.editIndex
         );
 
         response = await sendResponse(

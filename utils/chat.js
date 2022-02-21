@@ -119,7 +119,7 @@ const artisanResponse = async (
   full_name,
   createdAt
 ) => {
-  const artisans = await getListOfArtisan(
+  const { data: artisans, id } = await getListOfArtisan(
     service,
     description,
     state,
@@ -144,9 +144,17 @@ const artisanResponse = async (
   // );
 
   if (Array.isArray(artisans) && artisans?.length > 0) {
-    return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
-      artisans
-    )}`;
+    // return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
+    //   artisans
+    // )}`;
+
+    return {
+      booking_id: id,
+      artisanArray: artisans,
+      artisanList: `${
+        question_one.artisan
+      } \n${formatDataArrayToStringForArtisan(artisans)}`,
+    };
   } else {
     return "no artisan available for now, we will get back to you";
   }
