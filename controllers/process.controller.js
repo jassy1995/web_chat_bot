@@ -1059,9 +1059,9 @@ exports.RegistrationProcess = async (req, res) => {
         // );
         await update(
           {
-            artisan: JSON.parse(stage.artisanArray)[
-              Number(stage.artisanIndex) - 1
-            ].firstname,
+            artisan: JSON.stringify(
+              JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
+            ),
           },
           {
             where: {
@@ -1124,7 +1124,15 @@ exports.RegistrationProcess = async (req, res) => {
             },
           }
         );
-        let js = await artisanResponse();
+
+        let jet = `${JSON.parse(stage.artisanArray).map(
+          (entity, index) => `\n *[${index + 1}]* ${entity.firstname}`
+        )}`;
+        //  `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
+        //    artisans
+        //  )}`;
+        // let js = await artisanResponse();
+        let js = `${otherResponse.artisan} \n${jet}`;
         response = await sendResponse(js, payload.user.id);
       } else {
         let sg =
