@@ -1006,12 +1006,13 @@ exports.RegistrationProcess = async (req, res) => {
       } else if (
         payload.type === "text" &&
         stage.step === 13 &&
-        Number(payload.text) <= JSON.parse(stage.artisanArray).length
+        Number(payload.text) <= JSON.parse(stage.artisanArray)?.length
       ) {
         //  Number(payload.text) <= artisans.data.artisans.length &&
         //    Number(payload.text) > 0;
         // artisans.data.artisans.includes(
         //   artisans.data.artisans[Number(payload.text) - 1]
+        const getAgain = await currentStage(payload.user.id);
 
         await update(
           {
@@ -1025,10 +1026,10 @@ exports.RegistrationProcess = async (req, res) => {
           }
         );
         let art = await artisanInfoResponse(
-          JSON.parse(stage.artisanArray)[Number(payload.text) - 1].firstname,
-          JSON.parse(stage.artisanArray)[Number(payload.text) - 1].lastname,
-          JSON.parse(stage.artisanArray)[Number(payload.text) - 1].email,
-          JSON.parse(stage.artisanArray)[Number(payload.text) - 1].mobile
+          JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].firstname,
+          JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].lastname,
+          JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email,
+          JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
         );
         response = await sendResponse(art, payload.user.id);
       } else if (
