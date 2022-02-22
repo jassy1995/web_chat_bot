@@ -286,6 +286,8 @@ const { Service, Stage } = require("../models");
 // }
 
 const updateCustomerToLive = async (artisan_id, booking_id) => {
+  console.log(booking_id);
+  console.log(artisan_id);
   let data = JSON.stringify({ artisan: artisan_id });
   // const findBooking = await Stage.findOne({ where: { user_id } });
   // const booking_id = findBooking?.editIndex;

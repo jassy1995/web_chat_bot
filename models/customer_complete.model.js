@@ -43,7 +43,7 @@ const CustomerComplete = (sequelize, DataTypes, Sequelize) =>
       allowNull: false,
     },
     artisan: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
   });
