@@ -1080,9 +1080,9 @@ exports.RegistrationProcess = async (req, res) => {
           email: stage.email,
           location: stage.location,
           task_description: stage.task_description,
-          artisan: JSON.parse(stage.artisanArray)[
-            Number(stage.artisanIndex) - 1
-          ].firstname,
+          artisan: JSON.stringify(
+            JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
+          ),
         };
 
         await saveCustomerRequest(requestToSave);
