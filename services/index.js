@@ -260,37 +260,13 @@ const smsCustomer = async (msg, phone) => {
 //   },
 // ];
 
-const { Service, Stage } = require("../models");
-
-// {
-//     "user":"0",
-//     "category": 40,
-//     "description": "Good",
-//     "state": "Lagos",
-//     "lga": "Amac",
-//     "location": "1, Address Street, Lagos",
-//     "email": "email@wesabi.com",
-//     "mobile": "07033000000",
-//     "lastname": "Wesabi",
-//     "firstname": "Sanni",
-//     "channel":"chatbot",
-//     "date":"2022-02-13 09:00:00"
-// }
-
-// Send a PUT request to https://api.wesabi.com/v3/bookings/{booking_id}
-
-// And pass the artisan id as payload:
-
-// {
-// artisan:109,
-// }
+// const { Service, Stage } = require("../models");
 
 const updateCustomerToLive = async (artisan_id, booking_id) => {
   console.log(booking_id);
   console.log(artisan_id);
   let data = JSON.stringify({ artisan: artisan_id });
-  // const findBooking = await Stage.findOne({ where: { user_id } });
-  // const booking_id = findBooking?.editIndex;
+
   let config = {
     method: "put",
     url: `https://api.wesabi.com/v3/bookings/${booking_id}`,
@@ -302,7 +278,7 @@ const updateCustomerToLive = async (artisan_id, booking_id) => {
     data: data,
   };
   let response = await axios(config);
-  console.log(JSON.stringify(response.data));
+  console.log(response.data);
 };
 
 const saveArtisanToLive = (
