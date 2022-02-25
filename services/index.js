@@ -324,14 +324,18 @@ const saveArtisanToLive = (
 };
 
 const AccountDetail = async (full_name, id) => {
-  return (
-    await axios.post("https://wema.creditclan.com/generate/account", {
-      merchant_name: full_name,
-      amount: 500,
-      narration: "PES 2022",
-      phone: id,
-    })
-  ).data;
+  try {
+    return (
+      await axios.post("https://wema.creditclan.com/generate/account", {
+        merchant_name: full_name,
+        amount: 500,
+        narration: "PES 2022",
+        phone: id,
+      })
+    ).data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const confirmPayment = async (reference_id) => {
