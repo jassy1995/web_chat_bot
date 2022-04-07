@@ -34,11 +34,11 @@ const question_one = {
 };
 
 // format data array to return array of objects
-const formatServiceArray = (data) => {
+const formatServiceArray = (data, returnKey) => {
   if (!data) throw new Error("endpoints not found");
   return data.map((entity, index) => ({
     id: `${index + 1}`,
-    title: entity,
+    title: entity[returnKey],
   }));
 };
 
@@ -78,16 +78,20 @@ const fullNameResponse = () => {
 // const serviceResponse = async () => {
 //   const question = question_one.service;
 //   const services = await getServices();
-//   // return listButtons(question, formatServiceArray(services));
+// return listButtons(question, formatServiceArray(services));
 //   return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(services)}
 // };
 
 const serviceResponse = async () => {
   const { data: services } = await getServices();
-  return `kindly enter the number correspond to your option service \n ${formatDataArrayToStringLga(
-    services,
-    "category"
-  )}`;
+  return listButtons(
+    "Please choose one",
+    formatServiceArray(services, "category")
+  );
+  // return `kindly enter the number correspond to your option service \n ${formatDataArrayToStringLga(
+  //   services,
+  //   "category"
+  // )}`;
 };
 
 const stateResponse = async () => {
