@@ -17,8 +17,8 @@ const {
 const question_one = {
   full_name: "Kindly enter your *full name*",
   service: "Kindly click the button below to select the service you need",
-  state: "What state do you reside ?",
-  lga: "What is your LGA?",
+  state: "Kindly click the icon below to select your state",
+  lga: "Kindly click the icon below to select your local government",
   address: "Enter your address",
   id_card: "Attach your ID card",
   picture: "Attach your picture",
@@ -85,7 +85,7 @@ const fullNameResponse = () => {
 const serviceResponse = async () => {
   const { data: services } = await getServices();
   return listButtons(
-    "Please choose one",
+    "Please click the icon below to select your service",
     formatServiceArray(services, "category")
   );
   // return `kindly enter the number correspond to your option service \n ${formatDataArrayToStringLga(
@@ -98,7 +98,8 @@ const stateResponse = async () => {
   const question = question_one.state;
   const { data: states } = await getStates();
   let reverseState = states.reverse();
-  return `${question} \n${formatDataArrayToString(reverseState)}`;
+  return listButtons(question, formatServiceArray(reverseState, "name"));
+  // return `${question} \n${formatDataArrayToString(reverseState)}`;
 };
 
 const lgaResponse = async (state) => {
@@ -106,7 +107,8 @@ const lgaResponse = async (state) => {
   const { data: lga } = await getLga(state);
   return {
     lg: lga,
-    rests: `${question} \n${formatDataArrayToStringLga(lga, "lga")}`,
+    rests: listButtons(question, formatServiceArray(lga, "lga")),
+    // rests: `${question} \n${formatDataArrayToStringLga(lga, "lga")}`,
   };
 };
 
