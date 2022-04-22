@@ -73,7 +73,7 @@ const welcomeResponse = productsButtons("how do we help you today?", [
 
 const welcomeReturningArtisanResponse = (value, name) => {
   if (value === "artisan") {
-    return productsButtons(
+    return productsButtons3(
       `Welcome ${name}, kindly click the button below to select your service`,
       [
         {
@@ -83,7 +83,7 @@ const welcomeReturningArtisanResponse = (value, name) => {
       ]
     );
   } else {
-    return productsButtons(
+    return productsButtons3(
       `Welcome ${name}, kindly click the button below to select your service`,
       [
         {
