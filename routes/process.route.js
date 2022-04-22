@@ -11,8 +11,8 @@ const {
 
 const router = express.Router();
 
-// router.post("/api/artisan/registration/process", RegistrationProcess);
-router.post("/api/artisan/registration/process", RegistrationProcess2);
+router.post("/api/artisan/registration/process", RegistrationProcess);
+router.post("/api/artisan/registration/process2", RegistrationProcess2);
 router.get("/api/all_records", getRecords);
 router.post("/test", Testing);
 // router.post("/api/save-service", savedServiceRecords);
