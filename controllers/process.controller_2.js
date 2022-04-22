@@ -143,6 +143,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       await update(
         {
           menu: otherResponse.initService[Number(payload.text) - 1],
+          step: 2,
         },
         {
           where: {
@@ -150,272 +151,35 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
         }
       );
-      const existCustomer = await getExistCustomer(payload.user.id);
-      const refetchC = await currentStage(payload.user.id);
-      //============== START RETURNING CUSTOMER REQUEST ===============
+
       if (
-        existCustomer?.user_id === payload.user.id &&
-        refetchC.menu === "Request Service Provider(Customer)"
+        otherResponse.initService[Number(payload.text) - 1] ===
+        "Render Service (Artisan)"
       ) {
-        await update(
-          {
-            step: 3,
-          },
-          {
-            where: {
-              user_id: payload.user.id,
-            },
-          }
+        let va = await registrationFormResponse(
+          "To start registration, please click the button below",
+          "artisan-registration-form"
         );
 
-        let pss = await confirmNumberResponse(
-          payload.user.name,
-          payload.user.id
-        );
-        response = await sendResponse(pss, payload.user.id);
+        response = await sendResponse(va, payload.user.id);
       } else {
-        await update(
-          {
-            step: 2,
-          },
-          {
-            where: {
-              user_id: payload.user.id,
-            },
-          }
+        let va = await registrationFormResponse(
+          "To start your request process, please click the button below",
+          "customer-request-form"
         );
-
-        let tt = await changeNameResponse(payload.user.name);
-        response = await sendResponse(tt, payload.user.id);
+        response = await sendResponse(va, payload.user.id);
       }
     }
     //=============== START ARTISAN REGISTRATION ===============
-    if (stage?.menu === "Render Service (Artisan)") {
-      let va = await registrationFormResponse(
-        "To start registration, please click the button below",
-        "artisan-registration-form"
+    if (
+      stage?.menu === "Render Service (Artisan)" &&
+      payload.type === "artisan-registration-form" &&
+      stage?.step === 2
+    ) {
+      response = await sendResponse(
+        "your have successfully registered",
+        payload.user.id
       );
-
-      response = await sendResponse(va, payload.user.id);
-
-      // if (
-      //   artisanOne?.user_id === payload.user.id &&
-      //   stage?.menu === "Render Service (Artisan)"
-      // ) {
-      //   await update(
-      //     {
-      //       step: 0,
-      //     },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   response = await sendResponse(
-      //     `*${num.concat(
-      //       payload.user.id.slice(3)
-      //     )}* has already been used, please use another phone`,
-      //     payload.user.id
-      //   );
-      // }
-
-      // else if (
-      //   payload.type === "text" &&
-      //   stage.step === 2 &&
-      //   payload.text.toString() === "2"
-      // ) {
-      //   await update(
-      //     { step: 3 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   let fn = await fullNameResponse();
-      //   response = await sendResponse(fn, payload.user.id);
-      // }
-
-      // else if (payload.type === "text" && stage.step === 3) {
-      //   await update(
-      //     { full_name: payload.text, step: 4 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   let tts = await serviceResponse();
-      //   response = await sendResponse(tts, payload.user.id);
-      // }
-
-      // else if (
-      //   payload.type === "text" &&
-      //   stage.step === 2 &&
-      //   payload.text.toString() === "1"
-      // ) {
-      //   await update(
-      //     { full_name: payload.user.name, step: 4 },
-
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   let rfs = await serviceResponse();
-      //   response = await sendResponse(rfs, payload.user.id);
-      // }
-
-      // else if (
-      //   payload.type === "text" &&
-      //   stage.step === 4 &&
-      //   service.includes(service[Number(payload.text) - 1])
-      // ) {
-      //   await update(
-      //     { service: service[Number(payload.text) - 1].category, step: 5 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   let rRe = await stateResponse();
-      //   response = await sendResponse(rRe, payload.user.id);
-      // }
-
-      // else if (
-      //   payload.type === "text" &&
-      //   stage?.step === 5 &&
-      //   states.includes(states[Number(payload.text) - 1])
-      // ) {
-      //   await update(
-      //     { state: states[Number(payload.text) - 1].name, step: 6 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   let info = await lgaResponse(states[Number(payload.text) - 1].name);
-      //   await update(
-      //     { local_government: JSON.stringify(info.lg) },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   response = await sendResponse(info.rests, payload.user.id);
-      // }
-
-      // else if (
-      //   payload.type === "text" &&
-      //   stage?.step === 6 &&
-      //   payload.text > 0 &&
-      //   payload.text <= JSON.parse(stage.local_government)
-      // ) {
-      //   await update(
-      //     {
-      //       lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]
-      //         .lga,
-      //       step: 7,
-      //     },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   response = await sendResponse(otherResponse.address, payload.user.id);
-      // }
-
-      // else if (payload.type === "text" && stage.step === 7) {
-      //   await update(
-      //     { address: payload.text, step: 8 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-
-      //   response = await sendResponse("Enter your email", payload.user.id);
-      // }
-
-      // else if (payload.type === "text" && stage.step === 8) {
-      //   await update(
-      //     { email: payload.text, step: 9 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   let vb = await genderResponse();
-      //   response = await sendResponse(vb, payload.user.id);
-      // }
-
-      // else if (
-      //   payload.type === "text" &&
-      //   stage.step === 9 &&
-      //   otherResponse.genders.includes(
-      //     otherResponse.genders[Number(payload.text) - 1]
-      //   )
-      // ) {
-      //   await update(
-      //     { gender: otherResponse.genders[Number(payload.text) - 1], step: 10 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   response = await sendResponse(
-      //     "enter your date of birth, Kindly use this format *dd/mm/yyyy* ",
-      //     payload.user.id
-      //   );
-      // }
-
-      // else if (payload.type === "text" && stage.step === 10) {
-      //   await update(
-      //     { dateOfBirth: payload.text, step: 11 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   response = await sendResponse(otherResponse.id_card, payload.user.id);
-      // }
-
-      // else if (payload.type === "image" && stage?.step === 11) {
-      //   await update(
-      //     { id_card: payload.image, step: 12 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-
-      //   response = await sendResponse(otherResponse.picture, payload.user.id);
-      // }
-
-      // else if (payload.type === "image" && stage?.step === 12) {
-      //   await update(
-      //     {
-      //       picture: payload.image,
-      //       local_government: acct_value?.data,
-      //       step: 13,
-      //     },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
 
       //   const toSave = {
       //     user_id: stage.user_id,
