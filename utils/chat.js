@@ -12,6 +12,7 @@ const {
   artisanInfo,
   changeAddressButton,
   genderButton,
+  productsButtons3,
 } = require("./interactive_button");
 
 const question_one = {
@@ -70,6 +71,34 @@ const welcomeResponse = productsButtons("how do we help you today?", [
   },
 ]);
 
+const welcomeReturningArtisanResponse = (value, name) => {
+  if (value === "artisan") {
+    return productsButtons(
+      `Welcome ${name}, kindly click the button below to select your service`,
+      [
+        {
+          type: "reply",
+          reply: { id: `${2}`, title: "Request Service Provider(Customer)" },
+        },
+      ]
+    );
+  } else {
+    return productsButtons(
+      `Welcome ${name}, kindly click the button below to select your service`,
+      [
+        {
+          type: "reply",
+          reply: { id: `${1}`, title: "Request Service Provider(Artisan)" },
+        },
+        {
+          type: "reply",
+          reply: { id: `${2}`, title: "Request Service Provider(Customer)" },
+        },
+      ]
+    );
+  }
+};
+
 const fullNameResponse = () => {
   const question = question_one.full_name;
   return `\nWelcome to the registration of wesabi. we would like to ask you some questions\n${question}`;
@@ -85,7 +114,7 @@ const fullNameResponse = () => {
 const serviceResponse = async () => {
   const { data: services } = await getServices();
   return listButtons(
-    "Please click the icon below to select your service",
+    "Please click the button below to select your service",
     formatServiceArray(services, "category")
   );
   // return `kindly enter the number correspond to your option service \n ${formatDataArrayToStringLga(
@@ -175,6 +204,14 @@ const changeNameResponse = async (artisan_name) => {
     {
       type: "reply",
       reply: { id: `${2}`, title: "Yes" },
+    },
+  ]);
+};
+const registrationFormResponse = async (title, types) => {
+  return productsButtons3(title, [
+    {
+      type: types,
+      reply: { id: `${1}`, title: "start" },
     },
   ]);
 };
@@ -307,6 +344,8 @@ module.exports = {
   artisanInfoResponse,
   changeAddressResponse,
   genderResponse,
+  welcomeReturningArtisanResponse,
+  registrationFormResponse,
   // submitEditResponse,
   // mailingCustomer,
 };

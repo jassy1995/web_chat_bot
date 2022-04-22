@@ -18,6 +18,7 @@ const {
   artisanInfoResponse,
   changeAddressResponse,
   genderResponse,
+  // welcomeReturningArtisanResponse,
   // mailingCustomer,
 } = require("../utils/chat");
 
@@ -64,6 +65,7 @@ exports.RegistrationProcess = async (req, res) => {
     const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
     const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
     const checkExistCustomer = await getExistCustomer(payload.user.id);
+    // const isArtisanExist = await getExistArtisan(payload.user.id);
     // const artisans = await getListOfArtisan(
     //   stage?.service,
     //   stage?.task_description,
@@ -121,6 +123,13 @@ exports.RegistrationProcess = async (req, res) => {
         where: { user_id: payload.user.id },
       });
       await create({ user_id: payload.user.id, step: 1 });
+      // if (isArtisanExist) {
+      //   let ex = await welcomeReturningArtisanResponse(
+      //     isArtisanExist.full_name
+      //   );
+      //   response = await sendResponse(ex, payload.user.id);
+      // }els
+
       response = await sendResponse(welcomeResponse, payload.user.id);
       // }
     }

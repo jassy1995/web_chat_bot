@@ -150,6 +150,24 @@ const productsButtons2 = (info, button) => {
   return message;
 };
 
+const productsButtons3 = (info, button) => {
+  let message = {
+    payload: {
+      type: "interactive",
+      interactive: {
+        type: "button",
+        body: {
+          text: info,
+        },
+        action: {
+          buttons: button,
+        },
+      },
+    },
+  };
+  return message;
+};
+
 const listButtons = (question, options) => {
   let lists = {
     payload: {
@@ -183,4 +201,5 @@ module.exports = {
   artisanInfo,
   changeAddressButton,
   genderButton,
+  productsButtons3,
 };
