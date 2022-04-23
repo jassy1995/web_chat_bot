@@ -284,7 +284,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           stage?.service,
           stage?.full_name,
           stage?.email,
-          stage?.user.id,
+          payload?.user.id,
           stage?.gender,
           stage?.date_of_birth,
           stage?.state,
