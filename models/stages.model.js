@@ -67,7 +67,7 @@ const Stage = (sequelize, DataTypes, Sequelize) =>
     gender: {
       type: DataTypes.STRING,
     },
-    dateOfBirth: {
+    date_of_birth: {
       type: DataTypes.STRING,
     },
     artisanArray: {
