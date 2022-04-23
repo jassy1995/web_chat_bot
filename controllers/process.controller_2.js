@@ -454,6 +454,6 @@ exports.RegistrationProcess2 = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(error);
+    console.log(err);
   }
 };
