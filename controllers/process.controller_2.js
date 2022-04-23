@@ -204,6 +204,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       if (payload.type === "artisan-registration-form" && stage?.step === 2) {
         payload.data["payment_status"] = "pending";
         payload.data["step"] = 3;
+        console.log(payload.data);
         await update(payload.data, {
           where: {
             user_id: payload.user.id,
