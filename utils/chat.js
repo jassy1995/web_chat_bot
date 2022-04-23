@@ -21,9 +21,9 @@ const question_one = {
   state: "Kindly click the button below to select your state",
   lga: "Kindly click the button below to select your local government",
   address: "Enter your address",
-  id_card: "Attach your ID card",
+  id_card: "You are almost done, kindly attach your ID card",
   picture: "Attach your picture",
-  location: "Share your location",
+  location: "You are almost done, kindly share your location",
   task_description: "Describe your task(kindly make it brief)",
   artisan:
     "See attached list of verifiable artisans in your location and select one.... the artisan details goes thus",
