@@ -39,7 +39,7 @@ const ArtisanComplete = (sequelize, DataTypes, Sequelize) =>
       type: DataTypes.STRING,
       allowNull: false,
     },
-    dateOfBirth: {
+    date_of_birth: {
       type: DataTypes.STRING,
       allowNull: false,
     },
