@@ -67,7 +67,7 @@ exports.RegistrationProcess2 = async (req, res) => {
     const checkExistCustomer = await getExistCustomer(payload.user.id);
     const isArtisanExist = await getExistArtisan(payload.user.id);
     //========= START THE CHAT ===========
-    if (payload.type === "text" && payload?.text?.toLowerCase() == "hi") {
+    if (payload.type === "text" && payload?.text?.toLowerCase() === "hi") {
       if (isArtisanExist) {
         let ex1 = await welcomeReturningArtisanResponse(
           "artisan",
@@ -200,7 +200,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       }
     }
     //=============== START ARTISAN REGISTRATION ===============
-    if (stage?.menu === "Render Service (Artisan)") {
+    if (stage?.menu === "Render Service (Artisan)" && stage?.step === 2) {
       if (payload.type === "artisan-registration-form" && stage?.step === 2) {
         payload.data["payment_status"] = "pending";
         payload.data["step"] = 3;
