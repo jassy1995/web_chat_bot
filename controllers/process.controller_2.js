@@ -200,7 +200,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       }
     }
     //=============== START ARTISAN REGISTRATION ===============
-    else if (stage?.menu === "Render Service (Artisan)" && stage?.step === 2) {
+    else if (stage?.menu === "Render Service (Artisan)") {
       if (payload.type === "artisan-registration-form" && stage?.step === 2) {
         payload.data["payment_status"] = "pending";
         payload.data["step"] = 3;
