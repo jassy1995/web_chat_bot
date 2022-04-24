@@ -297,7 +297,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         );
       } else {
         let rq =
-          "Invalid input,please check and retry or enter *restart* to start all over";
+          "Invalid.. input,please check and retry or enter *restart* to start all over";
         response = await sendResponse(rq, payload.user.id);
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
@@ -450,7 +450,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         response = await sendResponse(js, payload.user.id);
       } else {
         let sg =
-          "Invalid input,please check and retry or enter *restart* to start all over";
+          "Invalid input...,please check and retry or enter *restart* to start all over";
         response = await sendResponse(sg, payload.user.id);
       }
     }
