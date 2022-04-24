@@ -100,7 +100,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       }
     }
     //================ RESTART THE CHAT==================
-    if (payload.text?.toLowerCase() === "restart") {
+    else if (payload.text?.toLowerCase() === "restart") {
       if (isArtisanExist) {
         let ex1 = await welcomeReturningArtisanResponse(
           "artisan",
@@ -133,7 +133,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       }
     }
     //================== MENU OPTIONS ======================
-    if (
+    else if (
       payload.type === "text" &&
       stage?.step === 1 &&
       otherResponse.initService.includes(
@@ -200,7 +200,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       }
     }
     //=============== START ARTISAN REGISTRATION ===============
-    if (stage?.menu === "Render Service (Artisan)" && stage?.step === 2) {
+    else if (stage?.menu === "Render Service (Artisan)" && stage?.step === 2) {
       if (payload.type === "artisan-registration-form" && stage?.step === 2) {
         payload.data["payment_status"] = "pending";
         payload.data["step"] = 3;
