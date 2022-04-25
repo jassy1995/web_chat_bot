@@ -3,7 +3,7 @@ const { Stage, ArtisanComplete, CustomerComplete } = require("../models");
 class MyQuery {
   currentStage = async (id) => {
     try {
-      return await Stage.findOne({ where: { user_id: id } });
+      return await Stage.findOne({ where: { user_id: id }, raw: true });
     } catch (error) {
       console.log(error);
     }
@@ -11,7 +11,10 @@ class MyQuery {
 
   getArtisanOne = async (id) => {
     try {
-      return await ArtisanComplete.findOne({ where: { user_id: id } });
+      return await ArtisanComplete.findOne({
+        where: { user_id: id },
+        raw: true,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -19,7 +22,10 @@ class MyQuery {
 
   getExistCustomer = async (id) => {
     try {
-      return await CustomerComplete.findOne({ where: { user_id: id } });
+      return await CustomerComplete.findOne({
+        where: { user_id: id },
+        raw: true,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +33,10 @@ class MyQuery {
 
   getAllExistCustomer = async (id) => {
     try {
-      return await CustomerComplete.findAll({ where: { user_id: id } });
+      return await CustomerComplete.findAll({
+        where: { user_id: id },
+        raw: true,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +44,10 @@ class MyQuery {
 
   getExistArtisan = async (id) => {
     try {
-      return await ArtisanComplete.findOne({ where: { user_id: id } });
+      return await ArtisanComplete.findOne({
+        where: { user_id: id },
+        raw: true,
+      });
     } catch (error) {
       console.log(error);
     }

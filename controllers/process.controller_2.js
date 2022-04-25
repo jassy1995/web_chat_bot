@@ -208,7 +208,6 @@ exports.RegistrationProcess2 = async (req, res) => {
       ) {
         payload.data["payment_status"] = "pending";
         payload.data["step"] = 3;
-        console.log(payload.data);
         await update(payload.data, {
           where: {
             user_id: payload.user.id,
@@ -236,7 +235,7 @@ exports.RegistrationProcess2 = async (req, res) => {
             },
           }
         );
-        console.log("hellow");
+
         const summary = `Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n LGA: *${stage?.lga}* \n Address: *${stage?.address}* \n Email: *${stage?.email}* \n date_of_birth: *${stage?.date_of_birth}* \n Gender: *${stage?.gender}* \n`;
         const header = "Here is the summary of your registration detail";
 
@@ -319,9 +318,10 @@ exports.RegistrationProcess2 = async (req, res) => {
       if (payload.text?.toLowerCase() === "yes" && stage.step === 2) {
         let va = await registrationFormResponse(
           "Kindly edit your information here",
-          "customer-request-form"
+          "customer-request-form",
+          checkExistCustomer
         );
-        response = await sendResponse(va, payload.user.id, checkExistCustomer);
+        response = await sendResponse(va, payload.user.id);
       } else if (payload.text?.toLowerCase() === "no" && stage.step === 2) {
         checkExistCustomer["step"] = 3;
         await update(checkExistCustomer, {
