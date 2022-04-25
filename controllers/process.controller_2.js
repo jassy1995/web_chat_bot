@@ -258,9 +258,18 @@ exports.RegistrationProcess2 = async (req, res) => {
         );
         let va = await registrationFormResponse(
           "Kindly edit your information here",
-          "artisan-registration-form"
+          "artisan-edit-form"
         );
-        response = await sendResponse(va, payload.user.id, stage);
+        response = await sendResponse(va, payload.user.id, {
+          full_name: stage.full_name,
+          service: stage?.service,
+          state: stage?.state,
+          lga: stage?.lga,
+          address: stage?.address,
+          email: stage?.email,
+          gender: stage?.gender,
+          date_of_birth: stage?.date_of_birth,
+        });
       } else if (
         payload.text?.toLowerCase() === "submit" &&
         stage?.step === 5
