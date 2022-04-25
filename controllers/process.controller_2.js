@@ -236,7 +236,7 @@ exports.RegistrationProcess2 = async (req, res) => {
             },
           }
         );
-
+        console.log("hellow");
         const summary = `Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n LGA: *${stage?.lga}* \n Address: *${stage?.address}* \n Email: *${stage?.email}* \n date_of_birth: *${stage?.date_of_birth}* \n Gender: *${stage?.gender}* \n`;
         const header = "Here is the summary of your registration detail";
 
