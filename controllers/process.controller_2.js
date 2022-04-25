@@ -247,7 +247,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
           {
             type: "reply",
-            reply: { id: "edit", title: "Edit", data: df },
+            reply: { id: "edit", title: "Edit" },
           },
         ];
         let re = productsButtons({ header, summary }, button);
