@@ -318,7 +318,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       if (payload.text?.toLowerCase() === "yes" && stage.step === 2) {
         let va = await registrationFormResponse(
           "Kindly edit your information here",
-          "customer-request-form",
+          "customer-edit-form",
           checkExistCustomer
         );
         response = await sendResponse(va, payload.user.id);
