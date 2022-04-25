@@ -211,7 +211,8 @@ const registrationFormResponse = async (title, types, data) => {
   return productsButtons3(title, [
     {
       type: types,
-      reply: { id: `${1}`, title: "start", ...(data && { data: data }) },
+      reply: { id: `${1}`, title: "start" },
+      ...(data && { data: data }),
     },
   ]);
 };
