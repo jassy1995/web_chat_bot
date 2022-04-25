@@ -201,7 +201,11 @@ exports.RegistrationProcess2 = async (req, res) => {
     }
     //=============== START ARTISAN REGISTRATION ===============
     else if (stage?.menu === "Render Service (Artisan)") {
-      if (payload.type === "artisan-registration-form" && stage?.step === 2) {
+      if (
+        (payload.type === "artisan-registration-form" ||
+          payload.type === "artisan-edit-form") &&
+        stage?.step === 2
+      ) {
         payload.data["payment_status"] = "pending";
         payload.data["step"] = 3;
         console.log(payload.data);
@@ -235,6 +239,7 @@ exports.RegistrationProcess2 = async (req, res) => {
 
         const summary = `Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n LGA: *${stage?.lga}* \n Address: *${stage?.address}* \n Email: *${stage?.email}* \n date_of_birth: *${stage?.date_of_birth}* \n Gender: *${stage?.gender}* \n`;
         const header = "Here is the summary of your registration detail";
+
         const button = [
           {
             type: "reply",
@@ -242,7 +247,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
           {
             type: "reply",
-            reply: { id: "edit", title: "Edit" },
+            reply: { id: "edit", title: "Edit", data: df },
           },
         ];
         let re = productsButtons({ header, summary }, button);
@@ -256,10 +261,9 @@ exports.RegistrationProcess2 = async (req, res) => {
             },
           }
         );
-
-        response = await sendResponse(
+        let vf = await registrationFormResponse(
           "Kindly edit your information here",
-          payload.user.id,
+          "artisan-edit-form",
           {
             full_name: stage.full_name,
             service: stage?.service,
@@ -271,6 +275,7 @@ exports.RegistrationProcess2 = async (req, res) => {
             date_of_birth: stage?.date_of_birth,
           }
         );
+        response = await sendResponse(vf, payload.user.id);
       } else if (
         payload.text?.toLowerCase() === "submit" &&
         stage?.step === 5
