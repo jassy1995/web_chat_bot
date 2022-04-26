@@ -335,6 +335,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         stage?.step === 2
       ) {
         payload.data["step"] = 3;
+        console.log(payload.data);
         await update(payload.data, {
           where: {
             user_id: payload.user.id,
@@ -427,6 +428,8 @@ exports.RegistrationProcess2 = async (req, res) => {
             JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
           ),
         };
+
+        console.log(requestToSave);
         await saveCustomerRequest(requestToSave);
         let msmg =
           "wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible";
