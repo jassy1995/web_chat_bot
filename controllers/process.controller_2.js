@@ -174,8 +174,9 @@ exports.RegistrationProcess2 = async (req, res) => {
           }* \n Email: *${checkExistCustomer?.email}* \n task_description: *${
             checkExistCustomer?.task_description
           }* \n Gender: *${checkExistCustomer?.gender}* \n Artisan: *${
-            JSON.parse(checkExistCustomer.artisan).firstname
+            JSON.parse(checkExistCustomer?.artisan).firstname
           } \n`;
+
           const header =
             "Below is the summary of your previous information, \n \n *would you like to change it* ?";
           const button = [
