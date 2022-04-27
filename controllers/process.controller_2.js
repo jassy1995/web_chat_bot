@@ -165,7 +165,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       } else {
         if (checkExistCustomer) {
           // JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
-          const summary = `Name: *${checkExistCustomer?.full_name}* \n Service: *${checkExistCustomer?.service}* \n State: *${checkExistCustomer?.state}* \n LGA: *${checkExistCustomer?.lga}* \n Address: *${checkExistCustomer?.address}* \n Email: *${checkExistCustomer?.email}* \n task_description: *${checkExistCustomer?.task_description}* \n Gender: *${checkExistCustomer?.gender}* \n \n`;
+          const summary = `Name: *${checkExistCustomer?.full_name}* \n Service: *${checkExistCustomer?.service}* \n State: *${checkExistCustomer?.state}* \n LGA: *${checkExistCustomer?.lga}* \n Address: *${checkExistCustomer?.address}* \n Email: *${checkExistCustomer?.email}* \n task_description: *${checkExistCustomer?.task_description}* \n \n`;
 
           const header =
             "Below is the summary of your previous information, \n \n *would you like to change it* ?";
@@ -308,7 +308,7 @@ exports.RegistrationProcess2 = async (req, res) => {
     } else if (stage?.menu === "Request Service Provider(Customer)") {
       if (payload.text?.toLowerCase() === "yes" && stage.step === 2) {
         let va = await registrationFormResponse(
-          "Kindly edit your information here",
+          "Kindly click the button below to edit your information",
           "customer-edit-form",
           checkExistCustomer
         );
