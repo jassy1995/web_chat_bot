@@ -168,7 +168,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           const summary = `Name: *${checkExistCustomer?.full_name}* \n Service: *${checkExistCustomer?.service}* \n State: *${checkExistCustomer?.state}* \n LGA: *${checkExistCustomer?.lga}* \n Address: *${checkExistCustomer?.address}* \n Email: *${checkExistCustomer?.email}* \n task_description: *${checkExistCustomer?.task_description}* \n \n`;
 
           const header =
-            "Below is the summary of your previous information, \n \n *would you like to change it* ?";
+            "Below is the summary of your previous information,\n \n would you like to change it ?";
           const button = [
             {
               type: "reply",
@@ -227,7 +227,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           }
         );
 
-        const summary = `Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n LGA: *${stage?.lga}* \n Address: *${stage?.address}* \n Email: *${stage?.email}* \n date_of_birth: *${stage?.date_of_birth}*  \n`;
+        const summary = `Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n LGA: *${stage?.lga}* \n Address: *${stage?.address}* \n Email: *${stage?.email}* \n dateOfBirth: *${stage?.date_of_birth}*  \n`;
         const header = "Here is the summary of your registration detail";
 
         const button = [
@@ -252,7 +252,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           }
         );
         let vf = await registrationFormResponse(
-          "Kindly edit your information here",
+          "Kindly click the button below to edit your previous information.",
           "artisan-edit-form",
           {
             full_name: stage.full_name,
@@ -307,26 +307,44 @@ exports.RegistrationProcess2 = async (req, res) => {
       }
     } else if (stage?.menu === "Request Service Provider(Customer)") {
       if (payload.text?.toLowerCase() === "yes" && stage.step === 2) {
+        const dataToSend = {
+          full_name: checkExistCustomer.full_name,
+          service: checkExistCustomer.service,
+          state: checkExistCustomer.state,
+          lga: checkExistCustomer.lga,
+          email: checkExistCustomer.email,
+          address: checkExistCustomer.address,
+          task_description: checkExistCustomer.task_description,
+        };
         let va = await registrationFormResponse(
-          "Kindly click the button below to edit your information",
+          "Kindly click the button below to edit your previous information",
           "customer-edit-form",
-          checkExistCustomer
+          dataToSend
         );
         response = await sendResponse(va, payload.user.id);
       } else if (payload.text?.toLowerCase() === "no" && stage.step === 2) {
-        checkExistCustomer["step"] = 3;
-        await update(checkExistCustomer, {
+        const reSave = {
+          full_name: checkExistCustomer.full_name,
+          service: checkExistCustomer.service,
+          state: checkExistCustomer.state,
+          lga: checkExistCustomer.lga,
+          email: checkExistCustomer.email,
+          address: checkExistCustomer.address,
+          task_description: checkExistCustomer.task_description,
+          step: 3,
+        };
+        await update(reSave, {
           where: {
             user_id: payload.user.id,
           },
         });
         response = await sendResponse(otherResponse.location, payload.user.id);
       } else if (
-        payload.type === "customer-request-form" &&
+        (payload.type === "customer-request-form" ||
+          payload.type === "customer-edit-form") &&
         stage?.step === 2
       ) {
         payload.data["step"] = 3;
-        console.log(payload.data);
         await update(payload.data, {
           where: {
             user_id: payload.user.id,
@@ -420,7 +438,6 @@ exports.RegistrationProcess2 = async (req, res) => {
           ),
         };
 
-        console.log(requestToSave);
         await saveCustomerRequest(requestToSave);
         let msmg =
           "wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible";

@@ -13,7 +13,6 @@ class MyQuery {
     try {
       return await ArtisanComplete.findOne({
         where: { user_id: id },
-        raw: true,
       });
     } catch (error) {
       console.log(error);
@@ -24,7 +23,6 @@ class MyQuery {
     try {
       return await CustomerComplete.findOne({
         where: { user_id: id },
-        raw: true,
       });
     } catch (error) {
       console.log(error);
@@ -35,7 +33,6 @@ class MyQuery {
     try {
       return await CustomerComplete.findAll({
         where: { user_id: id },
-        raw: true,
       });
     } catch (error) {
       console.log(error);
@@ -46,7 +43,6 @@ class MyQuery {
     try {
       return await ArtisanComplete.findOne({
         where: { user_id: id },
-        raw: true,
       });
     } catch (error) {
       console.log(error);
