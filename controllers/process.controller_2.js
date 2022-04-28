@@ -456,7 +456,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         );
 
         response = await sendResponse(
-          "Congrats,your request has been received",
+          "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible ",
           payload.user.id
         );
       } else if (stage.step === 5 && payload.text.toString() === "2") {

@@ -26,7 +26,7 @@ const question_one = {
   location: "You are almost done, kindly share your location",
   task_description: "Describe your task(kindly make it brief)",
   artisan:
-    "See attached list of verifiable artisans in your location and select one.... the artisan details goes thus",
+    "See attached list of verifiable artisans in your location. \n kindly enter the number correspond to your prefer artisan",
   initService: [
     "Render Service (Artisan)",
     "Request Service Provider(Customer)",
