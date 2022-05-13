@@ -209,7 +209,7 @@ exports.RegistrationProcess2 = async (req, res) => {
     // }
     //=============== START ARTISAN REGISTRATION ===============
     // else if (stage?.menu === "Render Service (Artisan)") {
-    if (
+    else if (
       (payload.type === "artisan-registration-form" ||
         payload.type === "artisan-edit-form") &&
       (stage?.step === 1 || stage?.step === 4)
@@ -327,13 +327,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         "Congrats, your registration has been completed",
         payload.user.id
       );
-    } else {
-      let rq =
-        "Invalid.. input,please check and retry or enter *restart* to start all over";
-      response = await sendResponse(rq, payload.user.id);
-    }
-
-    if (payload.type === "customer-request-form" && stage.step === 1) {
+    } else if (payload.type === "customer-request-form" && stage.step === 1) {
       payload.data["menu"] = "Request Service Provider(Customer)";
       payload.data["step"] = 3;
       await update(payload.data, {
@@ -543,7 +537,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         "Invalid input...,please check and retry or enter *restart* to start all over";
       response = await sendResponse(sg, payload.user.id);
     }
-    // }
+    return res.status(200).json(response);
   } catch (err) {
     console.log(err);
   }
