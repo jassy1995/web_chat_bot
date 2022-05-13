@@ -72,27 +72,60 @@ const welcomeResponse = productsButtons("how do we help you today?", [
 ]);
 
 const welcomeReturningArtisanResponse = (value, name) => {
-  if (value === "artisan") {
+  if (value === "artisanonly") {
     return productsButtons3(
-      `Welcome ${name}, kindly click the button below to select your service`,
+      `Welcome ${name}, kindly click the button below to start your application`,
+      [
+        {
+          type: "customer-request-form",
+          reply: { id: `${2}`, title: "Request Service Provider(Customer)" },
+        },
+      ]
+    );
+  } else if (value === "customeronly") {
+    return productsButtons3(
+      `Welcome ${name}, kindly click one of the button below to start your application process`,
+      [
+        {
+          type: "artisan-registration-form",
+          reply: { id: `${1}`, title: "Request Service Provider(Artisan)" },
+        },
+        {
+          type: "reply",
+          reply: {
+            id: "existcustomer",
+            title: "Request Service Provider(Customer)",
+          },
+        },
+      ]
+    );
+  } else if (value === "artisanandcustomer") {
+    return productsButtons3(
+      `Welcome ${name}, kindly click the button below to start your application`,
       [
         {
           type: "reply",
-          reply: { id: `${2}`, title: "Request Service Provider(Customer)" },
+          reply: {
+            id: "existcustomer",
+            title: "Request Service Provider(Customer)",
+          },
         },
       ]
     );
   } else {
     return productsButtons3(
-      `Welcome ${name}, kindly click the button below to select your service`,
+      `Welcome to the registration of wesabi. we would like to ask you some questions. \n kindly click one of the button below to start your application process`,
       [
         {
-          type: "reply",
-          reply: { id: `${1}`, title: "Request Service Provider(Artisan)" },
+          type: "artisan-registration-form",
+          reply: { id: "artisan", title: "Request Service Provider(Artisan)" },
         },
         {
-          type: "reply",
-          reply: { id: `${2}`, title: "Request Service Provider(Customer)" },
+          type: "customer-request-form",
+          reply: {
+            id: "customer",
+            title: "Request Service Provider(Customer)",
+          },
         },
       ]
     );
