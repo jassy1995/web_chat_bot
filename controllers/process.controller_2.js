@@ -327,7 +327,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         "Congrats, your registration has been completed",
         payload.user.id
       );
-    } else if (payload.type === "customer-request-form" && stage.step === 1) {
+    } else if (payload.type === "customer-request-form" && stage.step === 2) {
       payload.data["menu"] = "Request Service Provider(Customer)";
       payload.data["step"] = 3;
       await update(payload.data, {
