@@ -68,7 +68,7 @@ exports.RegistrationProcess2 = async (req, res) => {
     const isArtisanExist = await getExistArtisan(payload.user.id);
     //========= START THE CHAT ===========
     if (payload.type === "text" && payload?.text?.toLowerCase() === "hi") {
-      if (isArtisanExist.full_name && !checkExistCustomer.full_name) {
+      if (isArtisanExist?.full_name && !checkExistCustomer?.full_name) {
         let ex1 = await welcomeReturningArtisanResponse(
           "artisanonly",
           isArtisanExist.full_name
@@ -79,10 +79,10 @@ exports.RegistrationProcess2 = async (req, res) => {
         await create({ user_id: payload.user.id, step: 1 });
 
         response = await sendResponse(ex1, payload.user.id);
-      } else if (!isArtisanExist.full_name && checkExistCustomer.full_name) {
+      } else if (!isArtisanExist?.full_name && checkExistCustomer?.full_name) {
         let ex1 = await welcomeReturningArtisanResponse(
           "customeronly",
-          checkExistCustomer.full_name
+          checkExistCustomer?.full_name
         );
         await destroy({
           where: { user_id: payload.user.id },
@@ -90,10 +90,10 @@ exports.RegistrationProcess2 = async (req, res) => {
         await create({ user_id: payload.user.id, step: 1 });
 
         response = await sendResponse(ex1, payload.user.id);
-      } else if (isArtisanExist.full_name && checkExistCustomer.full_name) {
+      } else if (isArtisanExist?.full_name && checkExistCustomer?.full_name) {
         let ex2 = await welcomeReturningArtisanResponse(
           "artisanandcustomer",
-          checkExistCustomer.full_name
+          checkExistCustomer?.full_name
         );
         await destroy({
           where: { user_id: payload.user.id },
@@ -113,7 +113,7 @@ exports.RegistrationProcess2 = async (req, res) => {
     }
     //================ RESTART THE CHAT==================
     else if (payload.text?.toLowerCase() === "restart") {
-      if (isArtisanExist.full_name && !checkExistCustomer.full_name) {
+      if (isArtisanExist?.full_name && !checkExistCustomer?.full_name) {
         let ex1 = await welcomeReturningArtisanResponse(
           "artisanonly",
           isArtisanExist.full_name
@@ -124,10 +124,10 @@ exports.RegistrationProcess2 = async (req, res) => {
         await create({ user_id: payload.user.id, step: 1 });
 
         response = await sendResponse(ex1, payload.user.id);
-      } else if (!isArtisanExist.full_name && checkExistCustomer.full_name) {
+      } else if (!isArtisanExist?.full_name && checkExistCustomer?.full_name) {
         let ex1 = await welcomeReturningArtisanResponse(
           "customeronly",
-          checkExistCustomer.full_name
+          checkExistCustomer?.full_name
         );
         await destroy({
           where: { user_id: payload.user.id },
@@ -135,10 +135,10 @@ exports.RegistrationProcess2 = async (req, res) => {
         await create({ user_id: payload.user.id, step: 1 });
 
         response = await sendResponse(ex1, payload.user.id);
-      } else if (isArtisanExist.full_name && checkExistCustomer.full_name) {
+      } else if (isArtisanExist?.full_name && checkExistCustomer?.full_name) {
         let ex2 = await welcomeReturningArtisanResponse(
           "artisanandcustomer",
-          checkExistCustomer.full_name
+          checkExistCustomer?.full_name
         );
         await destroy({
           where: { user_id: payload.user.id },
