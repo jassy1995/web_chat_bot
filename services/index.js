@@ -388,15 +388,15 @@ const getListOfArtisan = async (
   createdAt
 ) => {
   // return await axios.post("https://kuda-mock.herokuapp.com/artisans");
-  console.log(service);
-  console.log(description);
-  console.log(state);
-  console.log(lga);
-  console.log(address);
-  console.log(email);
-  console.log(mobile);
-  console.log(full_name);
-  console.log(createdAt);
+  console.log(typeof service);
+  console.log(typeof task_description);
+  console.log(typeof state);
+  console.log(typeof lga);
+  console.log(typeof address);
+  console.log(typeof email);
+  console.log(typeof mobile);
+  console.log(typeof full_name);
+  console.log(typeof createdAt);
   let data = JSON.stringify({
     user: "0",
     category: service,

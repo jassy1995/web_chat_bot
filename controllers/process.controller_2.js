@@ -424,15 +424,15 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
         }
       );
-      // console.log(stage?.service);
-      // console.log(stage?.task_description);
-      // console.log(stage?.state);
-      // console.log(stage?.lga);
-      // console.log(stage?.address);
-      // console.log(stage?.email);
-      // console.log(payload.user.id);
-      // console.log(stage?.full_name);
-      // console.log(stage?.createdAt);
+      console.log(typeof stage?.service);
+      console.log(typeof stage?.task_description);
+      console.log(typeof stage?.state);
+      console.log(typeof stage?.lga);
+      console.log(typeof stage?.address);
+      console.log(typeof stage?.email);
+      console.log(typeof payload.user.id);
+      console.log(typeof stage?.full_name);
+      console.log(typeof stage?.createdAt);
 
       let { booking_id, artisanList, artisanArray } = await artisanResponse(
         stage?.service,
