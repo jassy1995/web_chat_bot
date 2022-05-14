@@ -388,6 +388,7 @@ const getListOfArtisan = async (
   createdAt
 ) => {
   // return await axios.post("https://kuda-mock.herokuapp.com/artisans");
+  console.log("====inside====");
   console.log(typeof service);
   console.log(typeof task_description);
   console.log(typeof state);

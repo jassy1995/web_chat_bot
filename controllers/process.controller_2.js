@@ -424,6 +424,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
         }
       );
+      console.log("====process====");
       console.log(typeof stage?.service);
       console.log(typeof stage?.task_description);
       console.log(typeof stage?.state);
