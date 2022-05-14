@@ -21,9 +21,10 @@ class MyQuery {
 
   getExistCustomer = async (id) => {
     try {
-      return await CustomerComplete.findOne({
+      const customers = await CustomerComplete.findAll({
         where: { user_id: id },
       });
+      return customers[customers.length - 1];
     } catch (error) {
       console.log(error);
     }
