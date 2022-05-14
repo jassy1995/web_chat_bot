@@ -388,16 +388,6 @@ const getListOfArtisan = async (
   createdAt
 ) => {
   // return await axios.post("https://kuda-mock.herokuapp.com/artisans");
-  console.log("====inside====");
-  console.log(typeof service);
-  console.log(typeof task_description);
-  console.log(typeof state);
-  console.log(typeof lga);
-  console.log(typeof address);
-  console.log(typeof email);
-  console.log(typeof mobile);
-  console.log(typeof full_name);
-  console.log(typeof createdAt);
   let data = JSON.stringify({
     user: "0",
     category: service,
@@ -451,7 +441,7 @@ const getListOfArtisan = async (
     // }
     return { data: response.data.data.artisans, id: response.data.data.id };
   } catch (error) {
-    console.log(error);
+    console.log(error?.message ? error.message : error);
   }
 };
 
@@ -472,6 +462,7 @@ const sendResponse = async (message, phone) => {
     return result.data;
   } catch (e) {
     console.log(e?.response?.body ?? e);
+    // console.log(e?.response?e.message);
   }
 };
 

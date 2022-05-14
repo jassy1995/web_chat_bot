@@ -58,12 +58,12 @@ exports.RegistrationProcess2 = async (req, res) => {
 
   try {
     const stage = await currentStage(payload.user.id);
-    const { data: service } = await getServices();
-    let { data } = await getStates();
-    const states = data.reverse();
-    const artisanOne = await getArtisanOne(payload.user.id);
-    const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
-    const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
+    // const { data: service } = await getServices();
+    // let { data } = await getStates();
+    // const states = data.reverse();
+    // const artisanOne = await getArtisanOne(payload.user.id);
+    // const acct_value = await AccountDetail(stage?.full_name, payload.user.id);
+    // const nextV = await AccountDetail(artisanOne?.full_name, payload.user.id);
     const checkExistCustomer = await getExistCustomer(payload.user.id);
     const isArtisanExist = await getExistArtisan(payload.user.id);
     //========= START THE CHAT ===========
@@ -156,59 +156,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         response = await sendResponse(ex2, payload.user.id);
       }
     }
-    //================== MENU OPTIONS ======================
-    // else if (payload.type === "artisan-registration-form" && stage?.step === 1) {
-    //   await update(
-    //     {
-    //       menu: otherResponse.initService[Number(payload.text) - 1],
-    //       step: 2,
-    //     },
-    //     {
-    //       where: {
-    //         user_id: payload.user.id,
-    //       },
-    //     }
-    //   );
-
-    //   if (
-    //     otherResponse.initService[Number(payload.text) - 1] ===
-    //     "Render Service (Artisan)"
-    //   ) {
-    //     let va = await registrationFormResponse(
-    //       "To start registration, please click the button below",
-    //       "artisan-registration-form"
-    //     );
-
-    //     response = await sendResponse(va, payload.user.id);
-    //   } else {
-    //     if (checkExistCustomer) {
-    //       const summary = `Name: *${checkExistCustomer?.full_name}* \n Service: *${checkExistCustomer?.service}* \n State: *${checkExistCustomer?.state}* \n LGA: *${checkExistCustomer?.lga}* \n Address: *${checkExistCustomer?.address}* \n Email: *${checkExistCustomer?.email}* \n task_description: *${checkExistCustomer?.task_description}* \n \n`;
-
-    //       const header =
-    //         "Below is the summary of your previous information,\n \n would you like to change it ?";
-    //       const button = [
-    //         {
-    //           type: "artisan-edit-form",
-    //           reply: { id: "yes", title: "Yes" },
-    //         },
-    //         {
-    //           type: "reply",
-    //           reply: { id: "no", title: "No" },
-    //         },
-    //       ];
-    //       let re = productsButtons({ header, summary }, button);
-    //       response = await sendResponse(re, payload.user.id);
-    //     } else {
-    //       let va = await registrationFormResponse(
-    //         "To start your request process, please click the button below",
-    //         "customer-request-form"
-    //       );
-    //       response = await sendResponse(va, payload.user.id);
-    //     }
-    //   }
-    // }
     //=============== START ARTISAN REGISTRATION ===============
-    // else if (stage?.menu === "Render Service (Artisan)") {
     else if (
       (payload.type === "artisan-registration-form" ||
         payload.type === "artisan-edit-form") &&
@@ -270,33 +218,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       ];
       let re = productsButtons({ header, summary }, button);
       response = await sendResponse(re, payload.user.id);
-    }
-    // else if (payload.text?.toLowerCase() === "edit" && stage?.step === 5) {
-    //   await update(
-    //     { step: 2 },
-    //     {
-    //       where: {
-    //         user_id: payload.user.id,
-    //       },
-    //     }
-    //   );
-    //   let vf = await registrationFormResponse(
-    //     "Kindly click the button below to edit your previous information.",
-    //     "artisan-edit-form",
-    //     {
-    //       full_name: stage.full_name,
-    //       service: stage?.service,
-    //       state: stage?.state,
-    //       lga: stage?.lga,
-    //       address: stage?.address,
-    //       email: stage?.email,
-    //       gender: stage?.gender,
-    //       date_of_birth: stage?.date_of_birth,
-    //     }
-    //   );
-    //   response = await sendResponse(vf, payload.user.id);
-    // }
-    else if (payload.text?.toLowerCase() === "submit" && stage?.step === 4) {
+    } else if (payload.text?.toLowerCase() === "submit" && stage?.step === 4) {
       const toSave = {
         user_id: stage.user_id,
         full_name: stage?.full_name,
@@ -377,13 +299,6 @@ exports.RegistrationProcess2 = async (req, res) => {
       ];
       let re = productsButtons({ header, summary }, button);
       response = await sendResponse(re, payload.user.id);
-
-      // let va = await registrationFormResponse(
-      //   "Kindly click the button below to edit your previous information",
-      //   "customer-edit-form",
-      //   dataToSend
-      // );
-      // response = await sendResponse(va, payload.user.id);
     } else if (payload.text?.toLowerCase() === "no" && stage.step === 2) {
       const reSave = {
         full_name: checkExistCustomer.full_name,
@@ -403,6 +318,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       response = await sendResponse(otherResponse.location, payload.user.id);
     } else if (payload.type === "customer-edit-form" && stage?.step === 2) {
       payload.data["step"] = 3;
+      console.log(payload.data);
       await update(payload.data, {
         where: {
           user_id: payload.user.id,
@@ -417,24 +333,13 @@ exports.RegistrationProcess2 = async (req, res) => {
       };
 
       await update(
-        { location: JSON.stringify(location), step: 4 },
+        { location: JSON.stringify(location) },
         {
           where: {
             user_id: payload.user.id,
           },
         }
       );
-      console.log("====process====");
-      console.log(typeof stage?.service);
-      console.log(typeof stage?.task_description);
-      console.log(typeof stage?.state);
-      console.log(typeof stage?.lga);
-      console.log(typeof stage?.address);
-      console.log(typeof stage?.email);
-      console.log(typeof payload.user.id);
-      console.log(typeof stage?.full_name);
-      console.log(typeof stage?.createdAt);
-
       let { booking_id, artisanList, artisanArray } = await artisanResponse(
         stage?.service,
         stage?.task_description,
@@ -446,17 +351,53 @@ exports.RegistrationProcess2 = async (req, res) => {
         stage?.full_name,
         stage?.createdAt
       );
-      await update(
-        { artisanArray: JSON.stringify(artisanArray), editIndex: booking_id },
-        {
-          where: {
-            user_id: payload.user.id,
+      if (!artisanList) {
+        await update(
+          { step: 2 },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+
+        const header = `Sorry our service has not extended to *${stage?.state}* , kindly click the button below to change your state.`;
+        const summary = "we recommend you picking Lagos state";
+        const button = [
+          {
+            type: "customer-edit-form",
+            reply: { id: "yes", title: "Change State" },
+            data: {
+              full_name: stage.full_name,
+              service: stage.service,
+              state: stage.state,
+              lga: stage.lga,
+              email: stage.email,
+              address: stage.address,
+              task_description: stage.task_description,
+            },
           },
-        }
-      );
-      response = await sendResponse(artisanList, payload.user.id);
+        ];
+        let re = productsButtons({ header, summary }, button);
+        response = await sendResponse(re, payload.user.id);
+      } else {
+        await update(
+          {
+            artisanArray: JSON.stringify(artisanArray),
+            editIndex: booking_id,
+            step: 4,
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+        console.log(payload.user.id);
+        response = await sendResponse(artisanList, payload.user.id);
+      }
     } else if (
-      stage.step === 4 &&
+      stage?.step === 4 &&
       Number(payload.text) <= JSON.parse(stage.artisanArray)?.length
     ) {
       const getAgain = await currentStage(payload.user.id);
