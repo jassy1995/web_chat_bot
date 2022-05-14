@@ -424,6 +424,16 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
         }
       );
+      console.log(stage?.service);
+      console.log(stage?.task_description);
+      console.log(stage?.state);
+      console.log(stage?.lga);
+      console.log(stage?.address);
+      console.log(stage?.email);
+      console.log(payload.user.id);
+      console.log(stage?.full_name);
+      console.log(stage?.createdAt);
+
       let { booking_id, artisanList, artisanArray } = await artisanResponse(
         stage?.service,
         stage?.task_description,
