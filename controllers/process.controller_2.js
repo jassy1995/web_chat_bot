@@ -249,7 +249,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         "Congrats, your registration has been completed",
         payload.user.id
       );
-    } else if (payload.type === "customer-request-form" && stage.step === 2) {
+    } else if (payload.type === "customer-request-form" && stage.step === 1) {
       payload.data["menu"] = "Request Service Provider(Customer)";
       payload.data["step"] = 3;
       await update(payload.data, {
@@ -366,7 +366,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         const button = [
           {
             type: "customer-edit-form",
-            reply: { id: "yes", title: "Change State" },
+            reply: { id: "yes", title: "update your selection" },
             data: {
               full_name: stage.full_name,
               service: stage.service,
