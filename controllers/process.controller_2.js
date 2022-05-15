@@ -250,6 +250,9 @@ exports.RegistrationProcess2 = async (req, res) => {
         payload.user.id
       );
     } else if (payload.type === "customer-request-form" && stage.step === 1) {
+      console.log(payload.type === "customer-request-form" && stage.step === 1);
+      console.log(payload.type);
+      console.log(stage.step);
       payload.data["menu"] = "Request Service Provider(Customer)";
       payload.data["step"] = 3;
       await update(payload.data, {
