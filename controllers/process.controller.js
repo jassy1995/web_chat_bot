@@ -940,6 +940,13 @@ exports.RegistrationProcess = async (req, res) => {
         Number(payload.text) > 0 &&
         Number(payload.text) <= JSON.parse(stage.local_government).length
       ) {
+        // console.log(
+        //   JSON.parse(stage.local_government)[Number(payload.text) - 1].name
+        // );
+        // console.log(
+        //   typeof JSON.parse(stage.local_government)[Number(payload.text) - 1]
+        //     .name
+        // );
         await update(
           {
             lga: JSON.parse(stage.local_government)[Number(payload.text) - 1]

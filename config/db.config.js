@@ -3,10 +3,10 @@ const { NODE_ENV, DB_USER, DB_HOST, DB_PASSWORD, DB } = process.env;
 const prod = NODE_ENV === "production";
 
 const dbConfig = {
-  HOST: DB_HOST,
-  USER: DB_USER,
-  PASSWORD: DB_PASSWORD,
-  DB: DB,
+  HOST: "localhost",
+  USER: "root",
+  PASSWORD: "babatunde85",
+  DB: "web_hook_db",
   dialect: "mysql",
 
   // Production Mode
