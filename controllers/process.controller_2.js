@@ -319,7 +319,10 @@ exports.RegistrationProcess2 = async (req, res) => {
         },
       });
       response = await sendResponse(otherResponse.location, payload.user.id);
-    } else if (payload.type === "customer-edit-form" && stage?.step === 2) {
+    } else if (
+      payload.type === "customer-edit-form" &&
+      (stage?.step === 2 || stage.step === 4)
+    ) {
       payload.data["step"] = 3;
       console.log(payload.data);
       await update(payload.data, {
@@ -336,93 +339,123 @@ exports.RegistrationProcess2 = async (req, res) => {
       };
 
       await update(
-        { location: JSON.stringify(location) },
+        { location: JSON.stringify(location), step: 4 },
         {
           where: {
             user_id: payload.user.id,
           },
         }
       );
-      let { booking_id, artisanList, artisanArray } = await artisanResponse(
-        stage?.service,
-        stage?.task_description,
-        stage?.state,
-        stage?.lga,
-        stage?.address,
-        stage?.email,
-        payload.user.id,
-        stage?.full_name,
-        stage?.createdAt
-      );
-      if (!artisanList) {
-        await update(
-          { step: 2 },
-          {
-            where: {
-              user_id: payload.user.id,
-            },
-          }
-        );
+      const summary = `Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n LGA: *${stage?.lga}* \n Address: *${stage?.address}* \n Email: *${stage?.email}* \n task_description: *${stage?.task_description}* \n \n`;
 
-        const header = `Sorry our service has not extended to *${stage?.state}* , kindly click the button below to change your state.`;
-        const summary = "we recommend you picking Lagos state";
-        const button = [
-          {
-            type: "customer-edit-form",
-            reply: { id: "yes", title: "update your selection" },
-            data: {
-              full_name: stage.full_name,
-              service: stage.service,
-              state: stage.state,
-              lga: stage.lga,
-              email: stage.email,
-              address: stage.address,
-              task_description: stage.task_description,
-            },
-          },
-        ];
-        let re = productsButtons({ header, summary }, button);
-        response = await sendResponse(re, payload.user.id);
-      } else {
-        await update(
-          {
-            artisanArray: JSON.stringify(artisanArray),
-            editIndex: booking_id,
-            step: 4,
-          },
-          {
-            where: {
-              user_id: payload.user.id,
-            },
-          }
-        );
-        console.log(payload.user.id);
-        response = await sendResponse(artisanList, payload.user.id);
-      }
-    } else if (
-      stage?.step === 4 &&
-      Number(payload.text) <= JSON.parse(stage.artisanArray)?.length
-    ) {
-      const getAgain = await currentStage(payload.user.id);
-      await update(
+      const header = "Below is the summary of your application";
+      const dataToSend = {
+        full_name: stage.full_name,
+        service: stage.service,
+        state: stage.state,
+        lga: stage.lga,
+        email: stage.email,
+        address: stage.address,
+        task_description: stage.task_description,
+      };
+      const button = [
         {
-          artisanIndex: payload.text,
-          step: 5,
+          type: "customer-edit-form",
+          reply: { id: "edit", title: "Edit" },
+          data: dataToSend,
         },
         {
-          where: {
-            user_id: payload.user.id,
-          },
-        }
-      );
-      let art = await artisanInfoResponse(
-        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].firstname,
-        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].lastname,
-        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email,
-        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
-      );
-      response = await sendResponse(art, payload.user.id);
-    } else if (stage.step == 5 && payload.text.toString() == "1") {
+          type: "reply",
+          reply: { id: "save", title: "Save" },
+        },
+      ];
+      let re = productsButtons({ header, summary }, button);
+      response = await sendResponse(re, payload.user.id);
+      // let { booking_id, artisanList, artisanArray } = await artisanResponse(
+      //   stage?.service,
+      //   stage?.task_description,
+      //   stage?.state,
+      //   stage?.lga,
+      //   stage?.address,
+      //   stage?.email,
+      //   payload.user.id,
+      //   stage?.full_name,
+      //   stage?.createdAt
+      // );
+      // if (!artisanList) {
+      //   await update(
+      //     { step: 2 },
+      //     {
+      //       where: {
+      //         user_id: payload.user.id,
+      //       },
+      //     }
+      //   );
+
+      //   const header = `Sorry our service has not extended to *${stage?.state}* , kindly click the button below to change your state.`;
+      //   const summary = "we recommend you picking Lagos state";
+      //   const button = [
+      //     {
+      //       type: "customer-edit-form",
+      //       reply: { id: "yes", title: "update your selection" },
+      //       data: {
+      //         full_name: stage.full_name,
+      //         service: stage.service,
+      //         state: stage.state,
+      //         lga: stage.lga,
+      //         email: stage.email,
+      //         address: stage.address,
+      //         task_description: stage.task_description,
+      //       },
+      //     },
+      //   ];
+      //   let re = productsButtons({ header, summary }, button);
+      //   response = await sendResponse(re, payload.user.id);
+      // }
+
+      // else {
+      //   await update(
+      //     {
+      //       artisanArray: JSON.stringify(artisanArray),
+      //       editIndex: booking_id,
+      //       step: 4,
+      //     },
+      //     {
+      //       where: {
+      //         user_id: payload.user.id,
+      //       },
+      //     }
+      //   );
+      //   console.log(payload.user.id);
+      //   response = await sendResponse(artisanList, payload.user.id);
+      // }
+    }
+
+    // else if (
+    //   stage?.step === 4 &&
+    //   Number(payload.text) <= JSON.parse(stage.artisanArray)?.length
+    // ) {
+    //   const getAgain = await currentStage(payload.user.id);
+    //   await update(
+    //     {
+    //       artisanIndex: payload.text,
+    //       step: 5,
+    //     },
+    //     {
+    //       where: {
+    //         user_id: payload.user.id,
+    //       },
+    //     }
+    //   );
+    //   let art = await artisanInfoResponse(
+    //     JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].firstname,
+    //     JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].lastname,
+    //     JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email,
+    //     JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
+    //   );
+    //   response = await sendResponse(art, payload.user.id);
+    // }
+    else if (stage.step == 4 && payload.text?.toLowerCase() == "save") {
       await update(
         {
           artisan: JSON.stringify(
@@ -446,9 +479,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         email: stage.email,
         location: stage.location,
         task_description: stage.task_description,
-        artisan: JSON.stringify(
-          JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
-        ),
+        artisan: "pending",
       };
 
       await saveCustomerRequest(requestToSave);
@@ -463,31 +494,36 @@ exports.RegistrationProcess2 = async (req, res) => {
           payload.user.id
         );
 
-      await updateCustomerToLive(
-        JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
-        stage.editIndex
-      );
+      // await updateCustomerToLive(
+      //   JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
+      //   stage.editIndex
+      // );
+
+      await updateCustomerToLive(45, stage?.editIndex || 48);
 
       response = await sendResponse(
         "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible ",
         payload.user.id
       );
-    } else if (stage.step === 5 && payload.text.toString() === "2") {
-      await update(
-        { step: 4 },
-        {
-          where: {
-            user_id: payload.user.id,
-          },
-        }
-      );
+    }
 
-      let jet = `${JSON.parse(stage.artisanArray).map(
-        (entity, index) => `\n *[${index + 1}]* ${entity.firstname}`
-      )}`;
-      let js = `${otherResponse.artisan} \n${jet}`;
-      response = await sendResponse(js, payload.user.id);
-    } else {
+    // else if (stage.step === 5 && payload.text.toString() === "2") {
+    //   await update(
+    //     { step: 4 },
+    //     {
+    //       where: {
+    //         user_id: payload.user.id,
+    //       },
+    //     }
+    //   );
+
+    //   let jet = `${JSON.parse(stage.artisanArray).map(
+    //     (entity, index) => `\n *[${index + 1}]* ${entity.firstname}`
+    //   )}`;
+    //   let js = `${otherResponse.artisan} \n${jet}`;
+    //   response = await sendResponse(js, payload.user.id);
+    // }
+    else {
       let sg =
         "Invalid input...,please check and retry or enter *restart* to start all over";
       response = await sendResponse(sg, payload.user.id);
