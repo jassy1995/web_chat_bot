@@ -456,18 +456,41 @@ exports.RegistrationProcess2 = async (req, res) => {
     //   response = await sendResponse(art, payload.user.id);
     // }
     else if (stage.step == 4 && payload.text?.toLowerCase() == "save") {
-      // await update(
-      //   {
-      //     artisan: JSON.stringify(
-      //       JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
-      //     ),
-      //   },
-      //   {
-      //     where: {
-      //       user_id: payload.user.id,
-      //     },
-      //   }
-      // );
+      let { booking_id, artisanList, artisanArray } = await artisanResponse(
+        stage?.service,
+        stage?.task_description,
+        stage?.state,
+        stage?.lga,
+        stage?.address,
+        stage?.email,
+        payload.user.id,
+        stage?.full_name,
+        stage?.createdAt
+      );
+      if (artisanList) {
+        await update(
+          {
+            artisan: artisanLis[0],
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+      }
+      if (!artisanList) {
+        await update(
+          {
+            artisan: "none",
+          },
+          {
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+      }
 
       const requestToSave = {
         user_id: stage.user_id,
@@ -479,7 +502,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         email: stage.email,
         location: stage.location,
         task_description: stage.task_description,
-        artisan: "pending",
+        artisan: artisanList ? JSON.stringify(artisanList[0]) : "none",
       };
 
       await saveCustomerRequest(requestToSave);
@@ -494,12 +517,9 @@ exports.RegistrationProcess2 = async (req, res) => {
           payload.user.id
         );
 
-      // await updateCustomerToLive(
-      //   JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
-      //   stage.editIndex
-      // );
+      await updateCustomerToLive(artisanList[0]?.id || 1, booking_id || 197);
 
-      await updateCustomerToLive(45, stage?.editIndex || 48);
+      // await updateCustomerToLive(45, stage?.editIndex || 48);
 
       response = await sendResponse(
         "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible ",
