@@ -467,7 +467,9 @@ exports.RegistrationProcess2 = async (req, res) => {
         stage?.full_name,
         stage?.createdAt
       );
+      let artisanId = 1;
       if (artisanList) {
+        artisanId = artisanLis[0].id;
         await update(
           {
             artisan: artisanLis[0],
@@ -517,7 +519,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           payload.user.id
         );
 
-      await updateCustomerToLive(artisanList[0]?.id || 1, booking_id || 197);
+      await updateCustomerToLive(artisanId, booking_id || 197);
 
       // await updateCustomerToLive(45, stage?.editIndex || 48);
 
