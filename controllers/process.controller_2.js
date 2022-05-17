@@ -319,10 +319,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         },
       });
       response = await sendResponse(otherResponse.location, payload.user.id);
-    } else if (
-      payload.type === "customer-edit-form" &&
-      (stage?.step === 2 || stage.step === 4)
-    ) {
+    } else if (payload.type === "customer-edit-form" && stage?.step === 2) {
       payload.data["step"] = 3;
       console.log(payload.data);
       await update(payload.data, {
@@ -339,123 +336,13 @@ exports.RegistrationProcess2 = async (req, res) => {
       };
 
       await update(
-        { location: JSON.stringify(location), step: 4 },
+        { location: JSON.stringify(location) },
         {
           where: {
             user_id: payload.user.id,
           },
         }
       );
-      const summary = `Name: *${stage?.full_name}* \n Service: *${stage?.service}* \n State: *${stage?.state}* \n LGA: *${stage?.lga}* \n Address: *${stage?.address}* \n Email: *${stage?.email}* \n task_description: *${stage?.task_description}* \n \n`;
-
-      const header = "Below is the summary of your application";
-      const dataToSend = {
-        full_name: stage.full_name,
-        service: stage.service,
-        state: stage.state,
-        lga: stage.lga,
-        email: stage.email,
-        address: stage.address,
-        task_description: stage.task_description,
-      };
-      const button = [
-        {
-          type: "customer-edit-form",
-          reply: { id: "edit", title: "Edit" },
-          data: dataToSend,
-        },
-        {
-          type: "reply",
-          reply: { id: "save", title: "Save" },
-        },
-      ];
-      let re = productsButtons({ header, summary }, button);
-      response = await sendResponse(re, payload.user.id);
-      // let { booking_id, artisanList, artisanArray } = await artisanResponse(
-      //   stage?.service,
-      //   stage?.task_description,
-      //   stage?.state,
-      //   stage?.lga,
-      //   stage?.address,
-      //   stage?.email,
-      //   payload.user.id,
-      //   stage?.full_name,
-      //   stage?.createdAt
-      // );
-      // if (!artisanList) {
-      //   await update(
-      //     { step: 2 },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-
-      //   const header = `Sorry our service has not extended to *${stage?.state}* , kindly click the button below to change your state.`;
-      //   const summary = "we recommend you picking Lagos state";
-      //   const button = [
-      //     {
-      //       type: "customer-edit-form",
-      //       reply: { id: "yes", title: "update your selection" },
-      //       data: {
-      //         full_name: stage.full_name,
-      //         service: stage.service,
-      //         state: stage.state,
-      //         lga: stage.lga,
-      //         email: stage.email,
-      //         address: stage.address,
-      //         task_description: stage.task_description,
-      //       },
-      //     },
-      //   ];
-      //   let re = productsButtons({ header, summary }, button);
-      //   response = await sendResponse(re, payload.user.id);
-      // }
-
-      // else {
-      //   await update(
-      //     {
-      //       artisanArray: JSON.stringify(artisanArray),
-      //       editIndex: booking_id,
-      //       step: 4,
-      //     },
-      //     {
-      //       where: {
-      //         user_id: payload.user.id,
-      //       },
-      //     }
-      //   );
-      //   console.log(payload.user.id);
-      //   response = await sendResponse(artisanList, payload.user.id);
-      // }
-    }
-
-    // else if (
-    //   stage?.step === 4 &&
-    //   Number(payload.text) <= JSON.parse(stage.artisanArray)?.length
-    // ) {
-    //   const getAgain = await currentStage(payload.user.id);
-    //   await update(
-    //     {
-    //       artisanIndex: payload.text,
-    //       step: 5,
-    //     },
-    //     {
-    //       where: {
-    //         user_id: payload.user.id,
-    //       },
-    //     }
-    //   );
-    //   let art = await artisanInfoResponse(
-    //     JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].firstname,
-    //     JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].lastname,
-    //     JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email,
-    //     JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
-    //   );
-    //   response = await sendResponse(art, payload.user.id);
-    // }
-    else if (stage.step == 4 && payload.text?.toLowerCase() == "save") {
       let { booking_id, artisanList, artisanArray } = await artisanResponse(
         stage?.service,
         stage?.task_description,
@@ -467,24 +354,41 @@ exports.RegistrationProcess2 = async (req, res) => {
         stage?.full_name,
         stage?.createdAt
       );
-      let artisanId = 1;
-      if (artisanList) {
-        artisanId = artisanLis[0].id;
-        await update(
-          {
-            artisan: artisanLis[0],
-          },
-          {
-            where: {
-              user_id: payload.user.id,
-            },
-          }
-        );
-      }
       if (!artisanList) {
         await update(
+          { step: 2 },
           {
-            artisan: "none",
+            where: {
+              user_id: payload.user.id,
+            },
+          }
+        );
+
+        const header = `Sorry our service has not extended to *${stage?.state}* , kindly click the button below to change your state.`;
+        const summary = "we recommend you picking Lagos state";
+        const button = [
+          {
+            type: "customer-edit-form",
+            reply: { id: "yes", title: "update your selection" },
+            data: {
+              full_name: stage.full_name,
+              service: stage.service,
+              state: stage.state,
+              lga: stage.lga,
+              email: stage.email,
+              address: stage.address,
+              task_description: stage.task_description,
+            },
+          },
+        ];
+        let re = productsButtons({ header, summary }, button);
+        response = await sendResponse(re, payload.user.id);
+      } else {
+        await update(
+          {
+            artisanArray: JSON.stringify(artisanArray),
+            editIndex: booking_id,
+            step: 4,
           },
           {
             where: {
@@ -492,7 +396,45 @@ exports.RegistrationProcess2 = async (req, res) => {
             },
           }
         );
+        console.log(payload.user.id);
+        response = await sendResponse(artisanList, payload.user.id);
       }
+    } else if (
+      stage?.step === 4 &&
+      Number(payload.text) <= JSON.parse(stage.artisanArray)?.length
+    ) {
+      const getAgain = await currentStage(payload.user.id);
+      await update(
+        {
+          artisanIndex: payload.text,
+          step: 5,
+        },
+        {
+          where: {
+            user_id: payload.user.id,
+          },
+        }
+      );
+      let art = await artisanInfoResponse(
+        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].firstname,
+        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].lastname,
+        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email
+        // JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
+      );
+      response = await sendResponse(art, payload.user.id);
+    } else if (stage.step == 5 && payload.text.toString() == "1") {
+      await update(
+        {
+          artisan: JSON.stringify(
+            JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
+          ),
+        },
+        {
+          where: {
+            user_id: payload.user.id,
+          },
+        }
+      );
 
       const requestToSave = {
         user_id: stage.user_id,
@@ -504,7 +446,9 @@ exports.RegistrationProcess2 = async (req, res) => {
         email: stage.email,
         location: stage.location,
         task_description: stage.task_description,
-        artisan: artisanList ? JSON.stringify(artisanList[0]) : "none",
+        artisan: JSON.stringify(
+          JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
+        ),
       };
 
       await saveCustomerRequest(requestToSave);
@@ -519,33 +463,31 @@ exports.RegistrationProcess2 = async (req, res) => {
           payload.user.id
         );
 
-      await updateCustomerToLive(artisanId, booking_id || 197);
-
-      // await updateCustomerToLive(45, stage?.editIndex || 48);
+      await updateCustomerToLive(
+        JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
+        stage.editIndex
+      );
 
       response = await sendResponse(
         "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible ",
         payload.user.id
       );
-    }
+    } else if (stage.step === 5 && payload.text.toString() === "2") {
+      await update(
+        { step: 4 },
+        {
+          where: {
+            user_id: payload.user.id,
+          },
+        }
+      );
 
-    // else if (stage.step === 5 && payload.text.toString() === "2") {
-    //   await update(
-    //     { step: 4 },
-    //     {
-    //       where: {
-    //         user_id: payload.user.id,
-    //       },
-    //     }
-    //   );
-
-    //   let jet = `${JSON.parse(stage.artisanArray).map(
-    //     (entity, index) => `\n *[${index + 1}]* ${entity.firstname}`
-    //   )}`;
-    //   let js = `${otherResponse.artisan} \n${jet}`;
-    //   response = await sendResponse(js, payload.user.id);
-    // }
-    else {
+      let jet = `${JSON.parse(stage.artisanArray).map(
+        (entity, index) => `\n *[${index + 1}]* ${entity.firstname}`
+      )}`;
+      let js = `${otherResponse.artisan} \n${jet}`;
+      response = await sendResponse(js, payload.user.id);
+    } else {
       let sg =
         "Invalid input...,please check and retry or enter *restart* to start all over";
       response = await sendResponse(sg, payload.user.id);
