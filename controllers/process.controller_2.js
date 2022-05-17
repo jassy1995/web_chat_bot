@@ -456,18 +456,18 @@ exports.RegistrationProcess2 = async (req, res) => {
     //   response = await sendResponse(art, payload.user.id);
     // }
     else if (stage.step == 4 && payload.text?.toLowerCase() == "save") {
-      await update(
-        {
-          artisan: JSON.stringify(
-            JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
-          ),
-        },
-        {
-          where: {
-            user_id: payload.user.id,
-          },
-        }
-      );
+      // await update(
+      //   {
+      //     artisan: JSON.stringify(
+      //       JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
+      //     ),
+      //   },
+      //   {
+      //     where: {
+      //       user_id: payload.user.id,
+      //     },
+      //   }
+      // );
 
       const requestToSave = {
         user_id: stage.user_id,
