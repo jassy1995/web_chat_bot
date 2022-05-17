@@ -435,14 +435,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
         }
       );
-      console.log(
-        JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
-      );
-      console.log(
-        JSON.stringify(
-          JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]
-        )
-      );
+
       const requestToSave = {
         user_id: stage.user_id,
         full_name: stage.full_name,
