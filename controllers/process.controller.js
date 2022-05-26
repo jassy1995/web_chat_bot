@@ -1046,7 +1046,8 @@ exports.RegistrationProcess = async (req, res) => {
           JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].firstname,
           JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].lastname,
           JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email,
-          JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
+          "not available"
+          // JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
         );
         response = await sendResponse(art, payload.user.id);
       } else if (
@@ -1117,7 +1118,7 @@ exports.RegistrationProcess = async (req, res) => {
         );
 
         response = await sendResponse(
-          "Congrats,your request has been received",
+          "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible",
           payload.user.id
         );
       } else if (
