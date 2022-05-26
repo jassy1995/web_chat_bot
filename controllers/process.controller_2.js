@@ -418,7 +418,8 @@ exports.RegistrationProcess2 = async (req, res) => {
       let art = await artisanInfoResponse(
         JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].firstname,
         JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].lastname,
-        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email
+        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email,
+        "not available"
         // JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
       );
       response = await sendResponse(art, payload.user.id);
