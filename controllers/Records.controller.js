@@ -1,10 +1,45 @@
 const { ArtisanComplete, CustomerComplete } = require("../models");
+const PAGE_SIZE = 20;
 
-exports.getRecords = async (req, res) => {
+exports.getArtisanRecords = async (req, res) => {
   try {
-    const artisans = await ArtisanComplete.findAll();
-    const customer_request = await CustomerComplete.findAll();
-    return res.json({ artisans, customer_request });
+    const { query } = req;
+    const page = query.page || 1;
+    const pageSize = query.pageSize || PAGE_SIZE;
+    const countArtisan = await ArtisanComplete.count();
+    const artisans = await ArtisanComplete.findAll({
+      order: [["createdAt", "DESC"]],
+      offset: pageSize * (page - 1),
+      limit: pageSize,
+    });
+    return res.send({
+      artisans,
+      total_artisan: countArtisan,
+      page,
+      pages: Math.ceil(countArtisan / pageSize),
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "error occur", error });
+  }
+};
+
+exports.getCustomerRecords = async (req, res) => {
+  try {
+    const { query } = req;
+    const page = query.page || 1;
+    const pageSize = query.pageSize || PAGE_SIZE;
+    const countCustomer = await CustomerComplete.count();
+    const customers = await CustomerComplete.findAll({
+      order: [["createdAt", "DESC"]],
+      offset: pageSize * (page - 1),
+      limit: pageSize,
+    });
+    return res.send({
+      customers,
+      total_customer: countCustomer,
+      page,
+      pages: Math.ceil(countCustomer / pageSize),
+    });
   } catch (error) {
     return res.status(500).json({ message: "error occur", error });
   }
