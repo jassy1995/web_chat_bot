@@ -27,7 +27,7 @@ exports.getCustomerRecords = async (req, res) => {
     const countCustomer = await CustomerComplete.count();
     const customers = await CustomerComplete.findAll({
       order: [["createdAt", "DESC"]],
-      offset: req.params.start,
+      offset: +req.params.start,
       limit: PAGE_SIZE,
     });
     if (customers.length === 0) end = true;
