@@ -7,7 +7,7 @@ exports.getArtisanRecords = async (req, res) => {
     const total_count = await ArtisanComplete.count();
     const artisans = await ArtisanComplete.findAll({
       order: [["createdAt", "DESC"]],
-      offset: req.params.start,
+      offset: +req.params.start,
       limit: PAGE_SIZE,
     });
     if (artisans.length === 0) end = true;
