@@ -262,19 +262,12 @@ const smsCustomer = async (msg, phone) => {
 
 // const { Service, Stage } = require("../models");
 
-const updateCustomerToLive = async (artisan_id, booking_id) => {
-  console.log(booking_id);
-  console.log(artisan_id);
-  let data = JSON.stringify({ artisan: artisan_id });
+const updateCustomerToLive = async (artisan) => {
+  let data = JSON.stringify(artisan);
 
   let config = {
-    method: "put",
-    url: `https://api.wesabi.com/v3/bookings/${booking_id}`,
-    headers: {
-      Authorization:
-        "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
-      "Content-Type": "application/json",
-    },
+    method: "post",
+    url: `https://wesabi.com/api/bookings/generate_request`,
     data: data,
   };
   let response = await axios(config);
@@ -369,81 +362,57 @@ const getLga = async (state) =>
       `https://api.wesabi.com/v3/lgas/state/${state}/?key=039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561`
     )
   ).data;
-// (
-//   await axios.get(
-//     `https://mobile.creditclan.com/webapi/v1/states/${stateId}/lgas`,
-//     config
-//   )
-// ).data;
 
-const getListOfArtisan = async (
-  service,
-  description,
-  state,
-  lga,
-  address,
-  email,
-  mobile,
-  full_name,
-  createdAt
-) => {
-  // return await axios.post("https://kuda-mock.herokuapp.com/artisans");
+const getListOfArtisan = async (service) => {
   let data = JSON.stringify({
-    user: "0",
-    category: service,
-    description,
-    state,
-    lga,
-    location: address,
-    email,
-    mobile: mobile?.replace(/^(234)|^(\+234)/, "0"),
-    firstname: full_name?.split(" ")[0],
-    lastname: full_name?.split(" ")[1],
-    channel: "chatbot",
-    date: createdAt,
+    service: service,
   });
   let config = {
     method: "post",
-    url: "https://api.wesabi.com/v3/bookings",
-    headers: {
-      Authorization:
-        "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
-      "Content-Type": "application/json",
-    },
+    url: "https://wesabi.com/api/bookings/getArtisans",
     data: data,
   };
   try {
     let response = await axios(config);
-    // await update(
-    //   {
-    //     editIndex: response.data.data.id,
-    //     artisanArray: JSON.stringify(response.data.data.artisans),
-    //   },
-    //   {
-    //     where: {
-    //       user_id: mobile,
-    //     },
-    //   }
-    // );
-    // const checker = await Stage.findOne({ where: { user_id: mobile } });
-    // console.log(JSON.parse(checker.artisanArray).length === 0);
-    // if (JSON.parse(checker.artisanArray).length === 0) {
-    //   await update(
-    //     {
-    //       artisanArray: JSON.stringify(response.data.data.artisans),
-    //     },
-    //     {
-    //       where: {
-    //         user_id: mobile,
-    //       },
-    //     }
-    //   );
-    // }
-    return { data: response.data.data.artisans, id: response.data.data.id };
+
+    return { data: response.data.message };
   } catch (error) {
     console.log(error?.message ? error.message : error);
   }
 };
+// const getListOfArtisan = async (service) => {
+//   let data = JSON.stringify({
+//     user: "0",
+//     category: service,
+//     description,
+//     state,
+//     lga,
+//     location: address,
+//     email,
+//     mobile: mobile?.replace(/^(234)|^(\+234)/, "0"),
+//     firstname: full_name?.split(" ")[0],
+//     lastname: full_name?.split(" ")[1],
+//     channel: "chatbot",
+//     date: createdAt,
+//   });
+//   let config = {
+//     method: "post",
+//     url: "https://api.wesabi.com/v3/bookings",
+//     headers: {
+//       Authorization:
+//         "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
+//       "Content-Type": "application/json",
+//     },
+//     data: data,
+//   };
+//   try {
+//     let response = await axios(config);
+
+//     return { data: response.data.data.artisans, id: response.data.data.id };
+//   } catch (error) {
+//     console.log(error?.message ? error.message : error);
+//   }
+// };
 
 const sendResponse = async (message, phone) => {
   try {

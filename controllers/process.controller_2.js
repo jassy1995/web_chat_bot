@@ -343,17 +343,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
         }
       );
-      let { booking_id, artisanList, artisanArray } = await artisanResponse(
-        stage?.service,
-        stage?.task_description,
-        stage?.state,
-        stage?.lga,
-        stage?.address,
-        stage?.email,
-        payload.user.id,
-        stage?.full_name,
-        stage?.createdAt
-      );
+      let { artisanList, artisanArray } = await artisanResponse(stage?.service);
       if (!artisanList) {
         await update(
           { step: 2 },
@@ -396,7 +386,7 @@ exports.RegistrationProcess2 = async (req, res) => {
             },
           }
         );
-        console.log(payload.user.id);
+
         response = await sendResponse(artisanList, payload.user.id);
       }
     } else if (
@@ -418,9 +408,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       let art = await artisanInfoResponse(
         JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].firstname,
         JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].lastname,
-        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].email,
-        "not available"
-        // JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].mobile
+        JSON.parse(getAgain.artisanArray)[Number(payload.text) - 1].skills
       );
       response = await sendResponse(art, payload.user.id);
     } else if (stage.step == 5 && payload.text.toString() == "1") {
@@ -464,11 +452,23 @@ exports.RegistrationProcess2 = async (req, res) => {
           payload.user.id
         );
 
-      await updateCustomerToLive(
-        JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
-        stage.editIndex
-      );
+      const requestData = {
+        artisan_id: JSON.stringify(
+          JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]?.id
+        ),
+        category: stage?.service,
+        description: stage?.task_description,
+        state: stage?.state,
+        lga: stage?.lga,
+        location: stage?.location,
+        email: stage?.email,
+        mobile: stage?.user_id?.replace(/^(234)|^(\+234)/, "0"),
+        firstname: stage.full_name?.split(" ")[0],
+        lastname: stage.full_name?.split(" ")[1],
+      };
 
+      await updateCustomerToLive(requestData);
+      // JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
       response = await sendResponse(
         "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible ",
         payload.user.id

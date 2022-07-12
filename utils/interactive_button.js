@@ -110,7 +110,7 @@ const confirmNumberButton = (info, button, artisan_phone) => {
   return message;
 };
 
-const artisanInfo = (fname, buttons, lname, email, mobile) => {
+const artisanInfo = (fname, buttons, lname, skills) => {
   let message = {
     payload: {
       type: "interactive",
@@ -121,7 +121,7 @@ const artisanInfo = (fname, buttons, lname, email, mobile) => {
           text: ` ${fname} ${lname}`,
         },
         body: {
-          text: `Email : *${email}* \n Mobile : *${mobile}* `,
+          text: `Skills : *${skills}* \n* `,
         },
         action: {
           buttons: buttons,

@@ -176,55 +176,21 @@ const lgaResponse = async (state) => {
 
 //  service, description, state, lga, address, email, phone, full_name, createdAt;
 
-const artisanResponse = async (
-  service,
-  description,
-  state,
-  lga,
-  address,
-  email,
-  mobile,
-  full_name,
-  createdAt
-) => {
-  const { data: artisans, id } = await getListOfArtisan(
-    service,
-    description,
-    state,
-    lga,
-    address,
-    email,
-    mobile,
-    full_name,
-    createdAt
-  );
-
-  // const artisans = await saveCustomerToLive(
-  //   service,
-  //   description,
-  //   state,
-  //   lga,
-  //   address,
-  //   email,
-  //   phone,
-  //   full_name,
-  //   createdAt
-  // );
+const artisanResponse = async (service) => {
+  const { data: artisans } = await getListOfArtisan(service);
 
   if (Array.isArray(artisans) && artisans?.length > 0) {
-    // return `${question_one.artisan} \n${formatDataArrayToStringForArtisan(
-    //   artisans
-    // )}`;
-
     return {
-      booking_id: id,
       artisanArray: artisans,
       artisanList: `${
         question_one.artisan
       } \n${formatDataArrayToStringForArtisan(artisans)}`,
     };
   } else {
-    return "no artisan available for now, we will get back to you";
+    return {
+      artisanArray: null,
+      artisanList: null,
+    };
   }
 };
 
@@ -310,7 +276,7 @@ const confirmNumberResponse = async (artisan_name, artisan_phone) => {
   );
 };
 
-const artisanInfoResponse = async (fname, lname, email, mobile) => {
+const artisanInfoResponse = async (fname, lname, skills) => {
   return artisanInfo(
     fname,
     [
@@ -324,8 +290,7 @@ const artisanInfoResponse = async (fname, lname, email, mobile) => {
       },
     ],
     lname,
-    email,
-    mobile
+    skills
   );
 };
 
