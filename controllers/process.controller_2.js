@@ -377,7 +377,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         await update(
           {
             artisanArray: JSON.stringify(artisanArray),
-            editIndex: booking_id,
+            
             step: 4,
           },
           {
