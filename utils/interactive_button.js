@@ -121,7 +121,7 @@ const artisanInfo = (fname, buttons, lname, skills) => {
           text: ` ${fname} ${lname}`,
         },
         body: {
-          text: `Skills : *${skills}* \n* `,
+          text: `Skills : *${skills}* `,
         },
         action: {
           buttons: buttons,
