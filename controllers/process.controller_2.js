@@ -453,9 +453,8 @@ exports.RegistrationProcess2 = async (req, res) => {
         );
 
       const requestData = {
-        artisan_id: JSON.stringify(
-          JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]?.id
-        ),
+        artisan_id: 
+          JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1]?.id,
         category: stage?.service,
         description: stage?.task_description,
         state: stage?.state,
