@@ -263,6 +263,7 @@ const smsCustomer = async (msg, phone) => {
 // const { Service, Stage } = require("../models");
 
 const updateCustomerToLive = async (artisan) => {
+  console.log(artisan)
   let data = JSON.stringify(artisan);
 
   let config = {
