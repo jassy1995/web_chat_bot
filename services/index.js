@@ -268,6 +268,11 @@ const updateCustomerToLive = async (artisan) => {
   let config = {
     method: "post",
     url: `https://wesabi.com/api/bookings/generate_request`,
+    headers: {
+      Authorization:
+        "Bearer 039498d32l0p98b2a9wd3d8kf124eziyz1yyv69r3489328lb4389145l561",
+      "Content-Type": "application/json",
+    },
     data: data,
   };
   let response = await axios(config);
