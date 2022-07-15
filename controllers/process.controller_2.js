@@ -242,7 +242,9 @@ exports.RegistrationProcess2 = async (req, res) => {
         stage?.gender,
         stage?.date_of_birth,
         stage?.state,
-        stage?.address
+        stage?.address,
+        stage?.picture,
+        stage?.id_card,
       );
 
       response = await sendResponse(

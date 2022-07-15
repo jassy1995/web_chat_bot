@@ -288,7 +288,9 @@ const saveArtisanToLive = (
   gender,
   birthday,
   state_name,
-  address
+  address,
+  image,
+  id_card
 ) => {
   let data = JSON.stringify({
     category: category,
@@ -300,6 +302,8 @@ const saveArtisanToLive = (
     birthday,
     state: state_name,
     address,
+    image,
+    id_card,
     channel: "chatbot",
     experience: "2",
   });
