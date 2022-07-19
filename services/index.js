@@ -373,9 +373,10 @@ const getLga = async (state) =>
     )
   ).data;
 
-const getListOfArtisan = async (service) => {
+const getListOfArtisan = async (service,state) => {
   let data = JSON.stringify({
     service: service,
+    state: state,
   });
   let config = {
     method: "post",

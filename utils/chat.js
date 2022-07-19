@@ -176,8 +176,8 @@ const lgaResponse = async (state) => {
 
 //  service, description, state, lga, address, email, phone, full_name, createdAt;
 
-const artisanResponse = async (service) => {
-  const { data: artisans } = await getListOfArtisan(service);
+const artisanResponse = async (service,state) => {
+  const { data: artisans } = await getListOfArtisan(service,state);
 
   if (Array.isArray(artisans) && artisans?.length > 0) {
     return {

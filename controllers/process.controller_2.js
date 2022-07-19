@@ -345,7 +345,7 @@ exports.RegistrationProcess2 = async (req, res) => {
           },
         }
       );
-      let { artisanList, artisanArray } = await artisanResponse(stage?.service);
+      let { artisanList, artisanArray } = await artisanResponse(stage?.service,stage?.state);
       if (!artisanList) {
         await update(
           { step: 2 },
