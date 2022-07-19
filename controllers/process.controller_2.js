@@ -470,7 +470,6 @@ exports.RegistrationProcess2 = async (req, res) => {
       };
 
       const {status} = await updateCustomerToLive(requestData);
-      // JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
       if(status){
         response = await sendResponse(
           "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible ",
