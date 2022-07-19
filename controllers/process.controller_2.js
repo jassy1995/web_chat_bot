@@ -495,7 +495,7 @@ exports.RegistrationProcess2 = async (req, res) => {
       );
 
       let jet = `${JSON.parse(stage.artisanArray).map(
-        (entity, index) => `\n *[${index + 1}]* ${entity.firstname}`
+        (entity, index) => `\n *[${index + 1}]* ${entity.firstname?.replace(",", " ")} ${entity.lastname?.replace(",", "")}`
       )}`;
       let js = `${otherResponse.artisan} \n${jet}`;
       response = await sendResponse(js, payload.user.id);
