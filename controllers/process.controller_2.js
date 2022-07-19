@@ -466,6 +466,7 @@ exports.RegistrationProcess2 = async (req, res) => {
         mobile: stage?.user_id?.replace(/^(234)|^(\+234)/, "0"),
         firstname: stage.full_name?.split(" ")[0],
         lastname: stage.full_name?.split(" ")[1],
+        address: stage.address,
       };
 
       await updateCustomerToLive(requestData);
