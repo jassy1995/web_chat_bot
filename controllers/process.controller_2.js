@@ -469,12 +469,22 @@ exports.RegistrationProcess2 = async (req, res) => {
         address: stage.address,
       };
 
-      await updateCustomerToLive(requestData);
+      const {status} = await updateCustomerToLive(requestData);
       // JSON.parse(stage.artisanArray)[Number(stage.artisanIndex) - 1].id,
-      response = await sendResponse(
-        "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible ",
-        payload.user.id
-      );
+      if(status){
+        response = await sendResponse(
+          "Congrats,your request has been received. Wesabi will confirm availability of selected worker and the worker will reach out to you as soon as possible ",
+          payload.user.id
+        );
+      }else{
+        response = await sendResponse(
+          "Unable to create your request, please refesh your browser and try again.",
+          payload.user.id
+        );
+      }
+
+      
+     
     } else if (stage.step === 5 && payload.text.toString() === "2") {
       await update(
         { step: 4 },

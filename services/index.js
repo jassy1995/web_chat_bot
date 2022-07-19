@@ -278,6 +278,7 @@ const updateCustomerToLive = async (artisan) => {
   };
   let response = await axios(config);
   console.log(response.data);
+  return response.data; 
 };
 
 const saveArtisanToLive = (
